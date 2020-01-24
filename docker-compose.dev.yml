@@ -1,0 +1,19 @@
+version: "3.5"
+
+services:
+  client:
+    command: npm run serve
+    build: 
+      context: ./client      
+      target: builder
+    ports:
+      - 8080:8080
+
+  server:
+    command: npm run start:dev
+
+    build: 
+      context: ./server      
+      target: builder
+    env_file:
+      - ./server/docker/dev.env 
