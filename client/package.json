@@ -1,0 +1,54 @@
+{
+  "name": "monuments-map",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "test:e2e": "vue-cli-service test:e2e",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "core-js": "^3.6.4",
+    "mapbox-gl": "^1.6.1",
+    "vue": "^2.6.11",
+    "vue-mapbox": "^0.4.1",
+    "vue-router": "^3.1.5",
+    "vuex": "^3.1.2"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^4.1.2",
+    "@vue/cli-plugin-e2e-cypress": "^4.1.2",
+    "@vue/cli-plugin-eslint": "^4.1.2",
+    "@vue/cli-plugin-router": "^4.1.2",
+    "@vue/cli-plugin-vuex": "^4.1.2",
+    "@vue/cli-service": "^4.1.2",
+    "@vue/eslint-config-prettier": "^5.0.0",
+    "babel-eslint": "^10.0.3",
+    "eslint": "^5.16.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-vue": "^5.0.0",
+    "prettier": "^1.19.1",
+    "vue-template-compiler": "^2.6.11"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "@vue/prettier"
+    ],
+    "rules": {
+      "no-console": "off"
+    },
+    "parserOptions": {
+      "parser": "babel-eslint"
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions"
+  ]
+}
