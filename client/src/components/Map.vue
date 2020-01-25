@@ -13,6 +13,13 @@
         :key="monument['cod LMI']"
         :coordinates="[monument.longitudine, monument.latitudine]"
       >
+        <MglPopup :coordinates="coordinates" anchor="top">
+          <div>
+            <h1>{{ monument.denumire }}</h1>
+            <div>{{ monument.adresa }}</div>
+          </div>
+          <!-- <VCard> <div>Hello, I'm popup!</div> </VCard> -->
+        </MglPopup>
       </MglMarker>
     </MglMap>
   </div>
