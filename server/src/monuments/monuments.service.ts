@@ -23,6 +23,6 @@ export class MonumentsService implements OnModuleInit{
     
   }
   findAll(): any{
-    return this.monuments;
+    return this.monuments;//.slice(0, 100);
   }
 }
