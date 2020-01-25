@@ -43,7 +43,6 @@ export default {
   }),
   methods: {
     onMapLoaded(event) {
-      console.log(`=======map loaded? `, event);
       // or just to store if you want have access from other components
       this.$store.map = event.map;
     }
