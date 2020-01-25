@@ -9,7 +9,7 @@
     "csv": "copyfiles data/**/*.csv dist/",
     "build": "nest build && npm run csv",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "nest start",
+    "start": "npm run csv && nest start",
     "start:dev": "npm run csv && nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
