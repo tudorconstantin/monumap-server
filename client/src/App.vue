@@ -1,35 +1,68 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link> |
-      <router-link to="/map">The Monuments Map</router-link>
-    </div>
+  <v-app id="inspire">
+    <v-navigation-drawer v-model="drawer" app clipped>
+      <v-list dense>
+        
+        <v-list-item link>
+          <v-list-item-action>
+            <v-icon>mdi-home</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>
+            <router-link to="/" class="white--text">About</router-link>
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item link>
+          <v-list-item-action>
+            <v-icon>mdi-map-marker-multiple</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+              <router-link to="/map" class="white--text">The Monuments Map</router-link>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
 
-    <router-view />
-  </div>
+    <v-app-bar app clipped-left>
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+      <v-toolbar-title>Romanian Monuments</v-toolbar-title>
+    </v-app-bar>
+
+    <v-content>
+            <router-view />
+      
+    </v-content>
+
+    <v-footer app>
+      <span>&copy; {{year}} </span>
+    </v-footer>
+  </v-app>
 </template>
 
+<script>
+
+export default {
+  props: {
+    source: String
+  },
+  name: "App",
+
+  components: {
+    
+  },
+  data: () => ({
+    drawer: false,
+    year: (new Date()).getFullYear()
+  }),
+  created() {
+    /* eslint-disable no-console */
+    console.log(this.$vuetify.theme);
+    this.$vuetify.theme.dark = true;
+  }
+};
+</script>
+
 <style>
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  height: 100%;
-}
 
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
 </style>

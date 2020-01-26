@@ -67,9 +67,8 @@ export default {
   }),
   methods: {
     onMapLoaded(event) {
-      // or just to store if you want have access from other components
       this.$store.map = event.map;
-      console.log(`====got pins: `, this.$store.monuments);
+      // console.log(`====got pins: `, this.$store.monuments);
     }
   }
 };

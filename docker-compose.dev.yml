@@ -3,6 +3,7 @@ version: "3.5"
 services:
   client:
     command: npm run serve
+    #image: registry.gitlab.prforge.com/tudor/monumap/client
     build: 
       context: ./client      
       target: builder

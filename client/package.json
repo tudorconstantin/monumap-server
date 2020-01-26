@@ -1,41 +1,33 @@
 {
-  "name": "monuments-map",
+  "name": "vuetify",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "test:e2e": "vue-cli-service test:e2e",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "core-js": "^3.6.4",
+    "core-js": "^3.4.4",
     "mapbox-gl": "^1.6.1",
-    "vue": "^2.6.11",
+    "vue": "^2.6.10",
     "vue-mapbox": "^0.4.1",
     "vue-router": "^3.1.5",
+    "vuetify": "^2.1.0",
     "vuex": "^3.1.2"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^4.1.2",
-    "@vue/cli-plugin-e2e-cypress": "^4.1.2",
-    "@vue/cli-plugin-eslint": "^4.1.2",
-    "@vue/cli-plugin-router": "^4.1.2",
-    "@vue/cli-plugin-vuex": "^4.1.2",
-    "@vue/cli-service": "^4.1.2",
-    "@vue/eslint-config-prettier": "^5.0.0",
+    "@vue/cli-plugin-babel": "^4.1.0",
+    "@vue/cli-plugin-eslint": "^4.1.0",
+    "@vue/cli-service": "^4.1.0",
     "babel-eslint": "^10.0.3",
-    "deepmerge": "^4.2.2",
     "eslint": "^5.16.0",
-    "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-vue": "^5.0.0",
-    "fibers": "^4.0.2",
-    "prettier": "^1.19.1",
-    "sass": "^1.25.1-test.1",
-    "sass-loader": "^8.0.2",
-    "vue-template-compiler": "^2.6.11",
-    "vuetify": "^2.2.6",
-    "vuetify-loader": "^1.4.3"
+    "sass": "^1.19.0",
+    "sass-loader": "^8.0.0",
+    "vue-cli-plugin-vuetify": "^2.0.3",
+    "vue-template-compiler": "^2.6.10",
+    "vuetify-loader": "^1.3.0"
   },
   "eslintConfig": {
     "root": true,
@@ -44,11 +36,9 @@
     },
     "extends": [
       "plugin:vue/essential",
-      "@vue/prettier"
+      "eslint:recommended"
     ],
-    "rules": {
-      "no-console": "off"
-    },
+    "rules": {},
     "parserOptions": {
       "parser": "babel-eslint"
     }
