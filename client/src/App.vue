@@ -59,6 +59,7 @@ export default {
     /* eslint-disable no-console */
     console.log(this.$vuetify.theme);
     this.$vuetify.theme.dark = true;
+    // this.$vuetify.theme.light = true;
   }
 };
 </script>
