@@ -3,7 +3,9 @@ FROM node:lts-buster AS builder
 COPY package.json /data/
 WORKDIR /data/
 
+#RUN npm install -g @vue/cli
 RUN npm install
+#RUN ln -s /data/node_modules/vue-cli-plugin-vuetify /data/
 
 ENV PATH=/data/node_modules/.bin:$PATH
 

@@ -13,7 +13,7 @@
         :key="monument['cod LMI']"
         :coordinates="[monument.longitudine, monument.latitudine]"
       >
-        <MglPopup :coordinates="coordinates" anchor="top">
+        <MglPopup anchor="top">
           <div>
             <h1>{{ monument.denumire }}</h1>
             <div>{{ monument.adresa }}</div>
@@ -67,9 +67,8 @@ export default {
   }),
   methods: {
     onMapLoaded(event) {
-      // or just to store if you want have access from other components
       this.$store.map = event.map;
-      console.log(`====got pins: `, this.$store.monuments);
+      // console.log(`====got pins: `, this.$store.monuments);
     }
   }
 };
