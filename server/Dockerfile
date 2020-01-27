@@ -17,7 +17,7 @@ RUN npm install
 FROM node:lts-alpine as app
 
 RUN addgroup --gid 1024 nodegroup
-RUN adduser --disabled-password --gecos "" --force-badname --ingroup 1024 node 
+RUN adduser --disabled-password --gecos "" --ingroup 1024 node 
 USER node
 COPY --chown=node:node ./docker/entrypoint.sh /tmp/
 RUN ["chmod", "+x", "/tmp/entrypoint.sh"]
