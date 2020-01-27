@@ -8,8 +8,8 @@
             <v-icon>mdi-home</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>
-            <router-link to="/" class="white--text">About</router-link>
+            <v-list-item-title class="text-primary">
+            <router-link to="/" >About</router-link>
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
@@ -18,7 +18,7 @@
             <v-icon>mdi-map-marker-multiple</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-              <router-link to="/map" class="white--text">The Monuments Map</router-link>
+              <router-link to="/map" class="text">The Monuments Map</router-link>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -58,8 +58,8 @@ export default {
   created() {
     /* eslint-disable no-console */
     console.log(this.$vuetify.theme);
-    this.$vuetify.theme.dark = true;
-    // this.$vuetify.theme.light = true;
+    // this.$vuetify.theme.dark = true;
+    this.$vuetify.theme.light = true;
   }
 };
 </script>

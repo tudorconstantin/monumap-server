@@ -14,7 +14,7 @@ export class MonumentsService implements OnModuleInit{
       if (fs.existsSync(path)) {
         this.monuments = await csv().fromFile(path);
       } else {
-        this.logger.debug(`WTFFF ${path}, ${__dirname}`);
+        this.logger.debug(`???? ${path}, ${__dirname}`);
       }
     } catch(err) {
       this.logger.error(err);

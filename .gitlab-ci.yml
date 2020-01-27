@@ -57,6 +57,7 @@ deploy_staging:
   variables:
     NODE_ENV: staging
     EXTERNAL_URL: monumap-staging.prforge.com
+    NGINX_SHARED_FOLDER: /srv/monumap-staging
     NETWORK: staging
     SERVICE_PORT: 8080
   environment:
@@ -75,6 +76,7 @@ deploy_prod:
   variables:
     NODE_ENV: production
     EXTERNAL_URL: monumap.prforge.com
+    NGINX_SHARED_FOLDER: /srv/monumap
     NETWORK: production
     SERVICE_PORT: 8080
   environment:
