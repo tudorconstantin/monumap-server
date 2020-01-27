@@ -17,7 +17,9 @@ services:
       - "${SERVICE_PORT:-8080}"
     volumes:
       - ./client:/data
-      - ${NGINX_SHARED_FOLDER:-/srv/monumap-staging}/images:/data/dist/img:z
+      # below is a shared folder between the host and the docker containers. we'll put images there - either at dev time, or uploaded through the backend
+      # the :z is because https://stackoverflow.com/questions/44139279/docker-mounting-volume-with-permission-denied/44142648#44142648
+      - ${NGINX_SHARED_FOLDER:-/srv/monumap-staging}/images:/data/dist/images:z
       - /data/node_modules/
     environment: 
       - API_URL=server:8081
