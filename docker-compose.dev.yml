@@ -1,7 +1,17 @@
 version: "3.5"
 
+networks:
+  traefik-public:
+    external: true
+  monumap-production:
+    external: false
+  monumap-staging:
+    external: false
+
 services:
   client:
+    volumes:
+      - shared-volume-dev:/data/public/images:rw
     command: npm run serve
     #image: registry.gitlab.prforge.com/tudor/monumap/client
     build: 
@@ -11,6 +21,8 @@ services:
       - 8080:8080
 
   server:
+    volumes:
+      - shared-volume-dev:/home/node/data:rw
     command: npm run start:dev
 
     build: 
@@ -18,3 +30,5 @@ services:
       target: builder
     env_file:
       - ./server/docker/dev.env 
+volumes:
+  shared-volume-dev:

@@ -3,6 +3,8 @@ version: "3.5"
 services:
   client:
     command: nginx -g "daemon off;"
+    volumes:
+      - shared-volume-staging:/data/public/images:rw
 
   server:
     env_file:
@@ -10,4 +12,8 @@ services:
     environment:
       NODE_ENV: staging
     command: "npm start"
+    volumes:
+      - shared-volume-staging:/usr/share/nginx/html/images:rw
 
+volumes:
+  shared-volume-staging:

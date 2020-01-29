@@ -1,3 +1,3 @@
 #!/bin/sh
-ln -s /usr/share/nginx/html/images /data/images
+#cp -r /usr/share/nginx/html/images* /data/images*
 exec "$@";
