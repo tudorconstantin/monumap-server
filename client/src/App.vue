@@ -56,10 +56,8 @@ export default {
     year: (new Date()).getFullYear()
   }),
   created() {
-    /* eslint-disable no-console */
-    console.log(this.$vuetify.theme);
-    // this.$vuetify.theme.dark = true;
     this.$vuetify.theme.light = true;
+    this.$vuetify.theme.dark = false;
   }
 };
 </script>
