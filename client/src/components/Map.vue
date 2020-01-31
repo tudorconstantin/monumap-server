@@ -13,15 +13,19 @@
         :key="monument['cod LMI']"
         :coordinates="[monument.longitudine, monument.latitudine]"
       >
-        <MglPopup anchor="top">
+        <v-icon slot="marker" @click="showRightPanel(monument)"
+          >mdi-map-marker</v-icon
+        >
+
+        <!-- <MglPopup anchor="top">
           <div>
             <h1>{{ monument.denumire }}</h1>
             <div>{{ monument.adresa }}</div>
           </div>
-          <!-- <VCard> <div>Hello, I'm popup!</div> </VCard> -->
-        </MglPopup>
+        </MglPopup> -->
       </MglMarker>
     </MglMap>
+    <Monument v-if="monumentShown" />
   </div>
 </template>
 
@@ -31,9 +35,10 @@ import {
   MglMap,
   MglNavigationControl,
   MglGeolocateControl,
-  MglMarker,
-  MglPopup
+  MglMarker
 } from "vue-mapbox";
+
+import Monument from "@/components/Monument.vue";
 
 import { mapState } from "vuex";
 
@@ -43,7 +48,7 @@ export default {
     MglNavigationControl,
     MglGeolocateControl,
     MglMarker,
-    MglPopup
+    Monument
   },
   data() {
     return {
@@ -63,12 +68,16 @@ export default {
     monuments: state => {
       const mons = (state.monuments && state.monuments.items) || [];
       return mons.filter(m => m.latitudine && m.longitudine);
-    }
+    },
+    monumentShown: state => state.sidebar.isNavOpen
   }),
   methods: {
     onMapLoaded(event) {
       this.$store.map = event.map;
       // console.log(`====got pins: `, this.$store.monuments);
+    },
+    showRightPanel(monument) {
+      this.$store.commit("sidebar/openNav", monument);
     }
   }
 };
