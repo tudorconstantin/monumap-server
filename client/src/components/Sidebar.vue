@@ -1,17 +1,29 @@
 <template>
-  <portal v-if="isPanelOpen">
-    <div @click="closeSidebarPanel">
-      <v-overlay :value="isPanelOpen" :z-index="0">
-        <v-sheet elevation="12">
-          <transition name="slide">
-            <div class="sidebar-panel" v-on:click.stop="ignoreClick">
-              <slot></slot>
-            </div>
-          </transition>
-        </v-sheet>
-      </v-overlay>
-    </div>
-  </portal>
+  <v-app>
+    <portal v-if="isPanelOpen">
+      <v-content>
+        <v-container fluid>
+          <div @click="closeSidebarPanel">
+            <v-overlay :value="isPanelOpen" :z-index="0">
+              <transition name="slide">
+                <v-sheet
+                  class="sidebar-panel"
+                  :class="{ 'full-width': $vuetify.breakpoint.smAndDown }"
+                  v-on:click.stop="ignoreClick"
+                >
+                  <v-spacer></v-spacer>
+                  <div width="100%" class="flex-row-reverse">
+                  <v-icon @click="closeSidebarPanel">mdi-close</v-icon>
+                  </div>
+                  <slot></slot>
+                </v-sheet>
+              </transition>
+            </v-overlay>
+          </div>
+        </v-container>
+      </v-content>
+    </portal>
+  </v-app>
 </template>
 <script>
 import { mapState } from "vuex";
@@ -28,8 +40,7 @@ export default {
       console.log(`ev`, event, this);
       this.$store.commit("sidebar/closeNav");
     },
-    ignoreClick() {
-    }
+    ignoreClick() {}
   },
   computed: mapState({
     isPanelOpen: state => {
@@ -72,6 +83,11 @@ export default {
   padding: 3rem 20px 2rem 20px;
   /* width: 300px; */
   width: 50%;
+  min-width: 50%;
   z-index: 1;
+}
+
+.full-width {
+  width: 100%;
 }
 </style>
