@@ -1,32 +1,116 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+  <q-layout view="hHh lpR fFf">
+
+    <q-header
+      elevated
+      class="bg-primary text-white"
+      height-hint="98"
+      v-if="!isHomeRoute"
+    >
+      <q-toolbar>
+        <q-btn
+          dense
+          flat
+          round
+          icon="menu"
+          @click="left = !left"
+        />
+
+        <q-toolbar-title>
+          <q-avatar>
+            <img src="https://cdn.quasar.dev/logo/svg/quasar-logo.svg">
+          </q-avatar>
+          Romania in Harti
+        </q-toolbar-title>
+
+        <q-btn
+          dense
+          flat
+          round
+          icon="menu"
+          @click="right = !right"
+        />
+      </q-toolbar>
+
+      <q-tabs align="left">
+        <q-route-tab
+          to="/lmi"
+          label="LMI"
+        />
+        <q-route-tab
+          to="/locuire"
+          label="Locuire"
+        />
+      </q-tabs>
+    </q-header>
+
+    <q-drawer
+      v-if="!isHomeRoute"
+      show-if-above
+      v-model="left"
+      side="left"
+      bordered
+    >
+      <!-- drawer content -->
+    </q-drawer>
+
+    <q-drawer
+      v-if="!isHomeRoute"
+      show-if-above
+      v-model="right"
+      side="right"
+      bordered
+      :width="500"
+    >
+      <!-- drawer content -->
+    </q-drawer>
+
+    <q-page-container>
+      <router-view />
+    </q-page-container>
+
+    <q-footer
+      v-if="!isHomeRoute"
+      elevated
+      class="bg-grey-8 text-white"
+    >
+      <q-toolbar>
+        <q-toolbar-title>
+          2020 <strong>Spatial Planning Tools</strong>
+        </q-toolbar-title>
+      </q-toolbar>
+    </q-footer>
+
+  </q-layout>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
+<script>
+export default {
+  data () {
+    return {
+      left: false,
+      right: false,
     }
-  }
+  },
+  computed: {
+    // if home route, hide all bars and panels
+    isHomeRoute () {
+      return this.$route.name === 'home';
+    },
+  },
+  created: function () {
+    // get monuments list
+    this.$store.dispatch("monuments/getAllMonuments");
+    // get monuments photos
+    this.$store.dispatch(
+      "photos/getMonumentImages",
+      this.$store.state.photos.monumentShown.nr
+    );
+  },
 }
+</script>
+
+<style lang="sass" scoped>
+.q-layout
+  overflow: scroll
 </style>
