@@ -1,90 +1,74 @@
 <template>
-  <div id="mapContainer">
-    <MglMap
-      :accessToken="accessToken"
-      :mapStyle.sync="mapStyle"
-      :container="container"
-      @load="onMapLoaded"
+  <div id="mapcontainer">
+    <l-map
+      style="height: 100%; width: 100%"
+      :zoom="zoom"
+      :center="center"
+      @update:zoom="zoomUpdated"
+      @update:center="centerUpdated"
+      @update:bounds="boundsUpdated"
     >
-      <MglNavigationControl position="top-left" />
-      <MglGeolocateControl position="top-left" />
-      <MglMarker
+      <l-tile-layer :url="url"></l-tile-layer>
+      <l-marker
         v-for="monument in monuments"
         :key="monument['cod LMI']"
-        :coordinates="[monument.longitudine, monument.latitudine]"
-      >
-        <v-icon slot="marker" @click="showRightPanel(monument)"
-          >mdi-map-marker</v-icon
-        >
-
-        <!-- <MglPopup anchor="top">
-          <div>
-            <h1>{{ monument.denumire }}</h1>
-            <div>{{ monument.adresa }}</div>
-          </div>
-        </MglPopup> -->
-      </MglMarker>
-    </MglMap>
-    <Monument v-if="monumentShown" />
+        :lat-lng="[monument.latitudine, monument.longitudine]"
+        @click="selectItem(monument)"
+      />
+    </l-map>
   </div>
 </template>
 
 <script>
-// import Mapbox from "mapbox-gl";
-import {
-  MglMap,
-  MglNavigationControl,
-  MglGeolocateControl,
-  MglMarker
-} from "vue-mapbox";
-
-import Monument from "@/components/Monument.vue";
-
+// import mapState
 import { mapState } from "vuex";
 
+
 export default {
-  components: {
-    MglMap,
-    MglNavigationControl,
-    MglGeolocateControl,
-    MglMarker,
-    Monument
-  },
-  data() {
+  data () {
     return {
-      accessToken:
-        "pk.eyJ1IjoidHVkb3Jjb25zdGFudGluIiwiYSI6ImNrM29yN2t3cjBiMDkzaG80cTdiczhzMmIifQ.fqelSp0srqiSV3qkfbE2qQ",
-      mapStyle:
-        "mapbox://styles/tudorconstantin/ck3on4c1v27jt1cmx3gmr5j0x/draft",
-      container: "mapContainer"
+      url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
+      zoom: 10,
+      center: [46.766676, 23.587646],
+      bounds: null,
     };
   },
-
-  created() {
-    this.map = null;
-    this.$store.dispatch("monuments/getAllMonuments");
-  },
-  computed: mapState({
-    monuments: state => {
-      const mons = (state.monuments && state.monuments.items) || [];
-      return mons.filter(m => m.latitudine && m.longitudine);
-    },
-    monumentShown: state => state.sidebar.isNavOpen
-  }),
   methods: {
-    onMapLoaded(event) {
+    zoomUpdated (zoom) {
+      this.zoom = zoom;
+    },
+    centerUpdated (center) {
+      this.center = center;
+    },
+    boundsUpdated (bounds) {
+      this.bounds = bounds;
+    },
+    onMapLoaded (event) {
       this.$store.map = event.map;
       // console.log(`====got pins: `, this.$store.monuments);
     },
-    showRightPanel(monument) {
-      this.$store.commit("sidebar/openNav", monument);
-    }
+    selectItem (monument) {
+      // console.log(monument["cod LMI"]);
+      this.$store.dispatch("monuments/selectItem", monument);
+    },
+  },
+  computed: {
+    ...mapState({
+      monuments: state => {
+        const mons = (state.monuments && state.monuments.items) || [];
+        return mons.filter(m => m.latitudine && m.longitudine);
+      },
+    }),
+    getContainerHeight () {
+      return document.getElementById('map-enclosure').offsetHeight;
+    },
   }
-};
-</script>
-<style>
-#mapContainer {
-  text-align: left;
-  height: 100%;
+
 }
+</script>
+
+<style lang="sass" scoped>
+#mapcontainer
+    width: 100%
+    height: 700px
 </style>

@@ -1,6 +1,8 @@
 <template>
-  <Map>    
-  </Map>
+  <div>
+    <Map>
+    </Map>
+  </div>
 </template>
 
 <script>
@@ -10,13 +12,14 @@ export default {
   name: "mapview",
   components: {
     Map,
+  },
+  data () {
+    return {
+      homepage: false,
+    }
   }
 };
 </script>
 
 <style>
-html,
-body {
-  height: 90%;
-}
 </style>

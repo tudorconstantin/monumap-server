@@ -3,8 +3,14 @@ const backendApi = process.env.API_URL
   : "http://localhost:8081";
 
 module.exports = {
-  "transpileDependencies": [
-    "vuetify"
+  pluginOptions: {
+    quasar: {
+      importStrategy: 'kebab',
+      rtlSupport: false
+    }
+  },
+  transpileDependencies: [
+    'quasar'
   ],
   devServer: {
     proxy: {
@@ -15,5 +21,4 @@ module.exports = {
       }
     }
   }
-
 }
