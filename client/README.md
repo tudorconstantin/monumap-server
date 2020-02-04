@@ -1,4 +1,4 @@
-# vuetify
+# new-client
 
 ## Project setup
 ```

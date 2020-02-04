@@ -2,7 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 
 import monuments from "./modules/monuments";
-import sidebar from "./modules/sidebar";
+import photos from "./modules/photos";
 
 Vue.use(Vuex);
 
@@ -12,6 +12,6 @@ export default new Vuex.Store({
   actions: {},
   modules: {
     monuments,
-    sidebar,
+    photos,
   }
 });
