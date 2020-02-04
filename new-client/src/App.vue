@@ -63,9 +63,10 @@
       :width="500"
     >
       <!-- drawer content -->
+      <info-bar></info-bar>
     </q-drawer>
 
-    <q-page-container>
+    <q-page-container id="map-enclosure">
       <router-view />
     </q-page-container>
 
@@ -85,12 +86,17 @@
 </template>
 
 <script>
+import InfoBar from '@/components/InfoBar'
+
 export default {
   data () {
     return {
       left: false,
       right: false,
     }
+  },
+  components: {
+    InfoBar,
   },
   computed: {
     // if home route, hide all bars and panels

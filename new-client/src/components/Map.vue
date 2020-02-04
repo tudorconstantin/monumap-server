@@ -13,6 +13,7 @@
         v-for="monument in monuments"
         :key="monument['cod LMI']"
         :lat-lng="[monument.latitudine, monument.longitudine]"
+        @click="selectItem(monument)"
       />
     </l-map>
   </div>
@@ -46,14 +47,22 @@ export default {
       this.$store.map = event.map;
       // console.log(`====got pins: `, this.$store.monuments);
     },
-  },
-  computed: mapState({
-    monuments: state => {
-      const mons = (state.monuments && state.monuments.items) || [];
-      return mons.filter(m => m.latitudine && m.longitudine);
+    selectItem (monument) {
+      console.log(monument["cod LMI"]);
+      this.$store.dispatch("monuments/selectItem", monument);
     },
-    monumentShown: state => true || state.photos.isNavOpen
-  }),
+  },
+  computed: {
+    ...mapState({
+      monuments: state => {
+        const mons = (state.monuments && state.monuments.items) || [];
+        return mons.filter(m => m.latitudine && m.longitudine);
+      },
+    }),
+    getContainerHeight () {
+      return document.getElementById('map-enclosure').offsetHeight;
+    },
+  }
 
 }
 </script>
