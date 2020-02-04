@@ -4,6 +4,11 @@
 * `docker-compose -f docker-compose.yml -f docker-compose.dev.yml build`
 * `docker-compose -f docker-compose.yml -f docker-compose.dev.yml up`
 
+## In order to have new npm packages installed in the docker images:
+* `docker system prune -a -f` # to clear docker caches
+* `docker network create traefik-public` # to recreate the traefik-public network
+* `docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --build -V`
+
 ## Notes
 If docker complains that network traefik-public doesn't exist, create it with `docker network create traefik-public`
 
