@@ -11,6 +11,12 @@ server {
   root    /usr/share/nginx/html;
   index   index.html index.htm;
   
+  # serving images from /usr/share/nginx/html/images/
+  location /images/ {
+    sendfile           on;
+    sendfile_max_chunk 1m;
+  }
+
   # Always serve index.html for any request
   location / {
       root /usr/share/nginx/html;
