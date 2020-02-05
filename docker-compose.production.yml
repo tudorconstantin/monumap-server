@@ -3,7 +3,7 @@ version: "3.5"
 services:
   client:
     volumes:
-      - shared-volume-production:/data/public/images:rw
+      - /srv/monumap/images:/usr/share/nginx/html/images:rw
     deploy:
       restart_policy:
         condition: on-failure
@@ -14,12 +14,9 @@ services:
 
   server:
     volumes:
-      - shared-volume-production:/usr/share/nginx/html/images:rw
+      - /srv/monumap/images:/tmp/images:rw
     env_file:
       - ./server/docker/production.env
     environment:
       NODE_ENV: production
     command: "npm start"
-
-volumes:
-  shared-volume-production:
