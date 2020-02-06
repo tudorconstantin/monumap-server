@@ -16,11 +16,17 @@
           @click="left = !left"
         />
 
-        <q-toolbar-title>
-          <q-avatar>
-            <img src="https://cdn.quasar.dev/logo/svg/quasar-logo.svg">
-          </q-avatar>
-          Romania in Harti
+        <q-toolbar-title class="row">
+          <img
+            class="q-pr-xs"
+            src="./assets/logo_bucuresti_2050.svg"
+            style="max-width: 600px; max-height: 40px;"
+          >
+          <img
+            class="q-pl-xs"
+            src="./assets/logo_bucuresti_2050_text_fara-subtitlu_bicrom_linie.svg"
+            style="max-width: 600px; max-height: 40px;"
+          >
         </q-toolbar-title>
 
         <q-btn
@@ -52,6 +58,7 @@
       bordered
     >
       <!-- drawer content -->
+      <search-panel></search-panel>
     </q-drawer>
 
     <q-drawer
@@ -60,33 +67,22 @@
       v-model="right"
       side="right"
       bordered
-      :width="500"
+      :width="450"
     >
       <!-- drawer content -->
-      <info-bar></info-bar>
+      <info-panel></info-panel>
     </q-drawer>
 
     <q-page-container id="map-enclosure">
       <router-view />
     </q-page-container>
 
-    <q-footer
-      v-if="!isHomeRoute"
-      elevated
-      class="bg-grey-8 text-white"
-    >
-      <q-toolbar>
-        <q-toolbar-title>
-          2020 <strong>Spatial Planning Tools</strong>
-        </q-toolbar-title>
-      </q-toolbar>
-    </q-footer>
-
   </q-layout>
 </template>
 
 <script>
-import InfoBar from '@/components/InfoBar'
+import SearchPanel from '@/components/SearchPanel'
+import InfoPanel from '@/components/InfoPanel'
 
 export default {
   data () {
@@ -96,7 +92,8 @@ export default {
     }
   },
   components: {
-    InfoBar,
+    SearchPanel,
+    InfoPanel,
   },
   computed: {
     // if home route, hide all bars and panels
