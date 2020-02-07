@@ -25,7 +25,7 @@ FROM nginx:stable-alpine as app
 
 ARG NGINX_PORT
 ARG API_URL
-RUN addgroup -g 1024 -S nginx nodegroup
+RUN groupmod -g 1024 -o nginx
 COPY --from=builder /data/dist /usr/share/nginx/html
 COPY docker/nginx.conf.template /etc/nginx/conf.d/nginx.conf.template
 RUN export
