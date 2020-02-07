@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Query,
   Param,
   Post,
   Put,
@@ -21,5 +22,10 @@ export class MonumentsController {
   @Get('/api/monuments.geojson')
   async getGeoJSON(): Promise<any> {
     return this.monumentsService.getGeoJSON();
+  }
+  @Get('/api/monument.images')
+  async listMonumentImages( @Query('monumentPath') monumentPath): Promise<any> {
+    if(!monumentPath) return [];
+    return await this.monumentsService.listMonumentImages(monumentPath);
   }
 }

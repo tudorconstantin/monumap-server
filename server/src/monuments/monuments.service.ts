@@ -2,6 +2,7 @@ import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
 import * as csv from "csvtojson";
 import * as fs from "fs";
 import * as GeoJSON from "geojson";
+import * as glob from 'glob-promise';
 
 @Injectable()
 export class MonumentsService implements OnModuleInit{
@@ -29,5 +30,12 @@ export class MonumentsService implements OnModuleInit{
 
   getGeoJSON(): any{
     return GeoJSON.parse(this.monuments.filter( m => m.latitudine && m.longitudine), {Point: ['latitudine', 'longitudine'], include: ['cod LMI', 'nr']});
+  }
+
+  async listMonumentImages(monumentPath: string): Promise<string[]>{
+
+    const safePath = monumentPath.replace(/\.\./gi,'');
+    const monumentImages = await glob('**', {cwd: `/tmp/images/${safePath}/`, debug: true});
+    return monumentImages || [];
   }
 }
