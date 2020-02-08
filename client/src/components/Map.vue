@@ -1,5 +1,10 @@
 <template>
-  <div id="mapcontainer">
+  <div 
+    id="mapcontainer"
+    :style="{
+            'height': `calc(100%)`
+     }"
+  >
     <l-map
       style="height: 100%; width: 100%"
       :zoom="zoom"
@@ -70,5 +75,5 @@ export default {
 <style lang="sass" scoped>
 #mapcontainer
     width: 100%
-    height: 700px
+    // height: 700px
 </style>

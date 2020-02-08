@@ -35,7 +35,7 @@ export class MonumentsService implements OnModuleInit{
   async listMonumentImages(monumentPath: string): Promise<string[]>{
 
     const safePath = monumentPath.replace(/\.\./gi,'');
-    const monumentImages = await glob('**', {cwd: `/tmp/images/${safePath}/`, debug: true});
+    const monumentImages = await glob('**', {cwd: `/tmp/images/${safePath}/`});
     return monumentImages || [];
   }
 }
