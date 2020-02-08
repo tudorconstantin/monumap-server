@@ -3,6 +3,7 @@
 
     <q-header
       elevated
+      id="header"
       class="bg-primary text-white"
       height-hint="98"
       v-if="!isHomeRoute"
