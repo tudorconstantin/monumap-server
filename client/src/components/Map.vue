@@ -1,9 +1,7 @@
 <template>
   <div 
     id="mapcontainer"
-    :style="{
-            'height': `calc(100%)`
-     }"
+    :style="cssVars"
   >
     <l-map
       style="height: 100%; width: 100%"
@@ -67,6 +65,11 @@ export default {
     getContainerHeight () {
       return document.getElementById('map-enclosure').offsetHeight;
     },
+    cssVars(){ //https://www.telerik.com/blogs/passing-variables-to-css-on-a-vue-component
+      return {
+        '--height': window.innerHeight - document.getElementById('header').offsetHeight + 'px'
+      }
+    }
   }
 
 }
@@ -75,5 +78,5 @@ export default {
 <style lang="sass" scoped>
 #mapcontainer
     width: 100%
-    // height: 700px
+    height: var(--height)
 </style>
