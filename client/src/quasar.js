@@ -12,6 +12,7 @@ import '@quasar/extras/ionicons-v4/ionicons-v4.css'
 import '@quasar/extras/mdi-v4/mdi-v4.css'
 import '@quasar/extras/eva-icons/eva-icons.css'
 import { Quasar } from 'quasar'
+import './styles/app.sass'
 
 Vue.use(Quasar, {
   config: {},
@@ -19,4 +20,4 @@ Vue.use(Quasar, {
   directives: { /* not needed if importStrategy is not 'manual' */ },
   plugins: {
   }
- })
+})

@@ -25,7 +25,7 @@
             <td class="text-right">{{ currentItem['latitudine'] }},{{ currentItem['longitudine'] }}</td>
           </tr>
           <tr>
-            <td class="text-left">UAT Superioara</td>
+            <td class="text-left">UAT Superioară</td>
             <td class="text-right">{{ currentItem['SIRSUP'] }}</td>
             <td class="text-right">{{ currentItem['UAT'] }}</td>
           </tr>
@@ -35,7 +35,7 @@
             <td class="text-right">{{ currentItem['localitate'] }}</td>
           </tr>
           <tr>
-            <td class="text-left">Adresa</td>
+            <td class="text-left">Adresă</td>
             <td class="text-right">{{ currentItem['cod postal'] }}</td>
           </tr>
         </tbody>
@@ -47,7 +47,7 @@
 
     <q-card class="my-card">
       <q-card-section>
-        <div class="text-h6">Incadrare</div>
+        <div class="text-h6">Încadrare</div>
       </q-card-section>
 
       <q-markup-table>
@@ -88,7 +88,7 @@
             <td class="text-right">{{ currentItem['stare generală'] }}</td>
           </tr>
           <tr>
-            <td class="text-left">Observatii</td>
+            <td class="text-left">Observații</td>
           </tr>
         </tbody>
         <q-card-section>

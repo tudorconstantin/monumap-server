@@ -1,18 +1,28 @@
 <template>
-  <div class="home column fullscreen justify-center items-center">
-    <div class="column items-center">
-      <h1 class="text-h1 text-blue-grey-10">Romania in Harti</h1>
+  <q-page class="home column fullscreen justify-evenly">
+    <div class="top-row column items-center">
+      <img
+        src="../assets/logo_bucuresti_2050.svg"
+        style="max-width: 600px; max-height: 250px;"
+      >
+      <h2 class="text-h2 text-blue-grey-10">Patrimoniul, locuirea și spațiile publice</h2>
       <q-btn
         to="lmi"
         push
         rounded
         color="indigo-10"
-        label="Vezi Harta"
+        label="explorează"
         no-caps
         size="lg"
       />
     </div>
-  </div>
+    <div class="bottom-row column items-center">
+      <img
+        src="../assets/logo_bucuresti_2050_text_cu-subtitlu_monocrom.svg"
+        style="max-width: 400px; max-height: 120px;"
+      >
+    </div>
+  </q-page>
 </template>
 
 <script>
@@ -29,5 +39,9 @@ export default {
 
 <style lang="sass" scoped>
 .home
-  background-color: #e2c036
+  background-color: white
+.top-row
+  background-color: white
+.bottom-row
+  background-color: white
 </style>
