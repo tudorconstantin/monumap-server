@@ -32,6 +32,10 @@ const getters = {
     // console.log(`@getters:: getSelectedItem ${state.selectedItem['cod LMI']}`);
     return state.selectedItem;
   },
+  getFilteredArray () {
+    // return array filtered by the search bar
+    return state.items;
+  },
 };
 
 const actions = {

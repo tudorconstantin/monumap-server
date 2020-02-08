@@ -22,8 +22,37 @@
         Total selecție
       </template>
     </q-input>
+    <q-list separator>
+      <q-item
+        clickable
+        v-ripple
+        v-for="item in monFilteredList"
+        :key="item['cod LMI']"
+      >
+        <q-item-section>{{item['denumire']}}</q-item-section>
+      </q-item>
+    </q-list>
   </div>
 </template>
+
+<script>
+// import mapGetters
+import { mapGetters } from 'vuex';
+
+export default {
+  data () {
+    return {
+      text: '',
+      dense: true,
+    }
+  },
+  computed: {
+    ...mapGetters({
+      monFilteredList: 'monuments/getFilteredArray',
+    }),
+  },
+}
+</script>
 
 <style lang="sass" scoped>
 

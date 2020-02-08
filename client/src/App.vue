@@ -1,5 +1,8 @@
 <template>
-  <q-layout view="hHh lpR fFf">
+  <q-layout
+    view="hHh lpR fFf"
+    class="aller-font"
+  >
 
     <q-header
       elevated
@@ -113,7 +116,5 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
-.q-layout
-  overflow: scroll
+<style lang="sass">
 </style>
