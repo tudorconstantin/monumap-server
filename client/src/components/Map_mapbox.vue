@@ -1,45 +1,30 @@
 <template>
-  <div id="mapContainer">
+  <div 
+    id="mapContainer"
+    :style="cssVars()"
+  >
     <MglMap
       :accessToken="accessToken"
       :mapStyle.sync="mapStyle"
       :container="container"
+      height='1000px'
       @load="onMapLoaded"
     >
       <MglNavigationControl position="top-left" />
       <MglGeolocateControl position="top-left" />
-      <MglMarker
-        v-for="monument in monuments"
-        :key="monument['cod LMI']"
-        :coordinates="[monument.longitudine, monument.latitudine]"
-      >
-        <q-icon
-          slot="marker"
-          :name="matRoom"
-          color="deep-orange"
-        >x</q-icon>
-
-        <!-- <MglPopup anchor="top">
-          <div>
-            <h1>{{ monument.denumire }}</h1>
-            <div>{{ monument.adresa }}</div>
-          </div>
-        </MglPopup> -->
-      </MglMarker>
+      
     </MglMap>
   </div>
 </template>
 
 <script>
-// import icons
 import { matRoom } from '@quasar/extras/material-icons'
 
-// import Mapbox from "mapbox-gl";
 import {
   MglMap,
   MglNavigationControl,
   MglGeolocateControl,
-  MglMarker
+  // MglMarker
 } from "vue-mapbox";
 
 import { mapState } from "vuex";
@@ -49,14 +34,13 @@ export default {
     MglMap,
     MglNavigationControl,
     MglGeolocateControl,
-    MglMarker
   },
   data () {
     return {
       accessToken:
         "pk.eyJ1IjoidHVkb3Jjb25zdGFudGluIiwiYSI6ImNrM29yN2t3cjBiMDkzaG80cTdiczhzMmIifQ.fqelSp0srqiSV3qkfbE2qQ",
       mapStyle:
-        "mapbox://styles/tudorconstantin/ck3on4c1v27jt1cmx3gmr5j0x/draft",
+        "mapbox://styles/tudorconstantin/ck6e0nrah6h571ipdkgakat2u",        
       container: "mapContainer"
     };
   },
@@ -75,11 +59,25 @@ export default {
   methods: {
     onMapLoaded (event) {
       this.$store.map = event.map;
-      // console.log(`====got pins: `, this.$store.monuments);
+      this.$store.map.on('click', (e) => {
+
+        const clickedMonument = (this.$store.map.queryRenderedFeatures(e.point) || [])[0];
+        if(clickedMonument){
+          this.onMonumentClicked(clickedMonument.properties);
+        }
+      })
     },
-    // showRightPanel (monument) {
-    //   this.$store.commit("photos/openNav", monument);
-    // }
+    cssVars(){ //https://www.telerik.com/blogs/passing-variables-to-css-on-a-vue-component
+      return {        
+        '--height': window.innerHeight - document.getElementById('header').offsetHeight + 'px',
+        '--width': window.innerWidth + 'px',
+      }
+    },
+
+    onMonumentClicked(monument){
+      const fullMonument = this.$store.state.monuments.items.find( m => m['cod LMI'] === monument.lmi);
+      this.$store.dispatch('monuments/selectItem', fullMonument);
+    }
   }
 };
 </script>
@@ -87,4 +85,6 @@ export default {
 <style lang="sass" scoped>
 #mapContainer
   text-align: left
+  height: var(--height)
+  width: var(--width)
 </style>

@@ -6,7 +6,8 @@
 </template>
 
 <script>
-import Map from "@/components/Map_leaflet";
+// import Map from "@/components/Map_leaflet";
+import Map from "@/components/Map_mapbox";
 
 export default {
   name: "mapview",
