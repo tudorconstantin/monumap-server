@@ -18,10 +18,8 @@
 </template>
 
 <script>
-// import icons
 import { matRoom } from '@quasar/extras/material-icons'
 
-// import Mapbox from "mapbox-gl";
 import {
   MglMap,
   MglNavigationControl,
@@ -70,19 +68,16 @@ export default {
       })
     },
     cssVars(){ //https://www.telerik.com/blogs/passing-variables-to-css-on-a-vue-component
-    console.log(`======width`,window.innerWidth);
       return {        
         '--height': window.innerHeight - document.getElementById('header').offsetHeight + 'px',
         '--width': window.innerWidth + 'px',
       }
     },
-    onMonumentClicked(monument){
-      console.log(`==========event`, monument);
-    }
 
-    // showRightPanel (monument) {
-    //   this.$store.commit("photos/openNav", monument);
-    // }
+    onMonumentClicked(monument){
+      const fullMonument = this.$store.state.monuments.items.find( m => m['cod LMI'] === monument.lmi);
+      this.$store.dispatch('monuments/selectItem', fullMonument);
+    }
   }
 };
 </script>
