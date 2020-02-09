@@ -25,6 +25,10 @@ FROM nginx:stable-alpine as app
 
 ARG NGINX_PORT
 ARG API_URL
+# Change gid for the nginx user
+# To have usermod and groupmod, I have to install the shadow package.
+RUN apk --no-cache add shadow && \
+   groupmod -g 1024 -o nginx
 COPY --from=builder /data/dist /usr/share/nginx/html
 COPY docker/nginx.conf.template /etc/nginx/conf.d/nginx.conf.template
 RUN export
