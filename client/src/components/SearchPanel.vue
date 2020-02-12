@@ -2,7 +2,7 @@
   <div>
     <q-input
       bottom-slots
-      v-model="text"
+      v-model="filterText"
       label="Căutare"
       counter
       :dense="dense"
@@ -27,7 +27,7 @@
         clickable
         v-ripple
         v-for="item in monFilteredList"
-        :key="item['cod LMI']"
+        :key="item['cod_lmi']"
       >
         <q-item-section>{{item['denumire']}}</q-item-section>
       </q-item>
@@ -36,8 +36,6 @@
 </template>
 
 <script>
-// import mapGetters
-import { mapGetters } from 'vuex';
 
 export default {
   data () {
@@ -47,9 +45,17 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      monFilteredList: 'monuments/getFilteredArray',
-    }),
+    filterText: {
+      get () {
+        return this.$store.state.monuments.filterText || '';
+      },
+      set (value){
+        this.$store.commit('monuments/setFilterText', value);
+      }
+    },
+    monFilteredList () {
+      return this.$store.state.monuments.items.filter( m => m['cod_lmi'] && m['cod_lmi'].toLowerCase().indexOf(this.filterText.toLowerCase()) > -1);
+    }
   },
 }
 </script>

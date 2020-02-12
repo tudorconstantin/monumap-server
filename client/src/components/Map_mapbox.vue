@@ -1,5 +1,7 @@
 <template>
+  
   <div id="mapContainer" :style="cssVars()">
+    <q-btn color="white" text-color="black" label="Standard" @click="filterMap"/>
     <MglMap
       :accessToken="accessToken"
       :mapStyle.sync="mapStyle"
@@ -53,7 +55,6 @@ export default {
       const mons = (state.monuments && state.monuments.items) || [];
       return mons.filter(m => m.latitudine && m.longitudine);
     },
-    monumentShown: state => true || state.photos.isNavOpen
   }),
   methods: {
     onMapLoaded(event) {
@@ -114,6 +115,10 @@ export default {
         m => m["cod LMI"] === monument.lmi
       );
       this.$store.dispatch("monuments/selectItem", fullMonument);
+    },
+    filterMap(){
+      this.$store.map.removeLayer('layerID');
+      this.$store.map.removeSource('places');
     }
   }
 };
