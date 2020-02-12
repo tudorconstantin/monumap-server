@@ -7,7 +7,7 @@ const fs = require('fs-extra');
 const processFiles = require('./modules/process-files');
 
 // variables
-const csvPath = './data/LMI-B_last.csv';
+const csvPath = './data/LMI-B_curat_cu-categorii.csv';
 
 // ////////////////////////////////////////////////////////////////////////////
 // // METHODS
