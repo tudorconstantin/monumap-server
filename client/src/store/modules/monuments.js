@@ -1,5 +1,6 @@
 const state = {
   items: [],
+  geoJSON: {},
   selectedItem: {
     'nr': '',
     'cod LMI': '',
@@ -44,9 +45,12 @@ const actions = {
     const res = await fetch("/api/monuments/");
     const monuments = await res.json();
     commit("setMonuments", monuments);
+
+    const geojson = await fetch("/api/monuments.geojson");
+    const geojsonMonuments = await geojson.json();
+    commit("setGeoJSON", geojsonMonuments);
   },
   selectItem ({ commit }, item) {
-    // console.log(`@actions:: selectItem ${item['cod LMI']}`);
     commit("setSelectedItem", item);
   }
 };
@@ -54,6 +58,9 @@ const actions = {
 const mutations = {
   setMonuments (state, monuments) {
     state.items = monuments;
+  },
+  setGeoJSON (state, monuments){
+    state.geoJSON = monuments;
   },
   setSelectedItem (state, item) {
     //console.log(`@mutations:: setSelectedItem ${item['cod LMI']}`);

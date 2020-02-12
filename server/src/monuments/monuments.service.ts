@@ -12,9 +12,9 @@ export class MonumentsService implements OnModuleInit{
   async onModuleInit(){
     
     try {
-      const path = `${__dirname}/../data/monuments.csv`;
+      const path = `${__dirname}/../data/lmi_bucuresti.csv`;
       if (fs.existsSync(path)) {
-        let monuments = await csv().fromFile(path);
+        let monuments = await csv({delimiter: ";"}).fromFile(path);
         monuments.forEach( m => {
           m.lmi = m['cod LMI'];
           m.monumentType = m['tipul patrimoniului'];
@@ -40,7 +40,7 @@ export class MonumentsService implements OnModuleInit{
   }
 
   getGeoJSON(): any{
-    return GeoJSON.parse(this.monuments.filter( m => m.latitudine && m.longitudine), {Point: ['latitudine', 'longitudine'], include: ['lmi', 'monumentType', 'position']});
+    return GeoJSON.parse(this.monuments.filter( m => m.x && m.y), {Point: ['y', 'x'], include: ['cod_lmi', 'SIRINF']});
   }
 
   async listMonumentImages(monumentPath: string): Promise<string[]>{
