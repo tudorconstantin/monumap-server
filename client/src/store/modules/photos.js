@@ -8,9 +8,8 @@ const state = {
 const getters = {};
 
 const actions = {
-  async getMonumentImages ({ commit }, monumentID) {
+  async getMonumentImages ({ commit }, /**monumentID*/) {
     // eslint-disable-next-line no-console
-    console.log(`=======adding images to monument ${monumentID}`)
     commit('updateShownMonumentInfo', {
       images: [
         '/images/CJ-II-a-A-07240/DSC_3408.jpg',

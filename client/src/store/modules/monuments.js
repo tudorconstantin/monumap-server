@@ -22,6 +22,7 @@ const state = {
     'tipul patrimoniului': '',
     'observatii': '',
   },
+  monumentDisplayed: false,
 };
 
 const getters = {
@@ -57,6 +58,9 @@ const mutations = {
   setSelectedItem (state, item) {
     //console.log(`@mutations:: setSelectedItem ${item['cod LMI']}`);
     state.selectedItem = item;
+  },
+  setMonumentDisplay(state, v){
+    state.monumentDisplayed = v;
   }
 };
 export default {
