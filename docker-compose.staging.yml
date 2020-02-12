@@ -4,7 +4,7 @@ services:
   client:
     command: nginx -g "daemon off;"
     volumes:
-      - shared-volume-staging:/data/public/images:rw
+      - /srv/monumap-staging/images:/usr/share/nginx/html/images:rw
 
   server:
     env_file:
@@ -13,7 +13,4 @@ services:
       NODE_ENV: staging
     command: "npm start"
     volumes:
-      - shared-volume-staging:/usr/share/nginx/html/images:rw
-
-volumes:
-  shared-volume-staging:
+      - /srv/monumap-staging/images:/tmp/images:rw

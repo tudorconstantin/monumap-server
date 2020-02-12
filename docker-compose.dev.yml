@@ -13,7 +13,6 @@ services:
     volumes:
       - shared-volume-dev:/data/public/images:rw
     command: npm run serve
-    #image: registry.gitlab.prforge.com/tudor/monumap/client
     build: 
       context: ./client      
       target: builder
@@ -22,7 +21,7 @@ services:
 
   server:
     volumes:
-      - shared-volume-dev:/home/node/data:rw
+      - shared-volume-dev:/tmp/images:rw
     command: npm run start:dev
 
     build: 
