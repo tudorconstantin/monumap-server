@@ -64,6 +64,10 @@ export default {
         const clickedMonument = (this.$store.map.queryRenderedFeatures(e.point) || [])[0];
         if(clickedMonument){
           this.onMonumentClicked(clickedMonument.properties);
+          this.$store.commit('monuments/setMonumentDisplay', true);
+        } else {
+          
+          this.$store.dispatch('monuments/selectItem', {});
         }
       })
     },

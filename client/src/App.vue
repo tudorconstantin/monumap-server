@@ -1,9 +1,5 @@
 <template>
-  <q-layout
-    view="hHh lpR fFf"
-    class="aller-font"
-  >
-
+  <q-layout view="hHh lpR fFf" class="aller-font">
     <q-header
       elevated
       id="header"
@@ -12,45 +8,34 @@
       v-if="!isHomeRoute"
     >
       <q-toolbar>
-        <q-btn
-          dense
-          flat
-          round
-          icon="menu"
-          @click="left = !left"
-        />
+        <q-btn dense flat round icon="menu" @click="left = !left" />
 
         <q-toolbar-title class="row">
           <img
             class="q-pr-xs"
             src="./assets/logo_bucuresti_2050.svg"
             style="max-width: 600px; max-height: 40px;"
-          >
+          />
           <img
             class="q-pl-xs"
             src="./assets/logo_bucuresti_2050_text_fara-subtitlu_bicrom_linie.svg"
             style="max-width: 600px; max-height: 40px;"
-          >
+          />
         </q-toolbar-title>
 
         <q-btn
+          v-if="$store.state.monuments.selectedItem['nr'] > 0"
           dense
           flat
           round
           icon="menu"
-          @click="right = !right"
+          @click="$store.commit( 'monuments/setMonumentDisplay', !$store.state.monuments.monumentDisplayed )"
         />
       </q-toolbar>
 
       <q-tabs align="left">
-        <q-route-tab
-          to="/lmi"
-          label="LMI"
-        />
-        <q-route-tab
-          to="/locuire"
-          label="Locuire"
-        />
+        <q-route-tab to="/lmi" label="LMI" />
+        <q-route-tab to="/locuire" label="Locuire" />
       </q-tabs>
     </q-header>
 
@@ -67,8 +52,7 @@
 
     <q-drawer
       v-if="!isHomeRoute"
-      show-if-above
-      v-model="right"
+      v-model="monumentInfoShown"
       side="right"
       bordered
       :width="450"
@@ -80,32 +64,43 @@
     <q-page-container id="map-enclosure">
       <router-view />
     </q-page-container>
-
   </q-layout>
 </template>
 
 <script>
-import SearchPanel from '@/components/SearchPanel'
-import InfoPanel from '@/components/InfoPanel'
+import SearchPanel from "@/components/SearchPanel";
+import InfoPanel from "@/components/InfoPanel";
+import { mapState } from "vuex";
 
 export default {
-  data () {
+  data() {
     return {
       left: false,
       right: false,
-    }
+    };
   },
   components: {
     SearchPanel,
-    InfoPanel,
+    InfoPanel
   },
   computed: {
     // if home route, hide all bars and panels
-    isHomeRoute () {
-      return this.$route.name === 'home';
+    isHomeRoute() {
+      return this.$route.name === "home";
     },
+    monumentInfoShown: {
+      get: function() {
+        return this.$store.state.monuments.selectedItem["nr"] > 0 && this.$store.state.monuments.monumentDisplayed;
+      },
+      set: function(v) { 
+        this.right = v 
+      }
+    },
+    ...mapState({
+      monumentDisplayed: state => state.monuments.monumentDisplayed,
+    })
   },
-  created: function () {
+  created: function() {
     // get monuments list
     this.$store.dispatch("monuments/getAllMonuments");
     // get monuments photos
@@ -113,9 +108,8 @@ export default {
       "photos/getMonumentImages",
       this.$store.state.photos.monumentShown.nr
     );
-  },
-}
+  }
+};
 </script>
 
-<style lang="sass">
-</style>
+<style lang="sass"></style>
