@@ -24,6 +24,7 @@ const state = {
     'observatii': '',
   },
   monumentDisplayed: false,
+  filterText: '',
 };
 
 const getters = {
@@ -68,6 +69,9 @@ const mutations = {
   },
   setMonumentDisplay(state, v){
     state.monumentDisplayed = v;
+  },
+  setFilterText(state, v){
+    state.filterText = v;
   }
 };
 export default {
