@@ -9,7 +9,6 @@ const getters = {};
 
 const actions = {
   async getMonumentImages ({ commit }, /**monumentID*/) {
-    // eslint-disable-next-line no-console
     commit('updateShownMonumentInfo', {
       images: [
         '/images/CJ-II-a-A-07240/DSC_3408.jpg',
