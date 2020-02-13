@@ -1,13 +1,9 @@
 <template>
   <div class="q-pa-md q-gutter-md">
-
     <q-card class="my-card">
-      <q-img
-        src="https://cdn.quasar.dev/img/parallax2.jpg"
-        basic
-      >
+      <q-img src="https://cdn.quasar.dev/img/parallax2.jpg" basic>
         <div class="absolute-bottom text-subtitle2 text-left">
-          {{ currentItem['cod LMI'] }}: {{ currentItem['denumire'] }}
+          {{ currentItem["cod_lmi"] }}: {{ currentItem["denumire"] }}
         </div>
       </q-img>
     </q-card>
@@ -21,26 +17,30 @@
         <tbody>
           <tr>
             <td class="text-left">GPS</td>
-            <td class="text-right">alt: {{ currentItem['cota'] }} m</td>
-            <td class="text-right">{{ currentItem['latitudine'] }},{{ currentItem['longitudine'] }}</td>
+            <!-- <td class="text-right">alt: {{ currentItem['cota'] }} m</td> -->
+            <td class="text-right">
+              {{ formatGPSCoord(currentItem["y"]) }}, {{
+                formatGPSCoord(currentItem["x"])
+              }}
+            </td>
           </tr>
           <tr>
             <td class="text-left">UAT Superioară</td>
-            <td class="text-right">{{ currentItem['SIRSUP'] }}</td>
-            <td class="text-right">{{ currentItem['UAT'] }}</td>
+            <td class="text-right">{{ currentItem["SIRSUP"] }}</td>
+            <td class="text-right">{{ currentItem["UAT"] }}</td>
           </tr>
           <tr>
             <td class="text-left">Localitate</td>
-            <td class="text-right">{{ currentItem['SIRUTA'] }}</td>
-            <td class="text-right">{{ currentItem['localitate'] }}</td>
+            <td class="text-right">{{ currentItem["SIRUTA"] }}</td>
+            <td class="text-right">{{ currentItem["localitate"] }}</td>
           </tr>
           <tr>
             <td class="text-left">Adresă</td>
-            <td class="text-right">{{ currentItem['cod postal'] }}</td>
+            <td class="text-right">{{ currentItem["cod postal"] }}</td>
           </tr>
         </tbody>
         <q-card-section>
-          {{ currentItem['adresa'] }}
+          {{ currentItem["adresa"] }}
         </q-card-section>
       </q-markup-table>
     </q-card>
@@ -54,19 +54,19 @@
         <tbody>
           <tr>
             <td class="text-left">Tip Patrimoniu</td>
-            <td class="text-right">{{ currentItem['tipul patrimoniului'] }}</td>
+            <td class="text-right">{{ currentItem["tip_patrimoniu"] }}</td>
           </tr>
           <tr>
             <td class="text-left">Program</td>
-            <td class="text-right">{{ currentItem['program'] }}</td>
+            <td class="text-right">{{ currentItem["program"] }}</td>
           </tr>
           <tr>
             <td class="text-left">Tip Monument</td>
-            <td class="text-right">{{ currentItem['tipul monumentului'] }}</td>
+            <td class="text-right">{{ currentItem["tip_monument"] }}</td>
           </tr>
           <tr>
             <td class="text-left">Datare</td>
-            <td class="text-right">{{ currentItem['datare'] }}</td>
+            <td class="text-right">{{ currentItem["datare"] }}</td>
           </tr>
         </tbody>
       </q-markup-table>
@@ -81,18 +81,18 @@
         <tbody>
           <tr>
             <td class="text-left">Data vizitei</td>
-            <td class="text-right">? nu am inca ?</td>
+            <td class="text-right">{{ currentItem["fotografiat"] }}</td>
           </tr>
           <tr>
             <td class="text-left">Stare generală</td>
-            <td class="text-right">{{ currentItem['stare generală'] }}</td>
+            <td class="text-right">{{ currentItem["stare"] }}</td>
           </tr>
           <tr>
             <td class="text-left">Observații</td>
           </tr>
         </tbody>
         <q-card-section>
-          {{ currentItem['observatii'] }}
+          {{ currentItem["observatii"] }}
         </q-card-section>
       </q-markup-table>
     </q-card>
@@ -109,11 +109,14 @@ export default {
       currentItem: state => {
         return state.monuments.selectedItem;
       }
-    }),
-
+    })
   },
+  methods: {
+    formatGPSCoord(number) {
+      return parseFloat(number).toFixed(6);
+    }
+  }
 };
 </script>
 
-<style>
-</style>
+<style></style>

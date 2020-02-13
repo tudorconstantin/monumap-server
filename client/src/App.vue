@@ -24,12 +24,17 @@
         </q-toolbar-title>
 
         <q-btn
-          v-if="$store.state.monuments.selectedItem['nr'] > 0"
+          v-if="monumentInfoShown"
           dense
           flat
           round
           icon="menu"
-          @click="$store.commit( 'monuments/setMonumentDisplay', !$store.state.monuments.monumentDisplayed )"
+          @click="
+            $store.commit(
+              'monuments/setMonumentDisplay',
+              !$store.state.monuments.monumentDisplayed
+            )
+          "
         />
       </q-toolbar>
 
@@ -75,8 +80,7 @@ import { mapState } from "vuex";
 export default {
   data() {
     return {
-      left: false,
-      right: false,
+      left: false
     };
   },
   components: {
@@ -88,16 +92,12 @@ export default {
     isHomeRoute() {
       return this.$route.name === "home";
     },
-    monumentInfoShown: {
-      get: function() {
-        return this.$store.state.monuments.selectedItem["nr"] > 0 && this.$store.state.monuments.monumentDisplayed;
-      },
-      set: function(v) { 
-        this.right = v 
-      }
-    },
+
     ...mapState({
       monumentDisplayed: state => state.monuments.monumentDisplayed,
+      monumentInfoShown: state =>
+        state.monuments.monumentDisplayed &&
+        !!state.monuments.selectedItem["cod_lmi"]
     })
   },
   created: function() {
