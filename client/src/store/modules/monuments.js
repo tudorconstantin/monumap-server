@@ -2,47 +2,72 @@ const state = {
   items: [],
   geoJSON: {},
   selectedItem: {
-    'nr': '',
-    'cod LMI': '',
-    'val': '',
-    'SIRSUP': '',
-    'rang': '',
-    'UAT': '',
-    'SIRUTA': '',
-    'localitate': '',
-    'denumire': '',
-    'adresa': '',
-    'latitudine': '',
-    'longitudine': '',
-    'cota': '',
-    'cod postal': '',
-    'stare generală': '',
-    'program': '',
-    'tipul monumentului': '',
-    'datare': '',
-    'tipul patrimoniului': '',
-    'observatii': '',
+    cod_lmi: '',
+    SIRSUP: '',
+    rang: '',
+    UAT: '',
+    SIRUTA: '',
+    localitate: '',
+    SIRINF: '',
+    sector: '',
+    adresa: '',
+    strada_nume: '',
+    strada_numar: '',
+    cod_lmi_jud: '',
+    cod_lmi_nat: '',
+    cod_lmi_grupa: '',
+    cod_lmi_val: '',
+    cod_lmi_num: '',
+    tip_patrimoniu: '',
+    program: '',
+    tip_monument: '',
+    denumire: '',
+    observatii_adresa: '',
+    fotografiat: '',
+    Inexistent: '',
+    constructie_noua: '',
+    stare: '',
+    observatii: '',
+    observatii_corina: '',
+    datare: '',
+    x: '',
+    y: '',
   },
   monumentDisplayed: false,
   filterText: '',
 };
 
 const getters = {
-  getMapHeight () {
+  getMapHeight() {
     return document.getElementById('map-enclosure').offsetHeight;
   },
-  getSelectedItem () {
+  getSelectedItem() {
     // console.log(`@getters:: getSelectedItem ${state.selectedItem['cod LMI']}`);
     return state.selectedItem;
   },
-  getFilteredArray () {
+  filteredArray: (state ) => {
     // return array filtered by the search bar
-    return state.items;
+    return state.items.filter( m => m['cod_lmi'] && m['cod_lmi'].toLowerCase().indexOf(state.filterText.toLowerCase()) > -1);
   },
+
+  filteredGeoJSON: (state, getters) => {
+    const res = {
+      type: state.geoJSON.type,
+      features: [],
+    };
+    const filteredMonuments = getters.filteredArray.map(m => m.cod_lmi);
+    state.geoJSON.features.map( feature => {
+      if (filteredMonuments.indexOf(feature.properties.cod_lmi) > -1){
+        res.features.push(feature);
+      }
+    });
+    
+    return res;
+  }
 };
 
 const actions = {
-  async getAllMonuments ({ commit }) {
+  async getAllMonuments({ commit }) {
     const res = await fetch("/api/monuments/");
     const monuments = await res.json();
     commit("setMonuments", monuments);
@@ -51,26 +76,26 @@ const actions = {
     const geojsonMonuments = await geojson.json();
     commit("setGeoJSON", geojsonMonuments);
   },
-  selectItem ({ commit }, item) {
+  selectItem({ commit }, item) {
     commit("setSelectedItem", item);
   }
 };
 
 const mutations = {
-  setMonuments (state, monuments) {
+  setMonuments(state, monuments) {
     state.items = monuments;
   },
-  setGeoJSON (state, monuments){
+  setGeoJSON(state, monuments) {
     state.geoJSON = monuments;
   },
-  setSelectedItem (state, item) {
+  setSelectedItem(state, item) {
     //console.log(`@mutations:: setSelectedItem ${item['cod LMI']}`);
     state.selectedItem = item;
   },
-  setMonumentDisplay(state, v){
+  setMonumentDisplay(state, v) {
     state.monumentDisplayed = v;
   },
-  setFilterText(state, v){
+  setFilterText(state, v) {
     state.filterText = v;
   }
 };

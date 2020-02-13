@@ -40,7 +40,7 @@ export class MonumentsService implements OnModuleInit{
   }
 
   getGeoJSON(): any{
-    return GeoJSON.parse(this.monuments.filter( m => m.x && m.y), {Point: ['y', 'x'], include: ['cod_lmi', 'SIRINF']});
+    return GeoJSON.parse(this.monuments.filter( m => m.x && m.y), {Point: ['y', 'x'], include: ['cod_lmi', 'SIRINF', 'denumire']});
   }
 
   async listMonumentImages(monumentPath: string): Promise<string[]>{

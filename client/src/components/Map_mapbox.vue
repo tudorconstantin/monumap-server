@@ -72,10 +72,11 @@ export default {
         layout: {
           "icon-image": symbol + "-15",
           "icon-allow-overlap": true,
-          "text-field": symbol,
+          // "text-field": ['get', 'denumire'],
+          "text-field": 'monument',
           "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
           "text-size": 11,
-          "text-transform": "uppercase",
+          // "text-transform": "uppercase",
           "text-letter-spacing": 0.05,
           "text-offset": [0, 1.5]
         },
@@ -93,7 +94,6 @@ export default {
         ) || [])[0];
         if (clickedMonument) {
           this.onMonumentClicked(clickedMonument.properties);
-          this.$store.commit("monuments/setMonumentDisplay", true);
         } else {
           this.$store.dispatch("monuments/selectItem", {});
         }
@@ -112,13 +112,15 @@ export default {
 
     onMonumentClicked(monument) {
       const fullMonument = this.$store.state.monuments.items.find(
-        m => m["cod LMI"] === monument.lmi
+        m => m["cod_lmi"] === monument.cod_lmi
       );
       this.$store.dispatch("monuments/selectItem", fullMonument);
+      this.$store.commit("monuments/setMonumentDisplay", true);
+
     },
     filterMap(){
-      this.$store.map.removeLayer('layerID');
-      this.$store.map.removeSource('places');
+      const filteredGeoJSON = this.$store.getters['monuments/filteredGeoJSON'];
+      this.$store.map.getSource('places').setData(filteredGeoJSON);
     }
   }
 };
