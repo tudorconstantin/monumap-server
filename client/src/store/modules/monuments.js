@@ -1,3 +1,4 @@
+// import _ from 'lodash';
 const state = {
   items: [],
   geoJSON: {},
@@ -42,12 +43,13 @@ const getters = {
     return document.getElementById('map-enclosure').offsetHeight;
   },
   getSelectedItem() {
-    // console.log(`@getters:: getSelectedItem ${state.selectedItem['cod LMI']}`);
     return state.selectedItem;
   },
-  filteredArray: (state ) => {
+  filteredArray: (state) => {
+    if (!state.filterText) return state.items.filter(m => m.x && m.y);
+
     // return array filtered by the search bar
-    return state.items.filter( m => m['cod_lmi'] && m['cod_lmi'].toLowerCase().indexOf(state.filterText.toLowerCase()) > -1);
+    return state.items.filter(m => m.x && m.y && m['cod_lmi'] && m['cod_lmi'].toLowerCase().indexOf(state.filterText.toLowerCase()) > -1);
   },
 
   filteredGeoJSON: (state, getters) => {
@@ -55,13 +57,19 @@ const getters = {
       type: state.geoJSON.type,
       features: [],
     };
+    if (!getters.filteredArray) {
+      return res;
+    }
+    if (!state.geoJSON.features) {
+      return res;
+    }
     const filteredMonuments = getters.filteredArray.map(m => m.cod_lmi);
-    state.geoJSON.features.map( feature => {
-      if (filteredMonuments.indexOf(feature.properties.cod_lmi) > -1){
+    state.geoJSON.features.map(feature => {
+      if (filteredMonuments.indexOf(feature.properties.cod_lmi) > -1) {
         res.features.push(feature);
       }
     });
-    
+
     return res;
   }
 };
@@ -78,6 +86,11 @@ const actions = {
   },
   selectItem({ commit }, item) {
     commit("setSelectedItem", item);
+  },
+  setFilterText({ commit }, text) {
+    // _.debounce(function () { 
+      commit('setFilterText', text);
+    // }, 400)();
   }
 };
 
