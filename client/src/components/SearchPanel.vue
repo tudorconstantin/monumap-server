@@ -11,11 +11,7 @@
         <q-icon name="place" />
       </template>
       <template v-slot:append>
-        <q-icon
-          name="close"
-          @click="text = ''"
-          class="cursor-pointer"
-        />
+        <q-icon name="close" @click="text = ''" class="cursor-pointer" />
       </template>
 
       <template v-slot:hint>
@@ -29,37 +25,34 @@
         v-for="item in monFilteredList"
         :key="item['cod_lmi']"
       >
-        <q-item-section>{{item['denumire']}}</q-item-section>
+        <q-item-section>{{ item["denumire"] }}</q-item-section>
       </q-item>
     </q-list>
   </div>
 </template>
 
 <script>
-
 export default {
-  data () {
+  data() {
     return {
-      text: '',
-      dense: true,
-    }
+      text: "",
+      dense: true
+    };
   },
   computed: {
     filterText: {
-      get () {
-        return this.$store.state.monuments.filterText || '';
+      get() {
+        return this.$store.state.monuments.filterText || "";
       },
-      set (value){
-        this.$store.commit('monuments/setFilterText', value);
+      set: function(value) {
+        this.$store.dispatch("monuments/setFilterText", value);
       }
     },
-    monFilteredList () {
-      return this.$store.state.monuments.items.filter( m => m['cod_lmi'] && m['cod_lmi'].toLowerCase().indexOf(this.filterText.toLowerCase()) > -1);
+    monFilteredList() {
+      return this.$store.getters["monuments/filteredArray"];
     }
-  },
-}
+  }
+};
 </script>
 
-<style lang="sass" scoped>
-
-</style>
+<style lang="sass" scoped></style>

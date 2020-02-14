@@ -1,7 +1,5 @@
 <template>
-  
   <div id="mapContainer" :style="cssVars()">
-    <q-btn color="white" text-color="black" label="Standard" @click="filterMap"/>
     <MglMap
       :accessToken="accessToken"
       :mapStyle.sync="mapStyle"
@@ -27,7 +25,7 @@ import {
   // MglMarker
 } from "vue-mapbox";
 
-import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
   components: {
@@ -50,30 +48,36 @@ export default {
     this.map = null;
     this.matRoom = matRoom;
   },
-  computed: mapState({
-    monuments: state => {
-      const mons = (state.monuments && state.monuments.items) || [];
-      return mons.filter(m => m.latitudine && m.longitudine);
-    },
-  }),
+  computed: {
+    ...mapGetters({
+      monuments: "monuments/filteredArray",
+      geoJSON: "monuments/filteredGeoJSON"
+    }),
+  },
+  watch: {
+    /* eslint-disable-next-line no-unused-vars */
+    geoJSON(newValue, oldValue){
+      this.filterMap();
+    }
+  },
   methods: {
     onMapLoaded(event) {
       this.$store.map = event.map;
       this.$store.map.addSource("places", {
         type: "geojson",
-        data: this.$store.state.monuments.geoJSON,
+        data: this.geoJSON
       });
 
-      const symbol = 'music';
+      const symbol = "music";
       this.$store.map.addLayer({
-        id: 'layerID', // layerID,
+        id: "layerID", // layerID,
         type: "symbol",
         source: "places",
         layout: {
           "icon-image": symbol + "-15",
           "icon-allow-overlap": true,
           // "text-field": ['get', 'denumire'],
-          "text-field": 'monument',
+          "text-field": "monument",
           "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
           "text-size": 11,
           // "text-transform": "uppercase",
@@ -84,7 +88,7 @@ export default {
           "text-color": "#202",
           "text-halo-color": "#fff",
           "text-halo-width": 2
-        },
+        }
         // filter: ["==", "icon", symbol]
       });
 
@@ -116,11 +120,11 @@ export default {
       );
       this.$store.dispatch("monuments/selectItem", fullMonument);
       this.$store.commit("monuments/setMonumentDisplay", true);
-
     },
-    filterMap(){
-      const filteredGeoJSON = this.$store.getters['monuments/filteredGeoJSON'];
-      this.$store.map.getSource('places').setData(filteredGeoJSON);
+    filterMap() {
+      if(!this.$store.map) return;
+      const filteredGeoJSON = this.$store.getters["monuments/filteredGeoJSON"];
+      this.$store.map.getSource("places").setData(filteredGeoJSON);
     }
   }
 };
