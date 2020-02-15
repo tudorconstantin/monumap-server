@@ -1,5 +1,8 @@
 <template>
-  <div class="q-pa-md q-gutter-md">
+  <div
+    v-if="!!currentItem && currentItem['cod_lmi']"
+    class="q-pa-md q-gutter-md"
+  >
     <q-card class="my-card">
       <q-img src="https://cdn.quasar.dev/img/parallax2.jpg" basic>
         <div class="absolute-bottom text-subtitle2 text-left">
@@ -19,9 +22,8 @@
             <td class="text-left">GPS</td>
             <!-- <td class="text-right">alt: {{ currentItem['cota'] }} m</td> -->
             <td class="text-right">
-              {{ formatGPSCoord(currentItem["y"]) }}, {{
-                formatGPSCoord(currentItem["x"])
-              }}
+              {{ formatGPSCoord(currentItem["y"]) }},
+              {{ formatGPSCoord(currentItem["x"]) }}
             </td>
           </tr>
           <tr>

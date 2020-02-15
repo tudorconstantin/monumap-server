@@ -24,6 +24,7 @@
         v-ripple
         v-for="item in monFilteredList"
         :key="item['cod_lmi']"
+        @click="selectMonument(item['cod_lmi'])"
       >
         <q-item-section>{{ item["denumire"] }}</q-item-section>
       </q-item>
@@ -50,6 +51,11 @@ export default {
     },
     monFilteredList() {
       return this.$store.getters["monuments/filteredArray"];
+    }
+  },
+  methods: {
+    selectMonument(codLmi) {
+      this.$store.dispatch("monuments/selectItem", codLmi);
     }
   }
 };

@@ -84,8 +84,18 @@ const actions = {
     const geojsonMonuments = await geojson.json();
     commit("setGeoJSON", geojsonMonuments);
   },
-  selectItem({ commit }, item) {
-    commit("setSelectedItem", item);
+  selectItem({ commit, state }, codLmi) {
+    if(!codLmi){
+      commit("setSelectedItem", undefined);
+      commit("setMonumentDisplay", false);
+      return;
+    }
+    const fullMonument = state.items.find(
+      m => m["cod_lmi"] === codLmi
+    );
+    commit("setSelectedItem", fullMonument);
+    commit("setMonumentDisplay", true);
+
   },
   setFilterText({ commit }, text) {
     // _.debounce(function () { 

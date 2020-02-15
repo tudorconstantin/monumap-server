@@ -99,7 +99,7 @@ export default {
         if (clickedMonument) {
           this.onMonumentClicked(clickedMonument.properties);
         } else {
-          this.$store.dispatch("monuments/selectItem", {});
+          this.$store.dispatch("monuments/selectItem", null);
         }
       });
     },
@@ -115,11 +115,8 @@ export default {
     },
 
     onMonumentClicked(monument) {
-      const fullMonument = this.$store.state.monuments.items.find(
-        m => m["cod_lmi"] === monument.cod_lmi
-      );
-      this.$store.dispatch("monuments/selectItem", fullMonument);
-      this.$store.commit("monuments/setMonumentDisplay", true);
+      if(!monument) return this.$store.dispatch("monuments/selectItem", null);
+      this.$store.dispatch("monuments/selectItem", monument['cod_lmi']);
     },
     filterMap() {
       if(!this.$store.map) return;
