@@ -104,7 +104,7 @@ const actions = {
     const imgArr = await res.json();
 
     // save full path images to array
-    const fullPathImageArray = imgArr.map(photoName => `/${srvImgArrPath}/${photoName}`);
+    const fullPathImageArray = imgArr.map(photoName => `/images/${srvImgArrPath}/${photoName}`);
 
     // creat images properties
     fullMonument.images = fullPathImageArray;
