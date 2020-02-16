@@ -39,10 +39,10 @@ const state = {
 };
 
 const getters = {
-  getMapHeight() {
+  getMapHeight () {
     return document.getElementById('map-enclosure').offsetHeight;
   },
-  getSelectedItem() {
+  getSelectedItem () {
     return state.selectedItem;
   },
   filteredArray: (state) => {
@@ -87,16 +87,33 @@ const actions = {
     commit("setGeoJSON", geojsonMonuments);
     commit("setMonuments", geojsonMonuments.features.map(m => m.properties));
   },
-  selectItem({ commit, state }, codLmi) {
+  async selectItem ({ commit, state }, codLmi) {
+    // if null value
     if (!codLmi) {
       commit("setSelectedItem", undefined);
       commit("setMonumentDisplay", false);
       return;
     }
-    const fullMonument = (state.geoJSON.features.find(
-      m => m['properties']["cod_lmi"] === codLmi
-    ) || {})['properties'];
-    this.map.flyTo({ center: [fullMonument.x, fullMonument.y], zoom: 18 });
+
+    // get all monument data
+    const fullMonument = state.items.find(
+      m => m["cod_lmi"] === codLmi
+    );
+
+    // request image list
+    const srvImgArrPath = `${fullMonument['SIRSUP']}_${fullMonument['UAT']}/${fullMonument['SIRUTA']}_${fullMonument['localitate']}/${fullMonument['SIRINF']}_${fullMonument['sector'].replace(' ', '-')}/${fullMonument['cod_lmi']}`;
+    const imgArrReqPath = `/api/monument.images?monumentPath=${srvImgArrPath}`;
+    const res = await fetch(imgArrReqPath);
+    const imgArr = await res.json();
+
+    // save full path images to array
+    const fullPathImageArray = imgArr.map(photoName => `/images/${srvImgArrPath}/${photoName}`);
+
+    // creat images properties
+    fullMonument.images = fullPathImageArray;
+
+    // re-center map view
+    this.map.flyTo({ center: [fullMonument.x, fullMonument.y] });
     commit("setSelectedItem", fullMonument);
     commit("setMonumentDisplay", true);
 
@@ -112,20 +129,20 @@ const actions = {
 };
 
 const mutations = {
-  setMonuments(state, monuments) {
+  setMonuments (state, monuments) {
     state.items = monuments;
   },
-  setGeoJSON(state, monuments) {
+  setGeoJSON (state, monuments) {
     state.geoJSON = monuments;
   },
-  setSelectedItem(state, item) {
+  setSelectedItem (state, item) {
     //console.log(`@mutations:: setSelectedItem ${item['cod LMI']}`);
     state.selectedItem = item;
   },
-  setMonumentDisplay(state, v) {
+  setMonumentDisplay (state, v) {
     state.monumentDisplayed = v;
   },
-  setFilterText(state, v) {
+  setFilterText (state, v) {
     state.filterText = v;
   }
 };
