@@ -1,14 +1,23 @@
 <template>
-  <q-layout view="hHh lpR fFf" class="aller-font">
+  <q-layout
+    view="hHh lpR fFf"
+    class="aller-font"
+  >
     <q-header
       elevated
       id="header"
-      class="bg-primary text-white"
+      class="bg-primary text-purple"
       height-hint="98"
       v-if="!isHomeRoute"
     >
       <q-toolbar>
-        <q-btn dense flat round icon="menu" @click="left = !left" />
+        <q-btn
+          dense
+          flat
+          round
+          icon="menu"
+          @click="left = !left"
+        />
 
         <q-toolbar-title class="row">
           <img
@@ -39,8 +48,14 @@
       </q-toolbar>
 
       <q-tabs align="left">
-        <q-route-tab to="/lmi" label="LMI" />
-        <q-route-tab to="/locuire" label="Locuire" />
+        <q-route-tab
+          to="/lmi"
+          label="LMI"
+        />
+        <q-route-tab
+          to="/locuire"
+          label="Locuire"
+        />
       </q-tabs>
     </q-header>
 
@@ -78,7 +93,7 @@ import InfoPanel from "@/components/InfoPanel";
 import { mapState } from "vuex";
 
 export default {
-  data() {
+  data () {
     return {
       left: true
     };
@@ -89,7 +104,7 @@ export default {
   },
   computed: {
     // if home route, hide all bars and panels
-    isHomeRoute() {
+    isHomeRoute () {
       return this.$route.name === "home";
     },
 
@@ -100,7 +115,7 @@ export default {
         !!state.monuments.selectedItem["cod_lmi"]
     })
   },
-  created: function() {
+  created: function () {
     // get monuments list
     this.$store.dispatch("monuments/getAllMonuments");
     // get monuments photos
