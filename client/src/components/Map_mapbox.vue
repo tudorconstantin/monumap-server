@@ -17,6 +17,8 @@
 
 <script>
 import { matRoom } from "@quasar/extras/material-icons";
+import "mapbox-gl/dist/mapbox-gl.css";
+import img from "./../assets/monument-pin-3.png";
 
 import {
   MglMap,
@@ -52,32 +54,30 @@ export default {
     ...mapGetters({
       monuments: "monuments/filteredArray",
       geoJSON: "monuments/filteredGeoJSON"
-    }),
+    })
   },
   watch: {
     /* eslint-disable-next-line no-unused-vars */
-    geoJSON(newValue, oldValue){
+    geoJSON(newValue, oldValue) {
       this.filterMap();
     }
   },
   methods: {
-    onMapLoaded(event) {
-      this.$store.map = event.map;
+    customizeMap(opts){
       this.$store.map.addSource("places", {
         type: "geojson",
         data: this.geoJSON
       });
-
-      const symbol = "music";
+      const symbol = opts.symbol;
       this.$store.map.addLayer({
         id: "layerID", // layerID,
         type: "symbol",
         source: "places",
         layout: {
-          "icon-image": symbol + "-15",
+          "icon-image": symbol,
           "icon-allow-overlap": true,
           // "text-field": ['get', 'denumire'],
-          "text-field": "monument",
+          "text-field": "P",
           "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
           "text-size": 11,
           // "text-transform": "uppercase",
@@ -103,6 +103,21 @@ export default {
         }
       });
     },
+    onMapLoaded(event) {
+      const map = event.map;
+      this.$store.map = map;
+      const self = this;
+      map.loadImage(img, function(error, image) {
+        if (error) {
+          console.error(`error loading image`, error);
+          map.customizeMap({symbol: 'music'});
+        }
+        map.addImage('monument-pin', image);
+        self.customizeMap({symbol: 'monument-pin'});
+      });
+
+
+    },
     cssVars() {
       //https://www.telerik.com/blogs/passing-variables-to-css-on-a-vue-component
       return {
@@ -115,11 +130,11 @@ export default {
     },
 
     onMonumentClicked(monument) {
-      if(!monument) return this.$store.dispatch("monuments/selectItem", null);
-      this.$store.dispatch("monuments/selectItem", monument['cod_lmi']);
+      if (!monument) return this.$store.dispatch("monuments/selectItem", null);
+      this.$store.dispatch("monuments/selectItem", monument["cod_lmi"]);
     },
     filterMap() {
-      if(!this.$store.map) return;
+      if (!this.$store.map) return;
       const filteredGeoJSON = this.$store.getters["monuments/filteredGeoJSON"];
       this.$store.map.getSource("places").setData(filteredGeoJSON);
     }

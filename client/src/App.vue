@@ -46,7 +46,7 @@
 
     <q-drawer
       v-if="!isHomeRoute"
-      show-if-above
+      :overlay="true"
       v-model="left"
       side="left"
       bordered
@@ -80,7 +80,7 @@ import { mapState } from "vuex";
 export default {
   data() {
     return {
-      left: false
+      left: true
     };
   },
   components: {
