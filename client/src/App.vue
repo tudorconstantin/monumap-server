@@ -100,14 +100,17 @@ export default {
         !!state.monuments.selectedItem["cod_lmi"]
     })
   },
-  created: function() {
+  created: async function() {
     // get monuments list
-    this.$store.dispatch("monuments/getAllMonuments");
+    await this.$store.dispatch("monuments/getAllMonuments");
+
     // get monuments photos
     this.$store.dispatch(
       "photos/getMonumentImages",
       this.$store.state.photos.monumentShown.nr
     );
+    // open the left panel
+    this.left = true;
   }
 };
 </script>

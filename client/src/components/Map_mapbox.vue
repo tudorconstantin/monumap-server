@@ -42,7 +42,7 @@ export default {
       mapStyle: "mapbox://styles/tudorconstantin/ck6e0nrah6h571ipdkgakat2u",
       container: "mapContainer",
       center: [26.0986, 44.4365],
-      zoom: 11.5
+      zoom: 12.5
     };
   },
 
@@ -75,9 +75,9 @@ export default {
         source: "places",
         layout: {
           "icon-image": symbol,
-          "icon-allow-overlap": true,
+          "icon-allow-overlap": false,
           // "text-field": ['get', 'denumire'],
-          "text-field": "P",
+          // "text-field": "P",
           "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
           "text-size": 11,
           // "text-transform": "uppercase",
@@ -101,6 +101,10 @@ export default {
         } else {
           this.$store.dispatch("monuments/selectItem", null);
         }
+      }).on('zoomend', () => {
+        this.$store.dispatch("monuments/mapViewChanged");
+      }).on('moveend', () => {
+        this.$store.dispatch("monuments/mapViewChanged");
       });
     },
     onMapLoaded(event) {
@@ -114,8 +118,6 @@ export default {
         map.addImage('monument-pin', image);
         self.customizeMap({symbol: 'monument-pin'});
       });
-
-
     },
     cssVars() {
       //https://www.telerik.com/blogs/passing-variables-to-css-on-a-vue-component
