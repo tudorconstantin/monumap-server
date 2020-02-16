@@ -109,7 +109,6 @@ export default {
       const self = this;
       map.loadImage(img, function(error, image) {
         if (error) {
-          console.error(`error loading image`, error);
           map.customizeMap({symbol: 'music'});
         }
         map.addImage('monument-pin', image);
