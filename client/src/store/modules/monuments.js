@@ -39,10 +39,10 @@ const state = {
 };
 
 const getters = {
-  getMapHeight() {
+  getMapHeight () {
     return document.getElementById('map-enclosure').offsetHeight;
   },
-  getSelectedItem() {
+  getSelectedItem () {
     return state.selectedItem;
   },
   filteredArray: (state) => {
@@ -75,7 +75,7 @@ const getters = {
 };
 
 const actions = {
-  async getAllMonuments({ commit }) {
+  async getAllMonuments ({ commit }) {
     const res = await fetch("/api/monuments/");
     const monuments = await res.json();
     commit("setMonuments", monuments);
@@ -84,42 +84,68 @@ const actions = {
     const geojsonMonuments = await geojson.json();
     commit("setGeoJSON", geojsonMonuments);
   },
-  selectItem({ commit, state }, codLmi) {    
-    if(!codLmi){
+  async selectItem ({ commit, state }, codLmi) {
+    console.log(`cod_lmi = ${codLmi}`);
+    // if null value
+    if (!codLmi) {
       commit("setSelectedItem", undefined);
       commit("setMonumentDisplay", false);
       return;
     }
+
+    // get all monument data
     const fullMonument = state.items.find(
       m => m["cod_lmi"] === codLmi
     );
-    this.map.flyTo({ center: [fullMonument.x, fullMonument.y ] });
+    console.log(fullMonument);
+
+    // request image list
+    const srvImgArrPath = `${fullMonument['SIRSUP']}_${fullMonument['UAT']}/${fullMonument['SIRUTA']}_${fullMonument['localitate']}/${fullMonument['SIRINF']}_${fullMonument['sector'].replace(' ', '-')}/${fullMonument['cod_lmi']}`;
+    const imgArrReqPath = `/api/monument.images?monumentPath=${srvImgArrPath}`;
+    const res = await fetch(imgArrReqPath);
+    const imgArr = await res.json();
+
+    // if imgArr = []
+    if (imgArr.length === 0) {
+      console.log('array is zero');
+    } else {
+      console.log(`imgArr: ${imgArr}`);
+    }
+
+    // save full path images to array
+    const fullPathImageArray = imgArr.map(photoName => `/${srvImgArrPath}/${photoName}`);
+
+    // creat images properties
+    fullMonument.images = fullPathImageArray;
+
+    // re-center map view
+    this.map.flyTo({ center: [fullMonument.x, fullMonument.y] });
     commit("setSelectedItem", fullMonument);
     commit("setMonumentDisplay", true);
 
   },
-  setFilterText({ commit }, text) {
+  setFilterText ({ commit }, text) {
     // _.debounce(function () { 
-      commit('setFilterText', text);
+    commit('setFilterText', text);
     // }, 400)();
   }
 };
 
 const mutations = {
-  setMonuments(state, monuments) {
+  setMonuments (state, monuments) {
     state.items = monuments;
   },
-  setGeoJSON(state, monuments) {
+  setGeoJSON (state, monuments) {
     state.geoJSON = monuments;
   },
-  setSelectedItem(state, item) {
+  setSelectedItem (state, item) {
     //console.log(`@mutations:: setSelectedItem ${item['cod LMI']}`);
     state.selectedItem = item;
   },
-  setMonumentDisplay(state, v) {
+  setMonumentDisplay (state, v) {
     state.monumentDisplayed = v;
   },
-  setFilterText(state, v) {
+  setFilterText (state, v) {
     state.filterText = v;
   }
 };
