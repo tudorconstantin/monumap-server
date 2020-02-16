@@ -113,7 +113,7 @@ const actions = {
     fullMonument.images = fullPathImageArray;
 
     // re-center map view
-    this.map.flyTo({ center: [fullMonument.x, fullMonument.y] });
+    this.map.flyTo({ center: [fullMonument.x, fullMonument.y], zoom: 18 });
     commit("setSelectedItem", fullMonument);
     commit("setMonumentDisplay", true);
 
