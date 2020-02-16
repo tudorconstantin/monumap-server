@@ -33,10 +33,18 @@ export class MonumentsService implements OnModuleInit{
     
   }
   findAll(): any{
-    return this.monuments;//.slice(0, 100);
-    // const res = {};
-    // this.monuments.forEach( m => res[m['tipul patrimoniului']] = (res[m['tipul patrimoniului']] || 0) + 1);
-    // return res;
+     return this.monuments;//.slice(0, 100);
+     const hash = {};
+    //  this.monuments.forEach( m => hash[m['denumire']] = (hash[m['denumire']] || 0) + 1);
+    //  const res = [];
+    //  for (const denumire in hash){
+    //    res.push([denumire, hash[denumire]]);
+    //  }
+    //  return res.sort( (a, b) => {
+    //    if (a[1] < b[1]) return 1;
+    //    if (a[1] > b[1]) return -1;
+    //    return 0;
+    //  });
   }
 
   getGeoJSON(): any{
