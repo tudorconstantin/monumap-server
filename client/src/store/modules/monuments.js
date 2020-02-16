@@ -96,9 +96,9 @@ const actions = {
     }
 
     // get all monument data
-    const fullMonument = state.items.find(
-      m => m["cod_lmi"] === codLmi
-    );
+    const fullMonument = state.geoJSON.features.find(
+      m => m['properties']["cod_lmi"] === codLmi
+    )['properties'];
 
     // request image list
     const srvImgArrPath = `${fullMonument['SIRSUP']}_${fullMonument['UAT']}/${fullMonument['SIRUTA']}_${fullMonument['localitate']}/${fullMonument['SIRINF']}_${fullMonument['sector'].replace(' ', '-')}/${fullMonument['cod_lmi']}`;
