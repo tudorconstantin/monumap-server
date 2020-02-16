@@ -1,14 +1,19 @@
 <template>
   <div
     v-if="!!currentItem && currentItem['cod_lmi']"
-    class="q-pa-md q-gutter-md"
+    class="q-pa-md q-gutter-md bg-grey-5"
   >
     <q-card class="my-card">
       <q-img
-        :src="currentItem.images[0]  || 'https://cdn.quasar.dev/img/parallax2.jpg'"
+        :src="currentItem.images[0]  || require('../assets/no-image.png')"
+        :alt="currentItem.cod_lmi"
+        width="270px"
         basic
       >
-        <div class="absolute-bottom text-subtitle2 text-left">
+        <div class="
+        absolute-bottom
+        text-subtitle2
+        text-left">
           {{ currentItem["cod_lmi"] }}: {{ currentItem["denumire"] }}
         </div>
       </q-img>
@@ -124,4 +129,7 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="sass" scoped>
+q-img
+  image-orientation: from-image
+</style>
