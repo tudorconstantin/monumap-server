@@ -5,7 +5,7 @@
   >
     <q-card class="my-card">
       <q-img
-        src="currentItem.images[0]"
+        :src="currentItem.images[0]  || 'https://cdn.quasar.dev/img/parallax2.jpg'"
         basic
       >
         <div class="absolute-bottom text-subtitle2 text-left">

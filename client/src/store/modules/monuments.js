@@ -85,7 +85,6 @@ const actions = {
     commit("setGeoJSON", geojsonMonuments);
   },
   async selectItem ({ commit, state }, codLmi) {
-    console.log(`cod_lmi = ${codLmi}`);
     // if null value
     if (!codLmi) {
       commit("setSelectedItem", undefined);
@@ -97,20 +96,12 @@ const actions = {
     const fullMonument = state.items.find(
       m => m["cod_lmi"] === codLmi
     );
-    console.log(fullMonument);
 
     // request image list
     const srvImgArrPath = `${fullMonument['SIRSUP']}_${fullMonument['UAT']}/${fullMonument['SIRUTA']}_${fullMonument['localitate']}/${fullMonument['SIRINF']}_${fullMonument['sector'].replace(' ', '-')}/${fullMonument['cod_lmi']}`;
     const imgArrReqPath = `/api/monument.images?monumentPath=${srvImgArrPath}`;
     const res = await fetch(imgArrReqPath);
     const imgArr = await res.json();
-
-    // if imgArr = []
-    if (imgArr.length === 0) {
-      console.log('array is zero');
-    } else {
-      console.log(`imgArr: ${imgArr}`);
-    }
 
     // save full path images to array
     const fullPathImageArray = imgArr.map(photoName => `/${srvImgArrPath}/${photoName}`);
