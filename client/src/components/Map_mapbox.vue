@@ -1,5 +1,8 @@
 <template>
-  <div id="mapContainer" :style="cssVars()">
+  <div
+    id="mapContainer"
+    :style="cssVars()"
+  >
     <MglMap
       :accessToken="accessToken"
       :mapStyle.sync="mapStyle"
@@ -18,7 +21,7 @@
 <script>
 import { matRoom } from "@quasar/extras/material-icons";
 import "mapbox-gl/dist/mapbox-gl.css";
-import img from "./../assets/monument-pin-3.png";
+import img from "./../assets/marker_v12.png";
 
 import {
   MglMap,
@@ -35,7 +38,7 @@ export default {
     MglNavigationControl,
     MglGeolocateControl
   },
-  data() {
+  data () {
     return {
       accessToken:
         "pk.eyJ1IjoidHVkb3Jjb25zdGFudGluIiwiYSI6ImNrM29yN2t3cjBiMDkzaG80cTdiczhzMmIifQ.fqelSp0srqiSV3qkfbE2qQ",
@@ -46,7 +49,7 @@ export default {
     };
   },
 
-  created() {
+  created () {
     this.map = null;
     this.matRoom = matRoom;
   },
@@ -58,12 +61,12 @@ export default {
   },
   watch: {
     /* eslint-disable-next-line no-unused-vars */
-    geoJSON(newValue, oldValue) {
+    geoJSON (newValue, oldValue) {
       this.filterMap();
     }
   },
   methods: {
-    customizeMap(opts){
+    customizeMap (opts) {
       this.$store.map.addSource("places", {
         type: "geojson",
         data: this.geoJSON
@@ -77,7 +80,7 @@ export default {
           "icon-image": symbol,
           "icon-allow-overlap": true,
           // "text-field": ['get', 'denumire'],
-          "text-field": "P",
+          "text-field": ".",
           "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
           "text-size": 11,
           // "text-transform": "uppercase",
@@ -103,22 +106,22 @@ export default {
         }
       });
     },
-    onMapLoaded(event) {
+    onMapLoaded (event) {
       const map = event.map;
       this.$store.map = map;
       const self = this;
-      map.loadImage(img, function(error, image) {
+      map.loadImage(img, function (error, image) {
         if (error) {
           console.error(`error loading image`, error);
-          map.customizeMap({symbol: 'music'});
+          map.customizeMap({ symbol: 'music' });
         }
         map.addImage('monument-pin', image);
-        self.customizeMap({symbol: 'monument-pin'});
+        self.customizeMap({ symbol: 'monument-pin' });
       });
 
 
     },
-    cssVars() {
+    cssVars () {
       //https://www.telerik.com/blogs/passing-variables-to-css-on-a-vue-component
       return {
         "--height":
@@ -129,11 +132,11 @@ export default {
       };
     },
 
-    onMonumentClicked(monument) {
+    onMonumentClicked (monument) {
       if (!monument) return this.$store.dispatch("monuments/selectItem", null);
       this.$store.dispatch("monuments/selectItem", monument["cod_lmi"]);
     },
-    filterMap() {
+    filterMap () {
       if (!this.$store.map) return;
       const filteredGeoJSON = this.$store.getters["monuments/filteredGeoJSON"];
       this.$store.map.getSource("places").setData(filteredGeoJSON);

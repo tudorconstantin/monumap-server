@@ -7,7 +7,6 @@
       <q-img
         :src="currentItem.images[0]  || require('../assets/no-image.png')"
         :alt="currentItem.cod_lmi"
-        width="270px"
         basic
       >
         <div class="
