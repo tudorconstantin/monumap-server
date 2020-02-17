@@ -88,8 +88,8 @@ export default {
           "text-offset": [0, 1.5]
         },
         paint: {
-          "text-color": "#202",
-          "text-halo-color": "#fff",
+          "text-color": "#fff",
+          "text-halo-color": "#fb5208",
           "text-halo-width": 2
         }
         // filter: ["==", "icon", symbol]
