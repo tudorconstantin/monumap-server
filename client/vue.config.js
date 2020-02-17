@@ -2,6 +2,10 @@ const backendApi = process.env.API_URL
   ? `http://${process.env.API_URL}`
   : "http://localhost:8081";
 
+const photosApi = process.env.API_URL
+  ? `http://${process.env.API_URL}`
+  : "https://monumap-staging.prforge.com";
+
 module.exports = {
   pluginOptions: {
     quasar: {
@@ -18,7 +22,11 @@ module.exports = {
         target: backendApi,
         ws: true,
         changeOrigin: true
-      }
-    }
+      },
+      '^/images': {
+        target: photosApi,
+        changeOrigin: true
+      },
+    },
   }
 }
