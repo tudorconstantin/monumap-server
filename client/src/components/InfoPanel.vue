@@ -19,91 +19,82 @@
       </q-img>
     </q-card>
 
-    <q-card class="my-card">
+    <q-card class="my-card bg-grey-3">
       <q-card-section>
-        <div class="text-h6">Localizare</div>
+        <div class="text-subtitle1">Localizare</div>
       </q-card-section>
 
-      <q-markup-table>
+      <q-markup-table wrap-cells>
         <tbody>
           <tr>
-            <td class="text-left">GPS</td>
-            <!-- <td class="text-right">alt: {{ currentItem['cota'] }} m</td> -->
-            <td class="text-right">
+            <td class="text-left name-column">Coordonate</td>
+            <td class="text-left">
               {{ formatGPSCoord(currentItem["y"]) }},
               {{ formatGPSCoord(currentItem["x"]) }}
             </td>
           </tr>
           <tr>
-            <td class="text-left">UAT Superioară</td>
-            <td class="text-right">{{ currentItem["SIRSUP"] }}</td>
-            <td class="text-right">{{ currentItem["UAT"] }}</td>
-          </tr>
-          <tr>
             <td class="text-left">Localitate</td>
-            <td class="text-right">{{ currentItem["SIRUTA"] }}</td>
-            <td class="text-right">{{ currentItem["localitate"] }}</td>
+            <td class="text-left">
+              {{ currentItem["SIRUTA"] }} {{ currentItem["localitate"] }}
+            </td>
           </tr>
           <tr>
-            <td class="text-left">Adresă</td>
-            <td class="text-right">{{ currentItem["cod postal"] }}</td>
-          </tr>
-        </tbody>
-        <q-card-section>
-          {{ currentItem["adresa"] }}
-        </q-card-section>
-      </q-markup-table>
-    </q-card>
-
-    <q-card class="my-card">
-      <q-card-section>
-        <div class="text-h6">Încadrare</div>
-      </q-card-section>
-
-      <q-markup-table>
-        <tbody>
-          <tr>
-            <td class="text-left">Tip Patrimoniu</td>
-            <td class="text-right">{{ currentItem["tip_patrimoniu"] }}</td>
-          </tr>
-          <tr>
-            <td class="text-left">Program</td>
-            <td class="text-right">{{ currentItem["program"] }}</td>
-          </tr>
-          <tr>
-            <td class="text-left">Tip Monument</td>
-            <td class="text-right">{{ currentItem["tip_monument"] }}</td>
-          </tr>
-          <tr>
-            <td class="text-left">Datare</td>
-            <td class="text-right">{{ currentItem["datare"] }}</td>
+            <td class="text-left">Adresa</td>
+            <td class="text-left">
+              {{ currentItem["adresa"] }}
+            </td>
           </tr>
         </tbody>
       </q-markup-table>
     </q-card>
 
-    <q-card class="my-card">
+    <q-card class="my-card bg-grey-3">
       <q-card-section>
-        <div class="text-h6">Evaluare</div>
+        <div class="text-subtitle1">Încadrare</div>
       </q-card-section>
 
-      <q-markup-table>
+      <q-markup-table wrap-cells>
         <tbody>
           <tr>
-            <td class="text-left">Data vizitei</td>
-            <td class="text-right">{{ currentItem["fotografiat"] }}</td>
+            <td class="text-left name-column">Patrimoniu</td>
+            <td class="text-left">{{ currentItem["tip_patrimoniu"] }}</td>
           </tr>
           <tr>
-            <td class="text-left">Stare generală</td>
-            <td class="text-right">{{ currentItem["stare"] }}</td>
+            <td class="text-left name-column">Program</td>
+            <td class="text-left">{{ currentItem["program_arhitectura"] }}</td>
           </tr>
           <tr>
-            <td class="text-left">Observații</td>
+            <td class="text-left name-column">Monument</td>
+            <td class="text-left">{{ currentItem["tip_monument"] }}</td>
+          </tr>
+          <tr>
+            <td class="text-left name-column">Datare</td>
+            <td class="text-left">{{ currentItem["datare"] }}</td>
           </tr>
         </tbody>
-        <q-card-section>
-          {{ currentItem["observatii"] }}
-        </q-card-section>
+      </q-markup-table>
+    </q-card>
+
+    <q-card class="my-card bg-grey-3">
+      <q-card-section>
+        <div class="text-subtitle1">Evaluare</div>
+      </q-card-section>
+
+      <q-markup-table wrap-cells>
+        <tbody>
+          <tr>
+            <td class="text-left name-column">Stare generală</td>
+            <td class="text-left">{{ currentItem["stare"] }}</td>
+          </tr>
+          <tr>
+            <td class="text-left name-column">Observații</td>
+            <td class="text-left">
+              {{ currentItem["observatii"] }}<br />
+              {{ currentItem["observatii_corina"] }}
+            </td>
+          </tr>
+        </tbody>
       </q-markup-table>
     </q-card>
   </div>
@@ -130,6 +121,8 @@ export default {
 </script>
 
 <style lang="sass" scoped>
+.name-column
+  width: 20px
 q-img
   image-orientation: from-image
 </style>

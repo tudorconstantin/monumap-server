@@ -6,7 +6,7 @@
     <q-header
       elevated
       id="header"
-      class="bg-primary text-purple"
+      class="bg-primary text-blue-grey-10"
       height-hint="98"
       v-if="!isHomeRoute"
     >
@@ -75,7 +75,7 @@
       v-model="monumentInfoShown"
       side="right"
       bordered
-      :width="450"
+      :width="400"
     >
       <!-- drawer content -->
       <info-panel></info-panel>

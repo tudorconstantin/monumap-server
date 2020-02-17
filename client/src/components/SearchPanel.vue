@@ -5,7 +5,7 @@
       v-model="filterText"
       label="Căutare"
       counter
-      :dense="dense"
+      dense="true"
     >
       <template v-slot:prepend>
         <q-icon name="place" />
@@ -42,7 +42,6 @@ export default {
   data () {
     return {
       text: "",
-      dense: true
     };
   },
   computed: {
