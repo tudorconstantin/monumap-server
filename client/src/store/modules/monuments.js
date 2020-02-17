@@ -46,10 +46,15 @@ const getters = {
     return state.selectedItem;
   },
   filteredArray: (state) => {
-    if (!state.filterText) return state.items.filter(m => m.x && m.y);
+    if (!state.geoJSON.features) return [];
+    if (!state.filterText) return state.geoJSON.features.map(f => f.properties);
 
-    // return array filtered by the search bar
-    return state.items.filter(m => m.x && m.y && m['cod_lmi'] && m['cod_lmi'].toLowerCase().indexOf(state.filterText.toLowerCase()) > -1);
+    // return array filtered by the search bar, searching without diacritics
+    return state.items.filter(m =>
+      (m['cod_lmi'] && m['cod_lmi'].toLowerCase().indexOf(state.filterText.toLowerCase()) > -1)
+      || (m['denumire'] && m['denumire'].normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().indexOf(state.filterText.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()) > -1)
+
+    );
   },
 
   filteredGeoJSON: (state, getters) => {
@@ -75,14 +80,12 @@ const getters = {
 };
 
 const actions = {
-  async getAllMonuments ({ commit }) {
-    const res = await fetch("/api/monuments/");
-    const monuments = await res.json();
-    commit("setMonuments", monuments);
+  async getAllMonuments({ commit }) {
 
     const geojson = await fetch("/api/monuments.geojson");
     const geojsonMonuments = await geojson.json();
     commit("setGeoJSON", geojsonMonuments);
+    commit("setMonuments", geojsonMonuments.features.map(m => m.properties));
   },
   async selectItem ({ commit, state }, codLmi) {
     // if null value
@@ -93,9 +96,9 @@ const actions = {
     }
 
     // get all monument data
-    const fullMonument = state.items.find(
-      m => m["cod_lmi"] === codLmi
-    );
+    const fullMonument = state.geoJSON.features.find(
+      m => m['properties']["cod_lmi"] === codLmi
+    )['properties'];
 
     // request image list
     const srvImgArrPath = `${fullMonument['SIRSUP']}_${fullMonument['UAT']}/${fullMonument['SIRUTA']}_${fullMonument['localitate']}/${fullMonument['SIRINF']}_${fullMonument['sector'].replace(' ', '-')}/${fullMonument['cod_lmi']}`;
@@ -110,15 +113,18 @@ const actions = {
     fullMonument.images = fullPathImageArray;
 
     // re-center map view
-    this.map.flyTo({ center: [fullMonument.x, fullMonument.y] });
+    this.map.flyTo({ center: [fullMonument.x, fullMonument.y], zoom: 18 });
     commit("setSelectedItem", fullMonument);
     commit("setMonumentDisplay", true);
 
   },
-  setFilterText ({ commit }, text) {
-    // _.debounce(function () { 
+  setFilterText({ commit }, text) {
     commit('setFilterText', text);
-    // }, 400)();
+  },
+  mapViewChanged({ commit, state }) {
+    commit('setMonuments', state.geoJSON.features.map(i => i.properties));
+    const items = this.map.queryRenderedFeatures();
+    commit('setMonuments', items.map(i => i.properties));
   }
 };
 
