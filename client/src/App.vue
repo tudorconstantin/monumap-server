@@ -115,7 +115,7 @@ export default {
         !!state.monuments.selectedItem["cod_lmi"]
     })
   },
-  created: async function() {
+  created: async function () {
     // get monuments list
     await this.$store.dispatch("monuments/getAllMonuments");
 
@@ -130,4 +130,7 @@ export default {
 };
 </script>
 
-<style lang="sass"></style>
+<style lang="sass" scoped>
+img
+  padding: 0 60px
+</style>
