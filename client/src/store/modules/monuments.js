@@ -51,9 +51,7 @@ const getters = {
 
     // return array filtered by the search bar, searching without diacritics
     return state.items.filter(m =>
-      (m['cod_lmi'] && m['cod_lmi'].toLowerCase().indexOf(state.filterText.toLowerCase()) > -1)
-      || (m['denumire'] && m['denumire'].normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().indexOf(state.filterText.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()) > -1)
-
+      (m['cod_lmi'] && m['cod_lmi'].toLowerCase().includes(state.filterText.toLowerCase()))
     );
   },
 
@@ -80,7 +78,7 @@ const getters = {
 };
 
 const actions = {
-  async getAllMonuments({ commit }) {
+  async getAllMonuments ({ commit }) {
 
     const geojson = await fetch("/api/monuments.geojson");
     const geojsonMonuments = await geojson.json();
@@ -118,10 +116,10 @@ const actions = {
     commit("setMonumentDisplay", true);
 
   },
-  setFilterText({ commit }, text) {
+  setFilterText ({ commit }, text) {
     commit('setFilterText', text);
   },
-  mapViewChanged({ commit, state }) {
+  mapViewChanged ({ commit, state }) {
     commit('setMonuments', state.geoJSON.features.map(i => i.properties));
     const items = this.map.queryRenderedFeatures();
     commit('setMonuments', items.map(i => i.properties));

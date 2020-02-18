@@ -4,7 +4,6 @@
       bottom-slots
       v-model="filterText"
       label="Căutare"
-      counter
       dense="true"
     >
       <template v-slot:prepend>
@@ -13,13 +12,16 @@
       <template v-slot:append>
         <q-icon
           name="close"
-          @click="text = ''"
+          @click="filterText = ''"
           class="cursor-pointer"
         />
       </template>
 
       <template v-slot:hint>
-        Total selecție
+        <div class="row">
+          <p class="col text-left">Total selecție</p>
+          <p class="col text-right">{{ countFilteredList }}</p>
+        </div>
       </template>
     </q-input>
     <q-list separator>
@@ -41,7 +43,6 @@
 export default {
   data () {
     return {
-      text: "",
     };
   },
   computed: {
@@ -55,6 +56,9 @@ export default {
     },
     monFilteredList () {
       return this.$store.getters["monuments/filteredArray"];
+    },
+    countFilteredList () {
+      return this.monFilteredList.length;
     }
   },
   methods: {
@@ -65,4 +69,7 @@ export default {
 };
 </script>
 
-<style lang="sass" scoped></style>
+<style lang="sass" scoped>
+p
+  padding: 0 30px
+</style>
