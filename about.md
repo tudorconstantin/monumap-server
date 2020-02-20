@@ -37,7 +37,12 @@ Solutia curenta se bazeaza pe experienta de peste 15 ani in enterprise software 
 
 ### Operational
 Solutia se bazeaza pe [Docker](https://www.docker.com/) ca tehnologie de **[containerizare a aplicatiilor](https://www.parkmycloud.com/blog/application-containerization/)** pentru ca este o tehnologie matura, larg raspandita si folosita in industria IT.
-Ca solutie pentru hosting si orchestrare a containerelor am ales sa folosim **[docker swarm](https://docs.docker.com/engine/swarm/)**, deasemenea hostuit de noi. Alternativa era [Kubernetes](https://kubernetes.io/), dar variantele gestionate de cloud provideri ofera hardware la un pret de cateva ori mai ridicat decat cel self hosted. Desi kubernetes este deasemenea open source, instalarea si mentenanta clusterelor de kubernetes [cresc considerabil complexitatea operationala a hostingului](https://gist.github.com/jonathan-kosgei/dac620fed9d9aeec35050bcc0a146647).
+
+Pentru a mentine dimensiunea imaginilor de docker in parametri rezonabili, am decis ca acestea sa fie construite folosind [docker multi-stage builds](https://medium.com/capital-one-tech/multi-stage-builds-and-dockerfile-b5866d9e2f84).
+
+Pentru ca procesul de setup initial si dezvoltare a aplicatiei sa fie cat mai rapid pentru dezvoltatorii care vor sa intre pe proiect, am folosit [docker-compose](https://gabrieltanner.org/blog/docker-compose).
+
+Ca solutie pentru hosting si orchestrare a containerelor am ales sa folosim **[docker swarm](https://docs.docker.com/engine/swarm/)**, deasemenea hostuit de noi, pentru ca este rapid de instalat si configurat si pentru ca stie lucra cu docker-compose cu modificari minime, ceea ce asigura ca **aplicatia se comporta identic in development mode, in staging si in productie**. Alternativa era [Kubernetes](https://kubernetes.io/), dar variantele gestionate de cloud provideri ofera hardware la un pret de cateva ori mai ridicat decat cel self hosted. Desi kubernetes este deasemenea open source, instalarea si mentenanta clusterelor de kubernetes [cresc considerabil complexitatea operationala a hostingului](https://gist.github.com/jonathan-kosgei/dac620fed9d9aeec35050bcc0a146647).
 
 Instanta self hosted de **GitLab**: am ales sa folosim git si gitlab ca unealta de VCS (versioning control system), pentru ca acesta ofera posibilitatea configurarii [pipelinurilor de continuous integration/continuous delivery (CI/CD)](https://semaphoreci.com/blog/cicd-pipeline) [direct in gitlab](https://docs.gitlab.com/ee/ci/).
 
@@ -50,7 +55,15 @@ Instanta self hosted de **GitLab**: am ales sa folosim git si gitlab ca unealta 
 ### Tehnologii frontend
 - [VueJS](https://vuejs.org/): este cel mai popular proiect open source de frontend din punct de vedere al numarului de adaugari la favorit. Deasemenea este cunoscut de toti membrii echipei de dezvoltare.
 - [Quasar](https://quasar.dev/). Initial am pornit proiectul folosind [Vuetify](https://vuetifyjs.com/en/) pentru ca e mai popular, dar dupa cateva zile, din cauza ca dezvoltarea era greoaie si neintuitiva, am schimbat la Quasar.
-- [MapBox](https://www.mapbox.com/) (cel putin deocamdata). Am incercat sa folosim leaflet.js si 
+- [MapBox](https://www.mapbox.com/) (cel putin deocamdata). Am avut de ales intre [openlayers](https://openlayers.org/), [leaflet.js](https://leafletjs.com/) (care foloseste [openstreetmap](https://www.openstreetmap.org/) ca provider de harti), [google maps](https://developers.google.com/maps/documentation), mapbox sau o solutie open source self-hosted (ex: [geoserver](http://geoserver.org/)). 
+
+In urma unui proces de R&D in care am cercetat functionalitatile, costurile si tradeoffurile variantelor, am ajuns la concluzia ca, in momentul de fata, MapBox este cea mai potrivita solutie:
+- Google Maps: am eliminat-o ca varianta pentru ca in iulie 2018 si-au [crescut considerabil preturile](https://geoawesomeness.com/developers-up-in-arms-over-google-maps-api-insane-price-hike/), restrangand destul de drastic volumul utilizarii gratuite.
+- OpenLayers si Leaflet: le-am eliminat, pentru ca nu ofera posibilitatea de a desena markerele peste harta cu poze din satelit
+- Varianta self-hosted: e necesar hardware puternic (recomandat 64GB RAM ) pentru a putea genera si servi harti. Chiar daca pe viitor aceasta varianta s-ar putea dovedi o solutie viabila, am considerat ca **in momentul de fata ar necesita costuri nejustificate**.
+
+### Tehnologii de persistenta a datelor
+In faza prezenta a proiectului, nu e necesara folosirea unei baze de date: informatiile legate de monumente (locatie, descriere, stare, samd) sunt stocate intr-un fisier .csv care este updatat de arhitectii care inventariaza documentele. Pozele sunt stocate intr-o structura de directoare pe server si servite de o instanta de nginx.
 
 ### Procesul de dezvoltare si suportul operational
 
