@@ -23,7 +23,7 @@ Realizarea unei pagini web care:
 - [x] O zona care sa ofere **detaliile monumentului** (descriere, starea monumentului, foto monument) in momentul in care utilizatorul il selecteaza (prin click pe marker, sau selectie din lista) (implementat 80%)
 
 ## Obiective si directii non-functionale (tehnice)
-Obiectivele non-functionale sunt acelea care nu "se observa" ca functionalitati, dar au un** impact major in implementarea, extensibilitatea, livrabilitatea, imbunatatirea si mentenanta proiectului**. 
+Obiectivele non-functionale sunt acelea care nu "se observa" ca functionalitati, dar au un **impact major in implementarea, extensibilitatea, livrabilitatea, imbunatatirea si mentenanta proiectului**. 
 Pentru a oferi o solutie software cat mai buna, ne-am orientat catre tehnologii care sa intruneasca urmatoarele conditii:
 - [x] Sa ne permita o **dezvoltare cat mai rapida** a solutiei
 - [x] Sa fie tehnologii moderne, pentru a incuraja contributii la proiect din partea comunitatii de IT
