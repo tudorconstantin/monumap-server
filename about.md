@@ -32,7 +32,7 @@ Pentru a oferi o solutie software cat mai buna, ne-am orientat catre tehnologii 
 - [x] Sa permita costuri de hosting rezonabile
 - [x] Sa permita instalarea softului pe o plaja cat mai larga de hosting provideri, cu eforturi minime.
 
-## Solutiile tehnice implementate si procesul de R&D
+## Solutiile tehnice adoptate si procesul de R&D
 Solutia curenta se bazeaza pe experienta de peste 15 ani in enterprise software development ai echipei, precum si pe concluziile trase in urma sesiunilor de **research & development (R&D)** pentru a vedea daca o tehnologie este potrivita sau nu.
 
 ### Operational
@@ -66,5 +66,28 @@ In urma unui proces de R&D in care am cercetat functionalitatile, costurile si t
 In faza prezenta a proiectului, nu e necesara folosirea unei baze de date: informatiile legate de monumente (locatie, descriere, stare, samd) sunt stocate intr-un fisier .csv care este updatat de arhitectii care inventariaza documentele. Pozele sunt stocate intr-o structura de directoare pe server si servite de o instanta de nginx.
 
 ### Procesul de dezvoltare si suportul operational
+Din momentul in care mediul de dezvoltare este configurat pe calculatorul programatorului, implementarea unei functionalitati decurge astfel:
+1. `git pull master` - pentru a aduce din repository-ul central ultimele modificari facute de alti dezvoltatori
+2. `git checkout -b nume_functionalitate` - cream un branch pentru a ne asigura ca nu stricam ceea ce deja functioneaza
+3. programatorul implementeaza functionalitatea
+4. `git push` - pentru a trimite codul nou pe server
+5. pipeline-ul de CI/CD face un build cu noile modificari, ruleaza testele (nu am implementat deocamdata teste, dar cand/daca vor fi, **pipeline-ul le va rula automat**) si mai executa niste verificari de baza pentru asigurarea calitatii codului.
+6. Daca buildul, testele si verificarile au succes, programatorul are posibilitatea sa includa functionalitatea in branchul principal (master), moment in care:
+7. pipeline-ul de CI/CD construieste imaginile de docker pentru stage-ul de productie si **face deploy automat in mediul de staging**.
+8. Dupa ce testam in staging si vedem ca totul merge cum trebuie, putem face deploy (din nou, in mod automat), in productie, prin simpla apasare a unui buton (deployul il face tot pipeline-ul de CI/CD).
+
+## Functionalitati si taskuri implementate pana acum si durata lor
+Nu am trackuit dezvoltarea in mod individual, asa ca duratele de jos sunt estimative:
+<!---
+Tabela creata cu https://www.tablesgenerator.com/markdown_tables
+-->
+
+| Nume task/functionalitate                                                                                                                                                                                                                                                   | Procent implementat        | Durata aproximativa a implementarii |
+|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------|-------------------------------------|
+| Setarea initiala proiectului<br>Cod:<br> - setup client <br> - setup server<br>Operational:<br> - Dockerizat client si server<br> - Configurat docker-compose<br> - Configurat docker swarm<br> - Configurat gitlab CI/CD<br> - Configurat serverul de productie si staging | 100% pentru stadiul actual | 9 zile                              |
+| R&D pentru deciziile legate de:<br>- furnizorul de harta<br>- libraria de componente pe UI<br>- frameworkul pentru backend                                                                                                                                                  | 100%                       | 2 zile                              |
+| Implementarea functionalitatilor                                                                                                                                                                                                                                            |                            | 8 zile                              |
+| Total (la data de 20/02/2020)                                                                                                                                                                                                                                               |                            | 19 zile                             |
+
 
 ## Roadmap si propuneri
