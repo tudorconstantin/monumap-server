@@ -11,7 +11,8 @@ Alternativa fiind citirea informatiilor de catre partile interesate dintr-un fis
 
   
 ## Obiectivele proiectului (faza initiala)
-Prezentarea monumentelor din Bucuresti intr-un **usor de inteles si usor de navigat**.
+Prezentarea monumentelor din Bucuresti intr-un **usor de inteles si usor de navigat**. 
+Am dorit deasemenea ca solutia sa fie suficient de flexibila pentru a o putea extinde si la **reprezentarea monumentelor din restul tarii**, cu modificari cat mai putine, lucru pe care consideram ca l-am realizazt.
 
 
 ## Obiective si functionalitati
@@ -19,21 +20,21 @@ Realizarea unei pagini web care:
 - [x] Afiseaza o **harta a municipiului Bucuresti** (implementat 100%)
 - [x] Pentru fiecare monument inventariat, afiseaza un **marker pe harta**, la locatia geografica a monumentului respectiv - (implementat 100%)
 - [x] Afiseaza o **lista cu denumirea monumentelor**, astfel incat utilizatorii sa poata naviga printre ele folosindu-se de numele lor (implementat 100%)
-- [X] Expune un **camp de cautare** pentru ca utilizatorii sa poata cauta rapid un monument sau un set de monumente (implementat 80%)
-- [x] O zona care sa ofere **detaliile monumentului** (descriere, starea monumentului, foto monument) in momentul in care utilizatorul il selecteaza (prin click pe marker, sau selectie din lista) (implementat 80%)
+- [X] Expune un **camp de cautare** pentru ca utilizatorii sa poata cauta rapid un monument sau un set de monumente (implementat 100%)
+- [x] O zona care sa ofere **detaliile monumentului** (descriere, starea monumentului, foto monument) in momentul in care utilizatorul il selecteaza (prin click pe marker, sau selectie din lista) (implementat 100%)
 
 ## Obiective si directii non-functionale (tehnice)
 Obiectivele non-functionale sunt acelea care nu "se observa" ca functionalitati, dar au un **impact major in implementarea, extensibilitatea, livrabilitatea, imbunatatirea si mentenanta proiectului**. 
 Pentru a oferi o solutie software cat mai buna, ne-am orientat catre tehnologii care sa intruneasca urmatoarele conditii:
 - [x] Sa ne permita o **dezvoltare cat mai rapida** a solutiei
 - [x] Sa fie tehnologii moderne, pentru a incuraja contributii la proiect din partea comunitatii de IT
-- [x] Sa fie **[cloud ready](https://blog.luminanetworks.com/what-does-cloud-ready-mean)** si usor de scalat pe orizontala
+- [x] Sa fie **[cloud ready](https://blog.luminanetworks.com/what-does-cloud-ready-mean)** si usor de [scalat pe orizontala](https://github.com/vaquarkhan/vaquarkhan/wiki/Difference-between-scaling-horizontally-and-vertically)
 - [x] Sa fie **open source**, pentru ca codul proiectului sa poata fi el insusi facut public si pentru a nu implica costuri de licentiere
 - [x] Sa permita costuri de hosting rezonabile
 - [x] Sa permita instalarea softului pe o plaja cat mai larga de hosting provideri, cu eforturi minime.
 
 ## Solutiile tehnice adoptate si procesul de R&D
-Solutia curenta se bazeaza pe experienta de peste 15 ani in enterprise software development ai echipei, precum si pe concluziile trase in urma sesiunilor de **research & development (R&D)** pentru a vedea daca o tehnologie este potrivita sau nu.
+Solutia curenta se bazeaza pe experienta de peste 15 ani in enterprise software development ai echipei, precum si pe concluziile trase in urma sesiunilor de **research & development (R&D)** pentru a decide daca o tehnologie este potrivita sau nu.
 
 ### Operational
 Solutia se bazeaza pe [Docker](https://www.docker.com/) ca tehnologie de **[containerizare a aplicatiilor](https://www.parkmycloud.com/blog/application-containerization/)** pentru ca este o tehnologie matura, larg raspandita si folosita in industria IT.
@@ -84,10 +85,57 @@ Tabela creata cu https://www.tablesgenerator.com/markdown_tables
 
 | Nume task/functionalitate                                                                                                                                                                                                                                                   | Procent implementat        | Durata aproximativa a implementarii |
 |-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------|-------------------------------------|
-| Setarea initiala proiectului<br>Cod:<br> - setup client <br> - setup server<br>Operational:<br> - Dockerizat client si server<br> - Configurat docker-compose<br> - Configurat docker swarm<br> - Configurat gitlab CI/CD<br> - Configurat serverul de productie si staging | 100% pentru stadiul actual | 9 zile                              |
+| Setarea initiala proiectului<br>Cod:<br> - setup client <br> - setup server<br>Operational:<br> - Dockerizat client si server<br> - Configurat docker-compose<br> - Configurat docker swarm<br> - Configurat gitlab CI/CD pipeline<br> - Configurat serverul de productie si staging | 100% pentru stadiul actual | 7 zile                              |
 | R&D pentru deciziile legate de:<br>- furnizorul de harta<br>- libraria de componente pe UI<br>- frameworkul pentru backend                                                                                                                                                  | 100%                       | 2 zile                              |
-| Implementarea functionalitatilor                                                                                                                                                                                                                                            |                            | 8 zile                              |
+| Implementarea functionalitatilor                                                                                                                                                                                                                                            | 100%                       | 8 zile                              |
+| Transformarea si adaptarea datelor culese din teren pentru a putea fi folosite in aplicatie:<br>- normalizare nume campuri <br>- completat date lipsa <br>- incadrarea monumentelor in una dintre cele patru categorii de monumente<br>- post-procesare poze (copiat in folderele potrivite, setat orientarea pe verticala la fiecare, etc) | 100% | 2 zile |
 | Total (la data de 20/02/2020)                                                                                                                                                                                                                                               |                            | 19 zile                             |
 
 
 ## Roadmap si propuneri
+Proiectul de fata este doar inceputul a ceea ce ar putea deveni o solutie inovativa, **o solutie deschisa**, care sa reprezinte [sursa de adevar](https://en.wikipedia.org/wiki/Single_source_of_truth) in stocarea si reprezentarea datelor publice cu componente de geolocatie. 
+O solutie care sa ofere **acces facil** tuturor cetatenilor la informatii care ar trebui sa fie publice.
+O solutie care sa ofere posibilitatea oricarui cetatean sa contribuie el insusi cu informatii, din 2-3 clickuri.
+
+Pentru a duce proiectul in aceasta directie, propunem cateva functionalitati pe care le putem implementa in perioada urmatoare:
+
+### Extinderea solutiei si pentru PATCJ
+**Importanta**: ridicata
+**Estimare implementare**: 2-3 zile
+Pe langa adaptatul datelor de pe Cluj si incarcatul lor pe server, e nevoie de adaptat interfata web (logo, branding, sectiuni, etc).
+
+### Posibilitate export date
+**Importanta**: ridicata
+**Estimare implementare**: 1-5+ zile
+In functie de cat de departe mergem cu implementarea acestei functionalitati, durata poate fi mai mare sau mai mica. 
+Ex 1 (implementare rapida 1-2 zile): Utilizatorul face o cautare text si da export la lista cu rezultatele cautarii. Impunem **o limita maxima a numarului** de monumente care pot fi exportate odata, pentru ca exportul sa poata fi relativ instant.
+Ex 2 (implementare medie 2-4 zile): Utilizatorul face o cautare text si da export la lista cu rezultatele cautarii. Nu impunem nicio limita a numarului de monumente care pot fi exportate, dar exportul se genereaza asincron, iar utilizatorul va primi un email cu un url catre fisierul generat.
+Ex 3 (implementare lunga 3+ zile): Utilizatorul deseneaza pe harta un perimetru si exporta toate monumentele din interiorul perimetrului.
+
+### Adaugare DB la solutie (SQL, sau NoSQL)
+**Importanta**: ridicata
+**Estimare implementare**: 2-4 zile
+Pentru a putea persista si interoga datele intr-un mod dinamic si flexibil, e nevoie de un storage engine (baza de date). 
+Daca dorim ca pe viitor solutia prezenta sa fie folosita pentru un **volum mai mare de informatii**, acestea vor trebui stocate intr-o baza de date.
+Observatie: cu cat adaugam mai tarziu DB-ul la solutie, cu atat s-ar putea sa avem de adaptat mai multa functionalitate
+
+### Gestiune de conturi de utilizatori
+**Importanta**: medie
+**Estimare implementare**: 3-5+ zile
+**Depinde de**: [Adaugare DB](#adaugare-db-la-solutie-sql-sau-nosql)
+
+Pentru ca informatiile afisate pe site sa poata fi gestionate dintr-o interfata web, e nevoie de **useri**, **roluri** (admin, contributor, etc) si un sistem de moderare a activitatii.
+Pentru a avea utilizatori pe site, e nevoie cel putin de urmatoarele ecrane si functionalitati:
+- signup
+- email confirmation
+- login
+- password reset
+- user profile page
+- optional: login cu facebook, google, etc
+
+### Solutie self-hosted de furnizor de harti
+**Importanta**: scazuta (deocamdata)
+**Estimare implementare**: 2-4+ zile
+
+Pentru cazul in care solutia prezenta devine populara, iar numarul vizualizarilor creste la peste 50 000 lunar, s-ar putea sa fie justificat instalarea si configurarea unui server care sa serveasca hartile. Ca preturi, in momentul de fata mapbox ofera primele 50 000 de incarcari de harta lunare gratis, iar [urmatoarele pornesc de la $5 / 1 000 de incarcari](https://www.mapbox.com/pricing/). 
+Pentru a avea propriul nostru server de harti, geoserver recomanda minimum 64GB RAM si +1 TB SSD storage, ceea ce duce costurile de hosting undeva la +100 EUR/luna pentru serverul de harti.
