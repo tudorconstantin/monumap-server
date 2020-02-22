@@ -23,6 +23,11 @@ export class MonumentsController {
   async getGeoJSON(): Promise<any> {
     return this.monumentsService.getGeoJSON();
   }
+  @Get('/api/monuments.groups')
+  async getMonumentTypes(@Query('prop') monumentProperty): Promise<any> {
+    monumentProperty = monumentProperty || 'tip_patrimoniu';
+    return this.monumentsService.getMonumentTypes(monumentProperty);
+  }
   @Get('/api/monument.images')
   async listMonumentImages( @Query('monumentPath') monumentPath): Promise<any> {
     if(!monumentPath) return [];

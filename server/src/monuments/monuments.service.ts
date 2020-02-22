@@ -8,7 +8,10 @@ import * as glob from 'glob-promise';
 export class MonumentsService implements OnModuleInit {
   private readonly logger = new Logger(MonumentsService.name);
   private monuments = [];
-  private geoJSON = {};
+  private geoJSON = {
+    type: '',
+    features: [],
+  };
 
   async onModuleInit () {
 
@@ -16,11 +19,6 @@ export class MonumentsService implements OnModuleInit {
       const path = `${__dirname}/../data/lmi_bucuresti.csv`;
       if (fs.existsSync(path)) {
         const monuments = await csv({ delimiter: ';' }).fromFile(path);
-        monuments.forEach(m => {
-          m.lmi = m['cod_lmi'];
-          m.monumentType = m['tip_patrimoniu'];
-          m.position = m.nr;
-        });
 
         this.monuments = monuments;
         const includedProps = Object.keys(this.monuments[0]);
@@ -52,6 +50,15 @@ export class MonumentsService implements OnModuleInit {
 
   getGeoJSON(): any{
     return this.geoJSON;
+  }
+
+  getMonumentTypes(prop): any {
+    const monumentTypes = {};
+    this.geoJSON.features.map( f => {
+      monumentTypes[ f['properties'][prop] ] = monumentTypes[ f['properties'][prop] ] || 0;
+      monumentTypes[ f['properties'][prop] ]++;
+    });
+    return monumentTypes;
   }
 
   async listMonumentImages (monumentPath: string): Promise<string[]> {
