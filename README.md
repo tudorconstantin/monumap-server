@@ -13,3 +13,9 @@
 If docker complains that network traefik-public doesn't exist, create it with `docker network create traefik-public`
 
 Images should be accessible at relative path `/images/CJ-II-a-A-07240/DSC_3408.jpg`
+
+## APIs
+Get the number of monuments by monument property, ex: 
+- `http://localhost:8080/api/monuments.groups?prop=sector` 
+- `http://localhost:8080/api/monuments.groups?prop=stare`
+- `http://localhost:8080/api/monuments.groups?prop=tip_patrimoniu`
