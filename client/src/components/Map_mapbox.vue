@@ -65,15 +65,15 @@ export default {
   methods: {
     customizeMap() {
       const map = this.$store.map;
-      map.addSource("places", {
-        type: "geojson",
-        data: this.geoJSON
-      });
-        console.log(`==============mt:`, constants.monumentTypes);
-
-      for (const mt of constants.monumentTypes) {
-        console.log(`==============mt: ${mt}`);
-        const img = this.getMonumentTypeURL(mt);
+      for (const mt in constants.monumentTypes) {
+        const img = constants.monumentTypes[mt];
+        map.addSource(mt, {
+          type: "geojson",
+          data: {
+            ...this.geoJSON,
+            features: this.geoJSON.features.filter( m => m.properties.icon_code === mt),
+          }
+        });
         /* eslint-disable no-unused-vars*/
         map.loadImage(img, function(error, image) {
           let symbol = "";
@@ -91,19 +91,24 @@ export default {
               "icon-image": symbol,
               "icon-allow-overlap": false,
               // "text-field": ['get', 'denumire'],
-              "text-field": ".",
-              "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
-              "text-size": 11,
-              // "text-transform": "uppercase",
-              "text-letter-spacing": 0.05,
-              "text-offset": [0, 1.5]
+              //"text-field": ".",
+              // "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+              // "text-size": 11,
+              // // "text-transform": "uppercase",
+              // "text-letter-spacing": 0.05,
+              // "text-offset": [0, 1.5]
             },
             paint: {
-              "text-color": "#fff",
-              "text-halo-color": "#fb5208",
-              "text-halo-width": 2
+              // "icon-color": "#fff",
+              // "icon-halo-blur": 2,
+              // "icon-halo-width": 2,
+              // "icon-halo-color": "#fb5208",
+
+              // "text-color": "#fff",
+              // "text-halo-color": "#fb5208",
+              // "text-halo-width": 2
             },
-            filter: ["==", "icon_code", mt]
+            // filter: ["==", "icon_code", mt]
           });
         });
       }
@@ -150,13 +155,6 @@ export default {
       if (!this.$store.map) return;
       const filteredGeoJSON = this.$store.getters["monuments/filteredGeoJSON"];
       this.$store.map.getSource("places").setData(filteredGeoJSON);
-    },
-    getMonumentTypeURL(mt) {
-      const fileName = new RegExp(`${mt}.png$`, 'g');
-
-      console.log(`==========img for ${mt}`, fileName);
-      const img = require.context('./../assets/', false, fileName);
-      return img;
     }
   }
 };
