@@ -1,4 +1,5 @@
 // import _ from 'lodash';
+import constants from '../../util/constants.js';
 
 const state = {
   items: [],
@@ -50,9 +51,15 @@ const getters = {
     if (!state.geoJSON.features) return [];
     if (!state.filterText) return state.geoJSON.features.map(f => f.properties);
 
+    const needle = state.filterText.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
     // return array filtered by the search bar, searching without diacritics
-    return state.items.filter(m =>
-      (m['cod_lmi'] && m['cod_lmi'].toLowerCase().includes(state.filterText.toLowerCase()))
+    return state.items.filter(m =>{
+        for (const field of constants.searchableFields){
+          if (m[field] && m[field].normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().includes(needle)) 
+          return true;
+        }
+        return false;
+      }
     );
   },
 
@@ -68,11 +75,8 @@ const getters = {
       return res;
     }
     const filteredMonuments = getters.filteredArray.map(m => m.cod_lmi);
-    state.geoJSON.features.map(feature => {
-      if (filteredMonuments.indexOf(feature.properties.cod_lmi) > -1) {
-        res.features.push(feature);
-      }
-    });
+
+    res.features = state.geoJSON.features.filter(feature => filteredMonuments.indexOf(feature.properties.cod_lmi) > -1);
 
     return res;
   }
@@ -111,8 +115,6 @@ const actions = {
     // creat images properties
     fullMonument.images = fullPathImageArray;
 
-    // re-center map view
-    this.map.flyTo({ center: [fullMonument.x, fullMonument.y], zoom: 18 });
     commit("setSelectedItem", fullMonument);
     commit("setMonumentDisplay", true);
 
@@ -120,10 +122,14 @@ const actions = {
   setFilterText ({ commit }, text) {
     commit('setFilterText', text);
   },
+
+  /* eslint-disable no-unused-vars*/
   mapViewChanged ({ commit, state }) {
-    commit('setMonuments', state.geoJSON.features.map(i => i.properties));
-    const items = this.map.queryRenderedFeatures();
-    commit('setMonuments', items.map(i => i.properties));
+    return;
+    // (?)TODO: filter the available markers based on the displayed area
+    // commit('setMonuments', state.geoJSON.features.map(i => i.properties));
+    // const items = this.map.queryRenderedFeatures();
+    // commit('setMonuments', items.map(i => i.properties));
   }
 };
 
@@ -135,7 +141,6 @@ const mutations = {
     state.geoJSON = monuments;
   },
   setSelectedItem (state, item) {
-    //console.log(`@mutations:: setSelectedItem ${item['cod LMI']}`);
     state.selectedItem = item;
   },
   setMonumentDisplay (state, v) {

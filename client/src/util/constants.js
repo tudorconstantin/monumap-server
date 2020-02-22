@@ -7,5 +7,6 @@ export default {
     REPREZENTATIV: require('../assets/REPREZENTATIV.png'),
     INDUSTRIAL_PRELUCRATOR: require('../assets/INDUSTRIAL_PRELUCRATOR.png'),
     INDUSTRIAL_ENERGETIC: require('../assets/INDUSTRIAL_ENERGETIC.png'),
-  }
+  },
+  searchableFields: ['denumire', 'adresa', 'cod_lmi', 'tip_monument', 'tip_patrimoniu', 'sector'],
 }

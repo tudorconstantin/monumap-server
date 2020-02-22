@@ -48,10 +48,8 @@ export default {
     },
     onMapLoaded (event) {
       this.$store.map = event.map;
-      // console.log(`====got pins: `, this.$store.monuments);
     },
     selectItem (monument) {
-      // console.log(monument["cod LMI"]);
       this.$store.dispatch("monuments/selectItem", monument);
     },
   },

@@ -52,6 +52,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      selectedItem: "monuments/getSelectedItem",
       monuments: "monuments/filteredArray",
       geoJSON: "monuments/filteredGeoJSON"
     })
@@ -60,6 +61,11 @@ export default {
     /* eslint-disable-next-line no-unused-vars */
     geoJSON(newValue, oldValue) {
       this.filterMap();
+    },
+    /* eslint-disable-next-line no-unused-vars */
+    selectedItem(newValue, oldValue) {
+      // re-center map view
+      this.$store.map.flyTo({ center: [newValue.x, newValue.y], zoom: 18 });
     }
   },
   methods: {
@@ -71,7 +77,9 @@ export default {
           type: "geojson",
           data: {
             ...this.geoJSON,
-            features: this.geoJSON.features.filter( m => m.properties.icon_code === mt),
+            features: this.geoJSON.features.filter(
+              m => m.properties.icon_code === mt
+            )
           }
         });
         /* eslint-disable no-unused-vars*/
@@ -89,7 +97,7 @@ export default {
             source: mt,
             layout: {
               "icon-image": symbol,
-              "icon-allow-overlap": false,
+              "icon-allow-overlap": false
               // "text-field": ['get', 'denumire'],
               //"text-field": ".",
               // "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
@@ -103,17 +111,16 @@ export default {
               // "icon-halo-blur": 2,
               // "icon-halo-width": 2,
               // "icon-halo-color": "#fb5208",
-
               // "text-color": "#fff",
               // "text-halo-color": "#fb5208",
               // "text-halo-width": 2
-            },
+            }
             // filter: ["==", "icon_code", mt]
           });
         });
       }
 
-      this.$store.map
+      map
         .on("click", e => {
           const clickedMonument = (this.$store.map.queryRenderedFeatures(
             e.point
@@ -154,7 +161,17 @@ export default {
     filterMap() {
       if (!this.$store.map) return;
       const filteredGeoJSON = this.$store.getters["monuments/filteredGeoJSON"];
-      this.$store.map.getSource("places").setData(filteredGeoJSON);
+
+      for (const mt in constants.monumentTypes) {
+        const geoJSONByMonumentType = {
+          ...filteredGeoJSON,
+          features: filteredGeoJSON.features.filter(
+            m => m.properties.icon_code === mt
+          )
+        };
+
+        this.$store.map.getSource(mt).setData(geoJSONByMonumentType);
+      }
     }
   }
 };
