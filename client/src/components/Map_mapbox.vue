@@ -1,8 +1,5 @@
 <template>
-  <div
-    id="mapContainer"
-    :style="cssVars()"
-  >
+  <div id="mapContainer" :style="cssVars()">
     <MglMap
       :accessToken="accessToken"
       :mapStyle.sync="mapStyle"
@@ -21,7 +18,7 @@
 <script>
 import { matRoom } from "@quasar/extras/material-icons";
 import "mapbox-gl/dist/mapbox-gl.css";
-import img from "./../assets/marker_v12.png";
+import constants from "@/util/constants.js";
 
 import {
   MglMap,
@@ -38,7 +35,7 @@ export default {
     MglNavigationControl,
     MglGeolocateControl
   },
-  data () {
+  data() {
     return {
       accessToken:
         "pk.eyJ1IjoidHVkb3Jjb25zdGFudGluIiwiYSI6ImNrM29yN2t3cjBiMDkzaG80cTdiczhzMmIifQ.fqelSp0srqiSV3qkfbE2qQ",
@@ -49,7 +46,7 @@ export default {
     };
   },
 
-  created () {
+  created() {
     this.map = null;
     this.matRoom = matRoom;
   },
@@ -61,68 +58,80 @@ export default {
   },
   watch: {
     /* eslint-disable-next-line no-unused-vars */
-    geoJSON (newValue, oldValue) {
+    geoJSON(newValue, oldValue) {
       this.filterMap();
     }
   },
   methods: {
-    customizeMap (opts) {
-      this.$store.map.addSource("places", {
+    customizeMap() {
+      const map = this.$store.map;
+      map.addSource("places", {
         type: "geojson",
         data: this.geoJSON
       });
-      const symbol = opts.symbol;
-      this.$store.map.addLayer({
-        id: "layerID", // layerID,
-        type: "symbol",
-        source: "places",
-        layout: {
-          "icon-image": symbol,
-          "icon-allow-overlap": false,
-          // "text-field": ['get', 'denumire'],
-          "text-field": ".",
-          "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
-          "text-size": 11,
-          // "text-transform": "uppercase",
-          "text-letter-spacing": 0.05,
-          "text-offset": [0, 1.5]
-        },
-        paint: {
-          "text-color": "#fff",
-          "text-halo-color": "#fb5208",
-          "text-halo-width": 2
-        }
-        // filter: ["==", "icon", symbol]
-      });
+        console.log(`==============mt:`, constants.monumentTypes);
 
-      this.$store.map.on("click", e => {
-        const clickedMonument = (this.$store.map.queryRenderedFeatures(
-          e.point
-        ) || [])[0];
-        if (clickedMonument) {
-          this.onMonumentClicked(clickedMonument.properties);
-        } else {
-          this.$store.dispatch("monuments/selectItem", null);
-        }
-      }).on('zoomend', () => {
-        this.$store.dispatch("monuments/mapViewChanged");
-      }).on('moveend', () => {
-        this.$store.dispatch("monuments/mapViewChanged");
-      });
+      for (const mt of constants.monumentTypes) {
+        console.log(`==============mt: ${mt}`);
+        const img = this.getMonumentTypeURL(mt);
+        /* eslint-disable no-unused-vars*/
+        map.loadImage(img, function(error, image) {
+          let symbol = "";
+          if (error) {
+            symbol = "music";
+          } else {
+            symbol = mt;
+            map.addImage(mt, image);
+          }
+          map.addLayer({
+            id: mt, // layerID,
+            type: "symbol",
+            source: mt,
+            layout: {
+              "icon-image": symbol,
+              "icon-allow-overlap": false,
+              // "text-field": ['get', 'denumire'],
+              "text-field": ".",
+              "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+              "text-size": 11,
+              // "text-transform": "uppercase",
+              "text-letter-spacing": 0.05,
+              "text-offset": [0, 1.5]
+            },
+            paint: {
+              "text-color": "#fff",
+              "text-halo-color": "#fb5208",
+              "text-halo-width": 2
+            },
+            filter: ["==", "icon_code", mt]
+          });
+        });
+      }
+
+      this.$store.map
+        .on("click", e => {
+          const clickedMonument = (this.$store.map.queryRenderedFeatures(
+            e.point
+          ) || [])[0];
+          if (clickedMonument) {
+            this.onMonumentClicked(clickedMonument.properties);
+          } else {
+            this.$store.dispatch("monuments/selectItem", null);
+          }
+        })
+        .on("zoomend", () => {
+          this.$store.dispatch("monuments/mapViewChanged");
+        })
+        .on("moveend", () => {
+          this.$store.dispatch("monuments/mapViewChanged");
+        });
     },
-    onMapLoaded (event) {
+    onMapLoaded(event) {
       const map = event.map;
       this.$store.map = map;
-      const self = this;
-      map.loadImage(img, function (error, image) {
-        if (error) {
-          map.customizeMap({symbol: 'music'});
-        }
-        map.addImage('monument-pin', image);
-        self.customizeMap({ symbol: 'monument-pin' });
-      });
+      this.customizeMap();
     },
-    cssVars () {
+    cssVars() {
       //https://www.telerik.com/blogs/passing-variables-to-css-on-a-vue-component
       return {
         "--height":
@@ -133,14 +142,21 @@ export default {
       };
     },
 
-    onMonumentClicked (monument) {
+    onMonumentClicked(monument) {
       if (!monument) return this.$store.dispatch("monuments/selectItem", null);
       this.$store.dispatch("monuments/selectItem", monument["cod_lmi"]);
     },
-    filterMap () {
+    filterMap() {
       if (!this.$store.map) return;
       const filteredGeoJSON = this.$store.getters["monuments/filteredGeoJSON"];
       this.$store.map.getSource("places").setData(filteredGeoJSON);
+    },
+    getMonumentTypeURL(mt) {
+      const fileName = new RegExp(`${mt}.png$`, 'g');
+
+      console.log(`==========img for ${mt}`, fileName);
+      const img = require.context('./../assets/', false, fileName);
+      return img;
     }
   }
 };

@@ -4,7 +4,7 @@
       bottom-slots
       v-model="filterText"
       label="Căutare"
-      dense="true"
+      :dense="true"
     >
       <template v-slot:prepend>
         <q-icon name="place" />

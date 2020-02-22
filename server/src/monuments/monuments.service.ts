@@ -21,6 +21,7 @@ export class MonumentsService implements OnModuleInit {
         const monuments = await csv({ delimiter: ';' }).fromFile(path);
 
         this.monuments = monuments;
+        monuments.forEach(m => m.icon_code = m['tip_patrimoniu'].normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().replace("PATRIMONIU ", '').replace(/\s+/g, '_'));
         const includedProps = Object.keys(this.monuments[0]);
 
         this.geoJSON = GeoJSON.parse(this.monuments.filter( m => m.x && m.y), {Point: ['y', 'x'], include: includedProps});
