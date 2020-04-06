@@ -11,6 +11,14 @@
     >
       <MglNavigationControl position="top-left" />
       <MglGeolocateControl position="top-left" />
+      <MglMarker
+        v-if="!!selectedItem"
+        :coordinates="[
+          selectedItem && selectedItem.x,
+          selectedItem && selectedItem.y,
+        ]"
+      >
+      </MglMarker>
     </MglMap>
   </div>
 </template>
@@ -23,8 +31,8 @@ import constants from "@/util/constants.js";
 import {
   MglMap,
   MglNavigationControl,
-  MglGeolocateControl
-  // MglMarker
+  MglGeolocateControl,
+  MglMarker,
 } from "vue-mapbox";
 
 import { mapGetters } from "vuex";
@@ -33,7 +41,8 @@ export default {
   components: {
     MglMap,
     MglNavigationControl,
-    MglGeolocateControl
+    MglGeolocateControl,
+    MglMarker,
   },
   data() {
     return {
@@ -42,20 +51,22 @@ export default {
       mapStyle: "mapbox://styles/tudorconstantin/ck6e0nrah6h571ipdkgakat2u",
       container: "mapContainer",
       center: [26.0986, 44.4365],
-      zoom: 12.5
+      zoom: 12.5,
+      constants: null,
     };
   },
 
   created() {
     this.map = null;
     this.matRoom = matRoom;
+    this.constants = constants;
   },
   computed: {
     ...mapGetters({
       selectedItem: "monuments/getSelectedItem",
       monuments: "monuments/filteredArray",
-      geoJSON: "monuments/filteredGeoJSON"
-    })
+      geoJSON: "monuments/filteredGeoJSON",
+    }),
   },
   watch: {
     /* eslint-disable-next-line no-unused-vars */
@@ -65,8 +76,9 @@ export default {
     /* eslint-disable-next-line no-unused-vars */
     selectedItem(newValue, oldValue) {
       // re-center map view
-      this.$store.map.flyTo({ center: [newValue.x, newValue.y], zoom: 18 });
-    }
+      if (newValue && newValue.x)
+        this.$store.map.flyTo({ center: [newValue.x, newValue.y], zoom: 18 });
+    },
   },
   methods: {
     customizeMap() {
@@ -79,8 +91,9 @@ export default {
             ...this.geoJSON,
             features: this.geoJSON.features.filter(
               m => m.properties.icon_code === mt
-            )
-          }
+            ),
+          },
+          generateId: true, // This ensures that all features have unique IDs
         });
         /* eslint-disable no-unused-vars*/
         map.loadImage(img, function(error, image) {
@@ -97,7 +110,7 @@ export default {
             source: mt,
             layout: {
               "icon-image": symbol,
-              "icon-allow-overlap": false
+              "icon-allow-overlap": false,
               // "text-field": ['get', 'denumire'],
               //"text-field": ".",
               // "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
@@ -114,9 +127,23 @@ export default {
               // "text-color": "#fff",
               // "text-halo-color": "#fb5208",
               // "text-halo-width": 2
-            }
+            },
             // filter: ["==", "icon_code", mt]
           });
+        });
+
+        let hoveredMonumentId = null;
+        map.on("mousemove", mt, e => {
+          if (e.features && e.features.length > 0) {
+            hoveredMonumentId = e.features[0].id;
+            map.getCanvas().style.cursor = "pointer";
+          }
+        });
+        map.on("mouseleave", mt, e => {
+          if (hoveredMonumentId) {
+            hoveredMonumentId = null;
+            map.getCanvas().style.cursor = "";
+          }
         });
       }
 
@@ -150,7 +177,7 @@ export default {
           window.innerHeight -
           document.getElementById("header").offsetHeight +
           "px",
-        "--width": window.innerWidth + "px"
+        "--width": window.innerWidth + "px",
       };
     },
 
@@ -167,13 +194,13 @@ export default {
           ...filteredGeoJSON,
           features: filteredGeoJSON.features.filter(
             m => m.properties.icon_code === mt
-          )
+          ),
         };
 
         this.$store.map.getSource(mt).setData(geoJSONByMonumentType);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
