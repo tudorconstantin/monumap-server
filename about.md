@@ -100,42 +100,42 @@ O solutie care sa ofere posibilitatea oricarui cetatean sa contribuie el insusi 
 Pentru a duce proiectul in aceasta directie, propunem cateva functionalitati pe care le putem implementa in perioada urmatoare:
 
 ### Extinderea solutiei si pentru PATCJ
-**Importanta**: ridicata
-**Estimare implementare**: 2-3 zile
+**Importanta**: ridicata<br/>
+**Estimare implementare**: 2-3 zile<br/>
 Pe langa adaptatul datelor de pe Cluj si incarcatul lor pe server, e nevoie de adaptat interfata web (logo, branding, sectiuni, etc).
 
 ### Posibilitate export date
-**Importanta**: ridicata
-**Estimare implementare**: 1-5+ zile
-In functie de cat de departe mergem cu implementarea acestei functionalitati, durata poate fi mai mare sau mai mica. 
-Ex 1 (implementare rapida 1-2 zile): Utilizatorul face o cautare text si da export la lista cu rezultatele cautarii. Impunem **o limita maxima a numarului** de monumente care pot fi exportate odata, pentru ca exportul sa poata fi relativ instant.
-Ex 2 (implementare medie 2-4 zile): Utilizatorul face o cautare text si da export la lista cu rezultatele cautarii. Nu impunem nicio limita a numarului de monumente care pot fi exportate, dar exportul se genereaza asincron, iar utilizatorul va primi un email cu un url catre fisierul generat.
+**Importanta**: ridicata<br/>
+**Estimare implementare**: 1-5+ zile<br/>
+In functie de cat de departe mergem cu implementarea acestei functionalitati, durata poate fi mai mare sau mai mica. <br/>
+Ex 1 (implementare rapida 1-2 zile): Utilizatorul face o cautare text si da export la lista cu rezultatele cautarii. Impunem **o limita maxima a numarului** de monumente care pot fi exportate odata, pentru ca exportul sa poata fi relativ instant.<br/>
+Ex 2 (implementare medie 2-4 zile): Utilizatorul face o cautare text si da export la lista cu rezultatele cautarii. Nu impunem nicio limita a numarului de monumente care pot fi exportate, dar exportul se genereaza asincron, iar utilizatorul va primi un email cu un url catre fisierul generat.<br/>
 Ex 3 (implementare lunga 3+ zile): Utilizatorul deseneaza pe harta un perimetru si exporta toate monumentele din interiorul perimetrului.
 
 ### Adaugare DB la solutie (SQL, sau NoSQL)
-**Importanta**: ridicata
-**Estimare implementare**: 2-4 zile
+**Importanta**: ridicata<br/>
+**Estimare implementare**: 2-4 zile<br/>
 Pentru a putea persista si interoga datele intr-un mod dinamic si flexibil, e nevoie de un storage engine (baza de date). 
 Daca dorim ca pe viitor solutia prezenta sa fie folosita pentru un **volum mai mare de informatii**, acestea vor trebui stocate intr-o baza de date.
 Observatie: cu cat adaugam mai tarziu DB-ul la solutie, cu atat s-ar putea sa avem de adaptat mai multa functionalitate
 
 ### Gestiune de conturi de utilizatori
-**Importanta**: medie
-**Estimare implementare**: 3-5+ zile
-**Depinde de**: [Adaugare DB](#adaugare-db-la-solutie-sql-sau-nosql)
+**Importanta**: medie <br/>
+**Estimare implementare**: 3-5+ zile<br/>
+**Depinde de**: [Adaugare DB](#adaugare-db-la-solutie-sql-sau-nosql)<br/>
 
 Pentru ca informatiile afisate pe site sa poata fi gestionate dintr-o interfata web, e nevoie de **useri**, **roluri** (admin, contributor, etc) si un sistem de moderare a activitatii.
 Pentru a avea utilizatori pe site, e nevoie cel putin de urmatoarele ecrane si functionalitati:
-- signup
-- email confirmation
-- login
-- password reset
-- user profile page
-- optional: login cu facebook, google, etc
+- signup<br/>
+- email confirmation<br/>
+- login<br/>
+- password reset<br/>
+- user profile page<br/>
+- optional: login cu facebook, google, etc<br/>
 
 ### Solutie self-hosted de furnizor de harti
-**Importanta**: scazuta (deocamdata)
-**Estimare implementare**: 2-4+ zile
+**Importanta**: scazuta (deocamdata)<br/>
+**Estimare implementare**: 2-4+ zile<br/>
 
 Pentru cazul in care solutia prezenta devine populara, iar numarul vizualizarilor creste la peste 50 000 lunar, s-ar putea sa fie justificat instalarea si configurarea unui server care sa serveasca hartile. Ca preturi, in momentul de fata mapbox ofera primele 50 000 de incarcari de harta lunare gratis, iar [urmatoarele pornesc de la $5 / 1 000 de incarcari](https://www.mapbox.com/pricing/). 
 Pentru a avea propriul nostru server de harti, geoserver recomanda minimum 64GB RAM si +1 TB SSD storage, ceea ce duce costurile de hosting undeva la +100 EUR/luna pentru serverul de harti.
