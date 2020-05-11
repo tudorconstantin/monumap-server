@@ -26,7 +26,7 @@
     "@nestjs/platform-express": "^6.7.2",
     "@types/csvtojson": "^1.1.5",
     "class-transformer": "^0.2.3",
-    "class-validator": "^0.11.0",
+    "class-validator": "^0.12.0",
     "csvtojson": "^2.0.10",
     "dotenv": "^8.2.0",
     "fs-extra": "^8.1.0",
