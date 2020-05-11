@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@quasar/extras": "1.8.1",
-    "@types/lodash": "4.14.149",
+    "@types/lodash": "4.14.150",
     "core-js": "3.6.4",
     "css-loader": "3.4.2",
     "leaflet": "1.6.0",
