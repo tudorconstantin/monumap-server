@@ -35,7 +35,7 @@
     "eslint-plugin-vue": "6.2.2",
     "babel-plugin-transform-imports": "2.0.0",
     "eslint": "7.0.0",
-    "node-sass": "4.13.1",
+    "node-sass": "4.14.1",
     "sass": "1.25.0",
     "sass-loader": "8.0.2",
     "vue-cli-plugin-quasar": "2.0.0",
