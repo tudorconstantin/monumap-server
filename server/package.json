@@ -32,7 +32,7 @@
     "fs-extra": "8.1.0",
     "geojson": "0.5.0",
     "glob": "7.1.6",
-    "piexifjs": "1.0.4",
+    "piexifjs": "1.0.6",
     "glob-promise": "3.4.0",
     "reflect-metadata": "0.1.13",
     "rimraf": "3.0.0",
