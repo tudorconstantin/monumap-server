@@ -34,7 +34,7 @@
     "babel-eslint": "10.1.0",
     "eslint-plugin-vue": "6.2.2",
     "babel-plugin-transform-imports": "2.0.0",
-    "eslint": "7.0.0",
+    "eslint": "7.1.0",
     "node-sass": "4.14.1",
     "sass": "1.26.5",
     "sass-loader": "8.0.2",
