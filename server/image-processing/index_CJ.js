@@ -1,13 +1,13 @@
-// move, rename, add GPS metadata & create destination folders for images, for BUCURESTI
+// move, rename, add GPS metadata & create destination folders for images, for CLUJ
 
 // import libraries
 const fs = require('fs-extra');
 
 // import local modules
-const processFiles = require('./modules/process-files_B');
+const processFiles = require('./modules/process-files_CJ');
 
 // variables
-const csvPath = './data/LMI-B_curat_cu-categorii.csv';
+const csvPath = './data/monuments_cj_last.csv';
 
 // ////////////////////////////////////////////////////////////////////////////
 // // METHODS
@@ -33,7 +33,7 @@ function main () {
   // help text
   const helpText = `\n Available commands:\n\n\
   1. -h : display help text\n\
-  2. -paf [input/path] [output/path] [userName]: process all image files. All arguments are required.\n\
+  2. -paf [input/path] [output/path] : process all image files. All arguments are required.\n\
   3. -mf : copy & rename files from given inFolder to given outFolder\n`;
 
   // get command line arguments
@@ -48,7 +48,6 @@ function main () {
   // get the rest of the arguments
   const inPathArg = process.argv[3];
   const outPathArg = process.argv[4];
-  const userName = process.argv[5];
 
   // run requested command
   // 1. if argument is 'h' or 'help' print available commands
@@ -61,17 +60,14 @@ function main () {
     console.log('\x1b[34m%s\x1b[0m', '\nProcess image files');
 
     // read monuments list - including header
-    monArr = readCSV(csvPath, ';');
+    // console.log(`${__dirname}/${csvPath}`);
+    const monArr = readCSV(csvPath, '%');
     console.log(`Monuments Array: ${monArr.length} items\n`);
 
     // check in and out path arguments
     if (fs.pathExistsSync(inPathArg) && fs.pathExistsSync(outPathArg)) {
-      if (userName) {
-        // process files in array
-        processFiles(inPathArg, outPathArg, userName, monArr.slice(1));
-      } else {
-        console.log(`ERR: userName is missing or invalid!`);
-      }
+      // process files in array
+      processFiles(inPathArg, outPathArg, monArr.slice(1));
 
       // if path args are invalid or missing print error msg
     } else {
