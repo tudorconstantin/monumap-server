@@ -118,6 +118,7 @@ export default {
   created: async function () {
     // get monuments list
     await this.$store.dispatch("monuments/getAllMonuments");
+    await this.$store.dispatch("polygons/getAllPolygons");
 
     // get monuments photos
     this.$store.dispatch(
