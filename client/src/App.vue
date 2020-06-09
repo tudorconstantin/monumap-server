@@ -1,8 +1,5 @@
 <template>
-  <q-layout
-    view="hHh lpR fFf"
-    class="aller-font"
-  >
+  <q-layout view="hHh lpR fFf" class="aller-font">
     <q-header
       elevated
       id="header"
@@ -11,13 +8,7 @@
       v-if="!isHomeRoute"
     >
       <q-toolbar>
-        <q-btn
-          dense
-          flat
-          round
-          icon="menu"
-          @click="left = !left"
-        />
+        <q-btn dense flat round icon="menu" @click="left = !left" />
 
         <q-toolbar-title class="row">
           <img
@@ -33,29 +24,18 @@
         </q-toolbar-title>
 
         <q-btn
-          v-if="monumentInfoShown"
+          v-if="itemInfoShown"
           dense
           flat
           round
           icon="menu"
-          @click="
-            $store.commit(
-              'monuments/setMonumentDisplay',
-              !$store.state.monuments.monumentDisplayed
-            )
-          "
+          @click="hideShowItemInfo()"
         />
       </q-toolbar>
 
       <q-tabs align="left">
-        <q-route-tab
-          to="/lmi"
-          label="LMI"
-        />
-        <q-route-tab
-          to="/locuire"
-          label="Locuire"
-        />
+        <q-route-tab to="/lmi" label="LMI" />
+        <q-route-tab to="/locuire" label="Locuire" />
       </q-tabs>
     </q-header>
 
@@ -72,7 +52,7 @@
 
     <q-drawer
       v-if="!isHomeRoute"
-      v-model="monumentInfoShown"
+      v-model="itemInfoShown"
       side="right"
       bordered
       :width="400"
@@ -88,46 +68,68 @@
 </template>
 
 <script>
-import SearchPanel from "@/components/SearchPanel";
-import InfoPanel from "@/components/InfoPanel";
-import { mapState } from "vuex";
+import SearchPanel from '@/components/SearchPanel';
+import InfoPanel from '@/components/InfoPanel';
+import { mapState } from 'vuex';
 
 export default {
-  data () {
+  data() {
     return {
-      left: true
+      left: true,
     };
   },
   components: {
     SearchPanel,
-    InfoPanel
+    InfoPanel,
   },
   computed: {
     // if home route, hide all bars and panels
-    isHomeRoute () {
-      return this.$route.name === "home";
+    isHomeRoute() {
+      return this.$route.name === 'home';
     },
 
     ...mapState({
-      monumentDisplayed: state => state.monuments.monumentDisplayed,
-      monumentInfoShown: state =>
-        state.monuments.monumentDisplayed &&
-        !!state.monuments.selectedItem["cod_lmi"]
-    })
+      itemDisplayed: (state) => state.monuments.monumentDisplayed || state.polygons.polygonDisplayed,
+      itemInfoShown: function (state) {
+        const res =
+          (this.$route.name === 'lmi' &&
+            state.monuments.monumentDisplayed &&
+            !!state.monuments.selectedItem['cod_lmi']) ||
+          (this.$route.name === 'locuire' &&
+            state.polygons.polygonDisplayed &&
+            !!state.polygons.selectedItem.properties.cod_lmi);
+        return res;
+      },
+    }),
   },
-  created: async function () {
-    // get monuments list
-    await this.$store.dispatch("monuments/getAllMonuments");
-    await this.$store.dispatch("polygons/getAllPolygons");
+  created: async function() {
+    // get items list
+    await this.$store.dispatch('monuments/getAllMonuments');
+    await this.$store.dispatch('polygons/getAllPolygons');
 
-    // get monuments photos
-    this.$store.dispatch(
-      "photos/getMonumentImages",
-      this.$store.state.photos.monumentShown.nr
-    );
+    // get items photos
+    // this.$store.dispatch(
+    //   "photos/getMonumentImages",
+    //   this.$store.state.photos.itemShown.nr
+    // );
     // open the left panel
     this.left = true;
-  }
+  },
+  methods: {
+    hideShowItemInfo() {
+      if (this.$route.name === 'lmi') {
+        this.$store.commit(
+          'monuments/setMonumentDisplay',
+          !this.$store.state.monuments.monumentDisplayed
+        );
+      } else if (this.$route.name === 'locuire') {
+        this.$store.commit(
+          'polygons/setPolygonDisplay',
+          !this.$store.state.polygons.polygonDisplayed
+        );
+      }
+    },
+  },
 };
 </script>
 

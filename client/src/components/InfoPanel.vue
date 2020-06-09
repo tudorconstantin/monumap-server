@@ -5,15 +5,17 @@
   >
     <q-card class="my-card">
       <q-img
-        :src="currentItem.images[0]  || require('../assets/no-image.png')"
+        :src="currentItem.images[0] || require('../assets/no-image.png')"
         :alt="currentItem.cod_lmi"
         basic
       >
-        <div class="
+        <div
+          class="
         absolute-bottom
         text-subtitle2
-        text-left">
-          {{ currentItem["cod_lmi"] }}: {{ currentItem["denumire"] }}
+        text-left"
+        >
+          {{ currentItem['cod_lmi'] }}: {{ currentItem['denumire'] }}
         </div>
       </q-img>
     </q-card>
@@ -28,20 +30,20 @@
           <tr>
             <td class="text-left name-column">Coordonate</td>
             <td class="text-left">
-              {{ formatGPSCoord(currentItem["y"]) }},
-              {{ formatGPSCoord(currentItem["x"]) }}
+              {{ formatGPSCoord(currentItem['y']) }},
+              {{ formatGPSCoord(currentItem['x']) }}
             </td>
           </tr>
           <tr>
             <td class="text-left">Localitate</td>
             <td class="text-left">
-              {{ currentItem["SIRUTA"] }} {{ currentItem["localitate"] }}
+              {{ currentItem['SIRUTA'] }} {{ currentItem['localitate'] }}
             </td>
           </tr>
           <tr>
             <td class="text-left">Adresa</td>
             <td class="text-left">
-              {{ currentItem["adresa"] }}
+              {{ currentItem['adresa'] }}
             </td>
           </tr>
         </tbody>
@@ -57,19 +59,19 @@
         <tbody>
           <tr>
             <td class="text-left name-column">Patrimoniu</td>
-            <td class="text-left">{{ currentItem["tip_patrimoniu"] }}</td>
+            <td class="text-left">{{ currentItem['tip_patrimoniu'] }}</td>
           </tr>
           <tr>
             <td class="text-left name-column">Program</td>
-            <td class="text-left">{{ currentItem["program_arhitectura"] }}</td>
+            <td class="text-left">{{ currentItem['program_arhitectura'] }}</td>
           </tr>
           <tr>
             <td class="text-left name-column">Monument</td>
-            <td class="text-left">{{ currentItem["tip_monument"] }}</td>
+            <td class="text-left">{{ currentItem['tip_monument'] }}</td>
           </tr>
           <tr>
             <td class="text-left name-column">Datare</td>
-            <td class="text-left">{{ currentItem["datare"] }}</td>
+            <td class="text-left">{{ currentItem['datare'] }}</td>
           </tr>
         </tbody>
       </q-markup-table>
@@ -84,13 +86,13 @@
         <tbody>
           <tr>
             <td class="text-left name-column">Stare generală</td>
-            <td class="text-left">{{ currentItem["stare"] }}</td>
+            <td class="text-left">{{ currentItem['stare'] }}</td>
           </tr>
           <tr>
             <td class="text-left name-column">Observații</td>
             <td class="text-left">
-              {{ currentItem["observatii"] }}<br />
-              {{ currentItem["observatii_corina"] }}
+              {{ currentItem['observatii'] }}<br />
+              {{ currentItem['observatii_corina'] }}
             </td>
           </tr>
         </tbody>
@@ -100,22 +102,29 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState } from 'vuex';
 
 export default {
-  name: "InfoBar",
+  name: 'InfoBar',
   computed: {
     ...mapState({
-      currentItem: state => {
-        return state.monuments.selectedItem;
-      }
-    })
+      currentItem(state) {
+        return this.$route.name === 'lmi'
+          ? state.monuments.selectedItem
+          : this.$route.name === 'locuire'
+          ? {
+              ...state.polygons.selectedItem,
+              ...state.polygons?.selectedItem?.properties,
+            }
+          : {};
+      },
+    }),
   },
   methods: {
-    formatGPSCoord (number) {
+    formatGPSCoord(number) {
       return parseFloat(number).toFixed(6);
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -94,19 +94,19 @@ const actions = {
     // if null value
     if (!codLmi) {
       commit("setSelectedItem", undefined);
-      commit("setMonumentDisplay", false);
+      commit("setPolygonDisplay", false);
       return;
     }
 
     // get all polygon data
-    const fullMonument = state.geoJSON.features.find(
+    const fullPolygon = state.geoJSON.features.find(
       m => m['properties']["cod_lmi"] === codLmi
     );
 
-    const monumentProperties = fullMonument['properties'];
+    const polygonProperties = fullPolygon['properties'];
 
     // request image list
-    const srvImgArrPath = `${monumentProperties['SIRSUP']}_${monumentProperties['UAT']}/${monumentProperties['SIRUTA']}_${monumentProperties['localitate']}/${monumentProperties['SIRINF']}_${monumentProperties['sector'].replace(' ', '-')}/${monumentProperties['cod_lmi']}`;
+    const srvImgArrPath = `${polygonProperties['SIRSUP']}_${polygonProperties['UAT']}/${polygonProperties['SIRUTA']}_${polygonProperties['localitate']}/${polygonProperties['SIRINF']}_${polygonProperties['sector'].replace(' ', '-')}/${polygonProperties['cod_lmi']}`;
 
     //TODO: polygon images????
     const imgArrReqPath = `/api/monument.images?polygonPath=${srvImgArrPath}`;
@@ -117,10 +117,10 @@ const actions = {
     const fullPathImageArray = imgArr.map(photoName => `/images/${srvImgArrPath}/${photoName}`);
 
     // creat images properties
-    fullMonument.images = fullPathImageArray;
+    fullPolygon.images = fullPathImageArray;
 
-    commit("setSelectedItem", fullMonument);
-    commit("setMonumentDisplay", true);
+    commit("setSelectedItem", fullPolygon);
+    commit("setPolygonDisplay", true);
 
   },
   setFilterText ({ commit }, text) {
@@ -147,7 +147,7 @@ const mutations = {
   setSelectedItem (state, item) {
     state.selectedItem = item;
   },
-  setMonumentDisplay (state, v) {
+  setPolygonDisplay (state, v) {
     state.polygonDisplayed = v;
   },
   setFilterText (state, v) {
