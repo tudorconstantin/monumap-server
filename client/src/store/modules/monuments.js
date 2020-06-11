@@ -85,8 +85,7 @@ const getters = {
 const actions = {
   async getAllMonuments ({ commit }) {
 
-    // const geojson = await fetch("/api/monuments.geojson");
-    const geojson = await fetch("/api/geojson/reabilitare-termica.geojson");
+    const geojson = await fetch("/api/monuments.geojson");
     const geojsonMonuments = await geojson.json();
     commit("setGeoJSON", geojsonMonuments);
     commit("setMonuments", geojsonMonuments.features.map(m => m.properties));
