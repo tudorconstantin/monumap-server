@@ -102,18 +102,13 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
 
 export default {
   name: 'InfoBar',
-  computed: {
-    ...mapState({
-      currentItem(state) {
-        return this.$route.name === 'lmi'
-          ? state.monuments.selectedItem
-          : {};
-      },
-    }),
+  props: [
+    'currentItem'
+  ],
+  created() {
   },
   methods: {
     formatGPSCoord(number) {
