@@ -86,6 +86,7 @@ const actions = {
   async getAllMonuments ({ commit }) {
 
     const geojson = await fetch("/api/monuments.geojson");
+    // const geojson = await fetch("https://monumap-staging.prforge.com/geojson/reabilitare-termica.geojson");
     const geojsonMonuments = await geojson.json();
     commit("setGeoJSON", geojsonMonuments);
     commit("setMonuments", geojsonMonuments.features.map(m => m.properties));

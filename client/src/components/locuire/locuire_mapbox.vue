@@ -1,5 +1,14 @@
 <template>
   <div id="mapContainer" :style="cssVars()">
+    <q-drawer :overlay="true" v-model="left" side="left" bordered>
+      <!-- drawer content -->
+      <search-panel></search-panel>
+    </q-drawer>
+
+    <q-drawer v-model="itemInfoShown" side="right" bordered :width="400">
+      <!-- drawer content -->
+      <info-panel v-bind:current-item="currentItem"></info-panel>
+    </q-drawer>
     <MglMap
       :accessToken="accessToken"
       :mapStyle.sync="mapStyle"
@@ -16,15 +25,13 @@
 </template>
 
 <script>
+import SearchPanel from './SearchPanel';
+import InfoPanel from './InfoPanel';
 import { matRoom } from '@quasar/extras/material-icons';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import constants from '@/util/constants.js';
 
-import {
-  MglMap,
-  MglNavigationControl,
-  MglGeolocateControl,
-} from 'vue-mapbox';
+import { MglMap, MglNavigationControl, MglGeolocateControl } from 'vue-mapbox';
 
 import { mapGetters } from 'vuex';
 
@@ -33,9 +40,14 @@ export default {
     MglMap,
     MglNavigationControl,
     MglGeolocateControl,
+    SearchPanel,
+    InfoPanel,
   },
   data() {
     return {
+      geoJSON: {},
+      currentItem: {},
+      left: true,
       accessToken:
         'pk.eyJ1IjoidHVkb3Jjb25zdGFudGluIiwiYSI6ImNrM29yN2t3cjBiMDkzaG80cTdiczhzMmIifQ.fqelSp0srqiSV3qkfbE2qQ',
       mapStyle: 'mapbox://styles/tudorconstantin/ck6e0nrah6h571ipdkgakat2u',
@@ -46,34 +58,44 @@ export default {
     };
   },
 
-  created() {
+  async created() {
     this.map = null;
     this.matRoom = matRoom;
     this.constants = constants;
+    const resp = await fetch('/api/polygons.geojson');
+    this.geoJSON = await resp.json();
   },
   computed: {
+    itemInfoShown() {
+      return !!this.currentItem?.cod_lmi;
+    },
+    selectedItem: {
+      get: function() {
+        return this.currentItem;
+      },
+      set: function(newValue) {
+        if (newValue) {
+          const bounds = JSON.parse(
+            JSON.stringify(newValue.geometry.coordinates[0])
+          );
+          this.$store.map.fitBounds(bounds, { margin: 2 });
+          this.currentItem = {
+            ...newValue.properties,
+            images: newValue.images,
+          };
+          return;
+        } 
+
+        console.log(`===============clean up currentItem`);
+        this.currentItem = {};
+      },
+    },
+
     ...mapGetters({
-      selectedItem: 'polygons/getSelectedItem',
       polygons: 'polygons/filteredArray',
-      geoJSON: 'polygons/filteredGeoJSON',
     }),
   },
-  watch: {
-    /* eslint-disable-next-line no-unused-vars */
-    // geoJSON(newValue, oldValue) {
-    //   this.filterMap();
-    // },
-    /* eslint-disable-next-line no-unused-vars */
-    selectedItem(newValue, oldValue) {
-      // re-center map view
-      if (newValue) {
-        const bounds = JSON.parse(
-          JSON.stringify(newValue.geometry.coordinates[0])
-        );
-        this.$store.map.fitBounds(bounds, { margin: 2 });
-      }
-    },
-  },
+
   methods: {
     addPolygons() {
       const map = this.$store.map;
@@ -109,9 +131,9 @@ export default {
             e.point
           ) || [])[0];
           if (clickedPolygon) {
-            this.onPolygonClicked(clickedPolygon.properties);
+            this.selectItem(clickedPolygon.properties);
           } else {
-            this.$store.dispatch('polygons/selectItem', null);
+            this.selectItem(null);
           }
         })
         .on('zoomend', () => {
@@ -137,9 +159,41 @@ export default {
       };
     },
 
-    onPolygonClicked(polygon) {
-      if (!polygon) return this.$store.dispatch('polygons/selectItem', null);
-      this.$store.dispatch('polygons/selectItem', polygon['cod_lmi']);
+    async selectItem(polygon) {
+      if (!polygon) {
+        this.currentItem = {};
+        this.selectedItem = null;
+        return;
+      }
+      // get all polygon data
+      const fullPolygon = this.geoJSON.features.find(
+        (m) => m['properties']['cod_lmi'] === polygon['cod_lmi']
+      );
+
+      const polygonProperties = fullPolygon['properties'];
+
+      // request image list
+      const srvImgArrPath = `${polygonProperties['SIRSUP']}_${
+        polygonProperties['UAT']
+      }/${polygonProperties['SIRUTA']}_${polygonProperties['localitate']}/${
+        polygonProperties['SIRINF']
+      }_${polygonProperties['sector'].replace(' ', '-')}/${
+        polygonProperties['cod_lmi']
+      }`;
+
+      //TODO: polygon images????
+      const imgArrReqPath = `/api/monument.images?polygonPath=${srvImgArrPath}`;
+      const res = await fetch(imgArrReqPath);
+      const imgArr = (await res.json()) || [];
+
+      // save full path images to array
+      const fullPathImageArray = imgArr.map(
+        (photoName) => `/images/${srvImgArrPath}/${photoName}`
+      );
+
+      // creat images properties
+      fullPolygon.images = fullPathImageArray;
+      this.selectedItem = fullPolygon;
     },
   },
 };

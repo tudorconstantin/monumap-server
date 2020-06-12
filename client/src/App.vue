@@ -41,8 +41,8 @@
 
     <q-drawer
       v-if="!isHomeRoute"
-      :overlay="true"
       v-model="left"
+      :overlay="true"
       side="left"
       bordered
     >
@@ -121,11 +121,6 @@ export default {
         this.$store.commit(
           'monuments/setMonumentDisplay',
           !this.$store.state.monuments.monumentDisplayed
-        );
-      } else if (this.$route.name === 'locuire') {
-        this.$store.commit(
-          'polygons/setPolygonDisplay',
-          !this.$store.state.polygons.polygonDisplayed
         );
       }
     },

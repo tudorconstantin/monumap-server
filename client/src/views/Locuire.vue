@@ -7,7 +7,7 @@
 
 <script>
 // import Map from "@/components/Map_leaflet";
-import Map from "@/components/locuire_mapbox";
+import Map from "@/components/locuire/locuire_mapbox";
 
 export default {
   name: "mapview",
