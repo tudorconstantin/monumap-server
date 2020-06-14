@@ -22,7 +22,7 @@
         v-ripple
         v-for="item in filteredItems"
         :key="item['properties']['cod_lmi']"
-        @click="selectMonument(item['properties']['cod_lmi'])"
+        @click="selectItem(item['properties'])"
       >
         <q-item-section>{{ item['properties']['denumire'] }}</q-item-section>
       </q-item>
@@ -33,8 +33,9 @@
 <script>
 export default {
   props: {
-    items: { type: Array},    
+    items: { type: Array },
     setFilter: { type: Function },
+    selectItem: { type: Function },
   },
   data() {
     return {
@@ -57,11 +58,6 @@ export default {
       get() {
         return this.dummyFilterText;
       },
-    },
-  },
-  methods: {
-    selectMonument(codLmi) {
-      this.$store.dispatch('monuments/selectItem', codLmi);
     },
   },
 };

@@ -36,6 +36,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import constants from '@/util/constants.js';
 
 import { MglMap, MglNavigationControl, MglGeolocateControl } from 'vue-mapbox';
+import Mapbox from 'mapbox-gl';
 
 import { mapGetters } from 'vuex';
 
@@ -178,10 +179,32 @@ export default {
       },
       set: function(newValue) {
         if (newValue) {
-          const bounds = JSON.parse(
-            JSON.stringify(newValue.geometry.coordinates[0])
+          let coordinates;
+          if (newValue.geometry.type === 'MultiPolygon') {
+            coordinates = JSON.parse(
+              JSON.stringify(newValue.geometry.coordinates[0])
+            );
+          } else if (newValue.geometry.type === 'MultiLineString') {
+            coordinates = JSON.parse(
+              JSON.stringify(newValue.geometry.coordinates)
+            );
+          } else if (newValue.geometry.type === 'Point') {
+            coordinates = [
+              [JSON.parse(JSON.stringify(newValue.geometry.coordinates))],
+            ];
+          }
+
+          let point = coordinates[0].shift().slice(0, 2);
+          let bounds = new Mapbox.LngLatBounds(
+            new Mapbox.LngLat(...point),
+            new Mapbox.LngLat(...point)
           );
-          this.$store.map.fitBounds(bounds, { margin: 2 });
+          while (coordinates[0].length) {
+            point = coordinates[0].shift().slice(0, 2);
+            bounds.extend(new Mapbox.LngLat(...point));
+          }
+
+          this.$store.map.fitBounds(bounds, { margin: 2, maxZoom: 17 });
           this.currentItem = {
             ...newValue.properties,
             images: newValue.images,
@@ -202,17 +225,31 @@ export default {
     addLayers() {
       const map = this.$store.map;
       Object.keys(this.geometryTypes || {}).forEach((geometryType) => {
-        map.addSource(geometryType, {
-          type: 'geojson',
-          data: {
-            ...this.geoJSON,
-            features: this.geoJSON.features.filter(
-              (m) => m.geometry && m.geometry?.type === geometryType
-            ),
-          },
-          generateId: true, // This ensures that all features have unique IDs
-        });
+        map
+          .addSource(geometryType, {
+            type: 'geojson',
+            data: {
+              ...this.geoJSON,
+              features: this.geoJSON.features.filter(
+                (m) => m.geometry && m.geometry?.type === geometryType
+              ),
+            },
+            generateId: true, // This ensures that all features have unique IDs
+          })
+          .on('mousemove', geometryType, (e) => {
+            if (e.features && e.features.length > 0) {
+              hoveredMonumentId = e.features[0].id;
+              map.getCanvas().style.cursor = 'pointer';
+            }
+          })
+          .on('mouseleave', geometryType, () => {
+            if (hoveredMonumentId) {
+              hoveredMonumentId = null;
+              map.getCanvas().style.cursor = '';
+            }
+          });
 
+        let hoveredMonumentId = null;
         map.addLayer({
           id: geometryType,
           type: this.geometryTypes[geometryType]['type'],
@@ -225,7 +262,12 @@ export default {
 
     /* eslint-disable-next-line no-unused-vars */
     setFilter(filter) {
-      
+      let filteredItems = [...this.items];
+      if (filter.text){
+        filteredItems = filteredItems.filter( i => i.properties.denumire.toUpperCase().indexOf(filter.text.toUpperCase()) > -1);
+      }
+
+      this.filteredItems = filteredItems;
     },
     customizeMap() {
       const map = this.$store.map;
@@ -265,15 +307,17 @@ export default {
       };
     },
 
-    async selectItem(polygon) {
-      if (!polygon) {
+    async selectItem(polygonProps) {
+      if (!polygonProps) {
         this.currentItem = {};
         this.selectedItem = null;
         return;
       }
       // get all polygon data
       const fullPolygon = this.geoJSON.features.find(
-        (m) => m['properties']['cod_lmi'] === polygon['cod_lmi']
+        (m) =>
+          m['properties']['source'] === polygonProps['source'] &&
+          m['properties']['id0'] === polygonProps['id0']
       );
 
       const polygonProperties = fullPolygon['properties'];
