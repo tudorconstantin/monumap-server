@@ -27,9 +27,15 @@ const routes = [
   },
   {
     path: "/spatii-publice",
-    name: "patii-publice",
+    name: "spatii-publice",
     component: () =>
       import(/* webpackChunkName: "map" */ "../views/SpatiiPublice.vue")
+  },
+  {
+    path: "/toalete-publice",
+    name: "toalete-publice",
+    component: () =>
+      import(/* webpackChunkName: "map" */ "../views/ToaletePublice.vue")
   }
 ];
 

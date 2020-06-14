@@ -36,6 +36,7 @@
       <q-tabs align="left">
         <q-route-tab to="/lmi" label="LMI" />
         <q-route-tab to="/spatii-publice" label="Spatii Publice" />
+        <q-route-tab to="/toalete-publice" label="Toalete Publice" />
       </q-tabs>
     </q-header>
 
