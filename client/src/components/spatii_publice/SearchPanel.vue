@@ -1,5 +1,35 @@
 <template>
   <div class="bg-grey-5">
+    <q-list separator v-for="group in itemGroups" :key="group.code">
+      <q-expansion-item
+        dense
+        dense-toggle
+        expand-separator
+        :label="group.label"
+      >
+        <q-card>
+          <q-card-section class="column bg-grey-4">
+            <!-- <q-checkbox v-model="group.checked" /> -->
+
+            <q-item
+              dense
+              clickable
+              v-ripple
+              v-for="item in filteredItems.filter(
+                (i) => i.properties.source === group.code
+              )"
+              :key="item['properties']['cod_lmi']"
+              @click="selectItem(item['properties'])"
+            >
+              <q-item-section>{{
+                item['properties']['denumire']
+              }}</q-item-section>
+            </q-item>
+          </q-card-section>
+        </q-card>
+      </q-expansion-item>
+    </q-list>
+
     <q-input bottom-slots v-model="filterText" label="Căutare" :dense="true">
       <template v-slot:prepend>
         <q-icon name="place" />
@@ -15,18 +45,6 @@
         </div>
       </template>
     </q-input>
-    <q-list separator>
-      <q-item
-        dense
-        clickable
-        v-ripple
-        v-for="item in filteredItems"
-        :key="item['properties']['cod_lmi']"
-        @click="selectItem(item['properties'])"
-      >
-        <q-item-section>{{ item['properties']['denumire'] }}</q-item-section>
-      </q-item>
-    </q-list>
   </div>
 </template>
 
@@ -40,6 +58,33 @@ export default {
   data() {
     return {
       dummyFilterText: '',
+      itemGroups: [
+        {
+          code: 'CIMITIRE',
+          label: 'Cimitire',
+          checked: true,
+        },
+        {
+          code: 'SPATII_ABANDONATE',
+          label: 'Spatii abandonate',
+          checked: true,
+        },
+        {
+          code: 'SPATII_LINIARE',
+          label: 'Spatii liniare',
+          checked: true,
+        },
+        {
+          code: 'SPATII_SUPRAFATA',
+          label: 'Spatii suprafata',
+          checked: true,
+        },
+        {
+          code: 'SPATII_PUNCTUALE',
+          label: 'Spatii punctuale',
+          checked: true,
+        },
+      ],
     };
   },
   computed: {
