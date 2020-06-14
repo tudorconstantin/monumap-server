@@ -36,7 +36,9 @@
       <q-tabs align="left">
         <q-route-tab to="/lmi" label="LMI" />
         <q-route-tab to="/spatii-publice" label="Spatii Publice" />
+        <q-route-tab to="/servicii-medicale" label="Servicii Medicale" />
         <q-route-tab to="/toalete-publice" label="Toalete Publice" />
+        <!-- <q-route-tab to="/lie-2020-1" label="LIE 2020.1" /> -->
       </q-tabs>
     </q-header>
 

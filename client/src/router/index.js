@@ -32,11 +32,23 @@ const routes = [
       import(/* webpackChunkName: "map" */ "../views/SpatiiPublice.vue")
   },
   {
+    path: "/servicii-medicale",
+    name: "servicii-medicale",
+    component: () =>
+      import(/* webpackChunkName: "map" */ "../views/ServiciiMedicale.vue")
+  },
+  {
     path: "/toalete-publice",
     name: "toalete-publice",
     component: () =>
       import(/* webpackChunkName: "map" */ "../views/ToaletePublice.vue")
-  }
+  },
+  // {
+  //   path: "/lie-2020-1",
+  //   name: "lie-2020-1",
+  //   component: () =>
+  //     import(/* webpackChunkName: "map" */ "../views/Lie2020_1.vue")
+  // }
 ];
 
 const router = new VueRouter({
