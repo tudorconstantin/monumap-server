@@ -269,7 +269,6 @@ export default {
             e.point
           ) || [])[0];
           if (clickedPolygon) {
-            console.log(`======clickedPolygon`, clickedPolygon)
             this.selectItem(clickedPolygon.properties);
           } else {
             this.selectItem(null);

@@ -272,7 +272,6 @@ export default {
     },
 
     async selectItem(polygonProps) {
-            console.log(`===============select item`, polygonProps);
 
       if (!polygonProps) {
         this.currentItem = {};
