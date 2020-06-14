@@ -261,7 +261,14 @@ export default {
     },
 
     /* eslint-disable-next-line no-unused-vars */
-    setFilter(filter) {},
+    setFilter(filter) {
+      let filteredItems = [...this.items];
+      if (filter.text){
+        filteredItems = filteredItems.filter( i => i.properties.denumire.toUpperCase().indexOf(filter.text.toUpperCase()) > -1);
+      }
+
+      this.filteredItems = filteredItems;
+    },
     customizeMap() {
       const map = this.$store.map;
       this.addLayers();
