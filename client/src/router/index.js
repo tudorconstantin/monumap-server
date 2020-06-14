@@ -26,10 +26,10 @@ const routes = [
       import(/* webpackChunkName: "map" */ "../views/MapView.vue")
   },
   {
-    path: "/locuire",
-    name: "locuire",
+    path: "/spatii-publice",
+    name: "patii-publice",
     component: () =>
-      import(/* webpackChunkName: "map" */ "../views/Locuire.vue")
+      import(/* webpackChunkName: "map" */ "../views/SpatiiPublice.vue")
   }
 ];
 

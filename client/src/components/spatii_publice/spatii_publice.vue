@@ -2,7 +2,11 @@
   <div id="mapContainer" :style="cssVars()">
     <q-drawer :overlay="true" v-model="left" side="left" bordered>
       <!-- drawer content -->
-      <search-panel></search-panel>
+      <search-panel
+        :set-filter="setFilter"
+        :select-item="selectItem"
+        :items="filteredItems"
+      ></search-panel>
     </q-drawer>
 
     <q-drawer v-model="itemInfoShown" side="right" bordered :width="400">
@@ -46,8 +50,34 @@ export default {
   data() {
     return {
       geoJSON: {},
+      items: [],
+      filteredItems: [],
       currentItem: {},
       left: true,
+      geometryTypes: {
+        MultiPolygon: {
+          paint: {
+            'fill-color': '#088',
+            'fill-opacity': 0.8,
+          },
+          type: 'fill',
+        },
+        Point: {
+          paint: {
+            'circle-radius': 6,
+            'circle-color': '#B42222',
+          },
+          type: 'circle',
+        },
+        MultiLineString: {
+          paint: {
+            'line-color': 'black',
+            'line-width': 3,
+          },
+          type: 'line',
+        },
+      },
+
       accessToken:
         'pk.eyJ1IjoidHVkb3Jjb25zdGFudGluIiwiYSI6ImNrM29yN2t3cjBiMDkzaG80cTdiczhzMmIifQ.fqelSp0srqiSV3qkfbE2qQ',
       mapStyle: 'mapbox://styles/tudorconstantin/ck6e0nrah6h571ipdkgakat2u',
@@ -62,8 +92,81 @@ export default {
     this.map = null;
     this.matRoom = matRoom;
     this.constants = constants;
-    const resp = await fetch('/api/polygons.geojson');
-    this.geoJSON = await resp.json();
+    const [
+      cimitire,
+      spatiiAbandonate,
+      spatiiLiniare,
+      spatiiSuprafata,
+      spatiiPunctuale,
+    ] = await Promise.all([
+      fetch('/geojson/cimitire.geojson').then((r) => r.json()),
+      fetch('/geojson/spatii-abandonate.geojson').then((r) => r.json()),
+      fetch('/geojson/spatii-liniare.geojson').then((r) => r.json()),
+      fetch('/geojson/spatii-suprafata.geojson').then((r) => r.json()),
+      fetch('/geojson/spatii-punctuale.geojson').then((r) => r.json()),
+    ]);
+
+    let features = [];
+
+    features = features.concat(
+      (cimitire?.features || [])
+        .filter((i) => i?.geometry?.type)
+        .map((i) => {
+          i.properties = i.properties || {};
+          i.properties.source = 'CIMITIRE';
+          return i;
+        })
+    );
+
+    features = features.concat(
+      (spatiiAbandonate?.features || []).map((i) => {
+        i.properties = i.properties || {};
+        i.properties.source = 'SPATII_ABANDONATE';
+        return i;
+      })
+    );
+
+    features = features.concat(
+      (spatiiLiniare?.features || []).map((i) => {
+        i.properties = i.properties || {};
+        i.properties.source = 'SPATII_LINIARE';
+        return i;
+      })
+    );
+
+    features = features.concat(
+      (spatiiSuprafata?.features || []).map((i) => {
+        i.properties = i.properties || {};
+        i.properties.source = 'SPATII_SUPRAFATA';
+        return i;
+      })
+    );
+
+    features = features.concat(
+      (spatiiPunctuale?.features || []).map((i) => {
+        i.properties = i.properties || {};
+        i.properties.source = 'SPATII_PUNCTUALE';
+        return i;
+      })
+    );
+
+    features = features.sort((a, b) => {
+      const A = a?.properties?.denumire?.toUpperCase();
+      const B = b?.properties?.denumire?.toUpperCase();
+
+      if (A < B) return -1;
+      if (A > B) return 1;
+      return 0;
+    });
+
+    const geoJSON = {
+      type: 'FeatureCollection',
+      name: 'spatiiPublice',
+      features,
+    };
+    this.geoJSON = geoJSON;
+    this.filteredItems = geoJSON.features;
+    this.items = geoJSON.features;
   },
   computed: {
     itemInfoShown() {
@@ -84,9 +187,8 @@ export default {
             images: newValue.images,
           };
           return;
-        } 
+        }
 
-        console.log(`===============clean up currentItem`);
         this.currentItem = {};
       },
     },
@@ -97,33 +199,37 @@ export default {
   },
 
   methods: {
-    addPolygons() {
+    addLayers() {
       const map = this.$store.map;
-      map.addSource('polygons', {
-        type: 'geojson',
-        data: {
-          ...this.geoJSON,
-          features: this.geoJSON.features.filter(
-            (m) => m.geometry.type === 'Polygon'
-          ),
-        },
-        generateId: true, // This ensures that all features have unique IDs
-      });
+      Object.keys(this.geometryTypes || {}).forEach((geometryType) => {
+        map.addSource(geometryType, {
+          type: 'geojson',
+          data: {
+            ...this.geoJSON,
+            features: this.geoJSON.features.filter(
+              (m) => m.geometry && m.geometry?.type === geometryType
+            ),
+          },
+          generateId: true, // This ensures that all features have unique IDs
+        });
 
-      map.addLayer({
-        id: 'polygons',
-        type: 'fill',
-        source: 'polygons',
-        layout: {},
-        paint: {
-          'fill-color': '#088',
-          'fill-opacity': 0.8,
-        },
+        map.addLayer({
+          id: geometryType,
+          type: this.geometryTypes[geometryType]['type'],
+          source: geometryType,
+          layout: {},
+          paint: this.geometryTypes[geometryType]['paint'],
+        });
       });
+    },
+
+    /* eslint-disable-next-line no-unused-vars */
+    setFilter(filter) {
+      
     },
     customizeMap() {
       const map = this.$store.map;
-      this.addPolygons();
+      this.addLayers();
 
       map
         .on('click', (e) => {

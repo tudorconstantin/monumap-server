@@ -21,10 +21,10 @@
         clickable
         v-ripple
         v-for="item in filteredItems"
-        :key="item['cod_lmi']"
-        @click="selectMonument(item['cod_lmi'])"
+        :key="item['properties']['cod_lmi']"
+        @click="selectMonument(item['properties']['cod_lmi'])"
       >
-        <q-item-section>{{ item['denumire'] }}</q-item-section>
+        <q-item-section>{{ item['properties']['denumire'] }}</q-item-section>
       </q-item>
     </q-list>
   </div>
@@ -32,10 +32,13 @@
 
 <script>
 export default {
-  props: ['items'],
+  props: {
+    items: { type: Array},    
+    setFilter: { type: Function },
+  },
   data() {
     return {
-      dummyFilterText: "",
+      dummyFilterText: '',
     };
   },
   computed: {
@@ -48,7 +51,7 @@ export default {
     },
     filterText: {
       set(newVal) {
-        console.log(`=====do some filtering`, newVal);
+        this.$props.setFilter({ text: newVal });
         this.dummyFilterText = newVal;
       },
       get() {

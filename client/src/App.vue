@@ -35,7 +35,7 @@
 
       <q-tabs align="left">
         <q-route-tab to="/lmi" label="LMI" />
-        <q-route-tab to="/locuire" label="Locuire" />
+        <q-route-tab to="/spatii-publice" label="Spatii Publice" />
       </q-tabs>
     </q-header>
 
@@ -105,7 +105,6 @@ export default {
   created: async function() {
     // get items list
     await this.$store.dispatch('monuments/getAllMonuments');
-    await this.$store.dispatch('polygons/getAllPolygons');
 
     // get items photos
     // this.$store.dispatch(
