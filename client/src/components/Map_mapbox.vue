@@ -14,10 +14,11 @@
       <MglMarker
         v-if="!!selectedItem"
         :coordinates="[
-          selectedItem && selectedItem.x,
-          selectedItem && selectedItem.y,
+          selectedItem && selectedItem.longitudine_x,
+          selectedItem && selectedItem.latitudine_y,
         ]"
       >
+        <img slot="marker" src="../assets/marker_selected.png"/>
       </MglMarker>
     </MglMap>
   </div>
@@ -47,9 +48,9 @@ export default {
   data() {
     return {
       accessToken:
-        'pk.eyJ1IjoidHVkb3Jjb25zdGFudGluIiwiYSI6ImNrM29yN2t3cjBiMDkzaG80cTdiczhzMmIifQ.fqelSp0srqiSV3qkfbE2qQ',
-      mapStyle: 'mapbox://styles/tudorconstantin/ck6e0nrah6h571ipdkgakat2u',
-      container: 'mapContainer',
+        "pk.eyJ1IjoidHVkb3Jjb25zdGFudGluIiwiYSI6ImNrM29yN2t3cjBiMDkzaG80cTdiczhzMmIifQ.fqelSp0srqiSV3qkfbE2qQ",
+      mapStyle: "mapbox://styles/tudorconstantin/ckb6h17g326dr1iuz4vf53dsr",
+      container: "mapContainer",
       center: [26.0986, 44.4365],
       zoom: 12.5,
       constants: null,
@@ -76,8 +77,8 @@ export default {
     /* eslint-disable-next-line no-unused-vars */
     selectedItem(newValue, oldValue) {
       // re-center map view
-      if (newValue && newValue.x)
-        this.$store.map.flyTo({ center: [newValue.x, newValue.y], zoom: 18 });
+      if (newValue && newValue.longitudine_x)
+        this.$store.map.flyTo({ center: [newValue.longitudine_x, newValue.latitudine_y], zoom: 18 });
     },
   },
   methods: {
@@ -90,7 +91,7 @@ export default {
           data: {
             ...this.geoJSON,
             features: this.geoJSON.features.filter(
-              (m) => m.properties.icon_code === mt
+              m => m.properties.icon_code === mt
             ),
           },
           generateId: true, // This ensures that all features have unique IDs
@@ -173,11 +174,14 @@ export default {
     cssVars() {
       //https://www.telerik.com/blogs/passing-variables-to-css-on-a-vue-component
       return {
-        '--height':
+        "--height": this.$q.platform.is.desktop ?
           window.innerHeight -
-          document.getElementById('header').offsetHeight +
-          'px',
-        '--width': window.innerWidth + 'px',
+          document.getElementById("header").offsetHeight +
+          "px" :
+            window.innerHeight -
+            document.getElementById("header-mobile").offsetHeight +
+            "px" ,
+        "--width": window.innerWidth + "px",
       };
     },
 
@@ -193,11 +197,11 @@ export default {
         const geoJSONByMonumentType = {
           ...filteredGeoJSON,
           features: filteredGeoJSON.features.filter(
-            (m) => m.properties.icon_code === mt
+            m => m.properties.icon_code === mt
           ),
         };
 
-        this.$store.map.getSource(mt).setData(geoJSONByMonumentType);
+          if (!this.$store.map) this.$store.map.getSource(mt).setData(geoJSONByMonumentType);
       }
     },
   },

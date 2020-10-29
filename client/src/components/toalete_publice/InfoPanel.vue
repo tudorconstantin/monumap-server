@@ -30,8 +30,8 @@
           <tr>
             <td class="text-left name-column">Coordonate</td>
             <td class="text-left">
-              {{ formatGPSCoord(currentItem['y']) }},
-              {{ formatGPSCoord(currentItem['x']) }}
+              {{ formatGPSCoord(currentItem['latitudine_y']) }},
+              {{ formatGPSCoord(currentItem['longitudine_x']) }}
             </td>
           </tr>
           <tr>

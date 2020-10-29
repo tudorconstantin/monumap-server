@@ -37,4 +37,9 @@ export class MonumentsController {
     if (!monumentPath) { return []; }
     return await this.monumentsService.listMonumentImages(monumentPath);
   }
+  @Get('/api/monument.photoalbums')
+  async listPhotoAlbums( @Query('monumentPath') monumentPath): Promise<any> {
+    if (!monumentPath) { return []; }
+    return await this.monumentsService.listPhotoAlbums(monumentPath);
+  }
 }
