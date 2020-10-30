@@ -156,8 +156,8 @@
                       {{ item["adresa"] }}
                     </q-item-label>
                   </q-item-section>
-                  <q-item-section class="q-pa-xs no-border no-margin" style="max-width: 22px">
-                    <q-icon name="fiber_manual_record" size="20px" :color="colorCodes[item['icon_code']]"/>
+                  <q-item-section class="q-pa-xs no-border no-margin" style="max-width: 26px">
+                    <q-icon class="" name="fiber_manual_record" size="24px" :color="colorCodes[item['icon_code']]"/>
                   </q-item-section>
                 </q-item>
             </q-list>
