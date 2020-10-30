@@ -1,27 +1,59 @@
 <template>
   <q-page class="home column fullscreen justify-evenly">
-    <div class="top-row column items-center">
-      <img
-        src="../assets/logo_bucuresti_2050.svg"
-        style="max-width: 600px; max-height: 250px;"
-      >
-      <h2 class="text-h2 text-blue-grey-10">Patrimoniul, locuirea și spațiile publice</h2>
-      <q-btn
-        to="lmi"
-        push
-        rounded
-        color="indigo-10"
-        label="explorează"
-        no-caps
-        size="lg"
-      />
+
+    <!-- DESKTOP -->
+    <div v-if="$q.platform.is.desktop" class="fit column items-center justify-evenly">
+      <div class="column items-center">
+        <img
+            src="../assets/logo_bucuresti_2050.svg"
+            style="max-width: 600px; max-height: 250px;"
+        >
+        <h2 class="text-h2 text-blue-grey-10">Patrimoniul, locuirea și spațiile publice</h2>
+        <q-btn
+            to="lmi"
+            push
+            rounded
+            color="indigo-10"
+            label="explorează"
+            no-caps
+            size="lg"
+        />
+      </div>
+      <div class="bottom-row column items-center">
+        <img
+            src="../assets/logo_bucuresti_2050_text_cu-subtitlu_monocrom.svg"
+            style="max-width: 400px; max-height: 120px;"
+        >
+      </div>
     </div>
-    <div class="bottom-row column items-center">
-      <img
-        src="../assets/logo_bucuresti_2050_text_cu-subtitlu_monocrom.svg"
-        style="max-width: 400px; max-height: 120px;"
-      >
+
+
+    <!-- MOBILE -->
+    <div v-if="$q.platform.is.mobile" class="fit column items-center justify-evenly">
+      <div class="column items-center">
+        <img
+            src="../assets/logo_bucuresti_2050.svg"
+            style="max-width: 200px; max-height: 180px;"
+        >
+        <h2 class="text-h5 text-center text-blue-grey-10">Patrimoniul, locuirea și spațiile publice</h2>
+        <q-btn
+            to="lmi"
+            push
+            rounded
+            color="indigo-10"
+            label="explorează"
+            no-caps
+            size="lg"
+        />
+      </div>
+      <div class="bottom-row column items-center">
+        <img
+            src="../assets/logo_bucuresti_2050_text_cu-subtitlu_monocrom.svg"
+            style="max-width: 150px; max-height: 60px;"
+        >
+      </div>
     </div>
+
   </q-page>
 </template>
 

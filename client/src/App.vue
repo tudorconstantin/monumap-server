@@ -1,6 +1,7 @@
 <template>
   <div>
-    <!-- desktop implementation -->
+
+    <!-- DESKTOP -->
     <q-layout
         view="hHh lpR fFf"
         class="aller-font"
@@ -82,14 +83,14 @@
       <lmi2015-info-panel-content></lmi2015-info-panel-content>
     </q-drawer>
 
-      <!-- page container -->
+      <!-- page container / map container -->
       <q-page-container id="map-enclosure">
         <router-view/>
       </q-page-container>
     </q-layout>
 
 
-    <!-- mobile implementation -->
+    <!-- MOBILE -->
     <q-layout
         view="hHh lpR fFf"
         class="aller-font"
@@ -111,16 +112,16 @@
         <q-toolbar>
           <q-btn dense flat round icon="menu" @click="toggleLeftPanel"/>
 
-          <q-toolbar-title class="row">
+          <q-toolbar-title class="row justify-start">
+<!--            <img-->
+<!--                class="q-pr-xs"-->
+<!--                src="./assets/logo_bucuresti_2050.svg"-->
+<!--                style="max-width: 600px; max-height: 40px;"-->
+<!--            />-->
             <img
-                class="q-pr-xs"
-                src="./assets/logo_bucuresti_2050.svg"
-                style="max-width: 600px; max-height: 40px;"
-            />
-            <img
-                class="q-pl-xs"
+                class="q-pl-xs no-padding"
                 src="./assets/logo_bucuresti_2050_text_fara-subtitlu_bicrom_linie.svg"
-                style="max-width: 600px; max-height: 40px;"
+                style="max-width: 230px; max-height: 25px;"
             />
           </q-toolbar-title>
 
@@ -133,7 +134,26 @@
                     label="LMI 2015"
                     @click="this.$store.dispatch('monuments/updateCurrentTab', 'LMI 2015')"
                 />
-                <!-- <q-route-tab to="/locuire" label="Locuire" @click="this.$store.dispatch('monuments/updateCurrentTab', 'Locuire')"/> -->
+                <q-route-tab
+                    to="/spatii-publice"
+                    label="Spatii Publice"
+                    @click="this.$store.dispatch('monuments/updateCurrentTab', 'Spatii Publice')"
+                />
+                <q-route-tab
+                    to="/servicii-medicale"
+                    label="Servicii Medicale"
+                    @click="this.$store.dispatch('monuments/updateCurrentTab', 'Servicii Medicale')"
+                />
+                <q-route-tab
+                    to="/toalete-publice"
+                    label="Toalete Publice"
+                    @click="this.$store.dispatch('monuments/updateCurrentTab', 'Toalete Publice')"
+                />
+<!--                <q-route-tab-->
+<!--                    to="/lie-2020-1"-->
+<!--                    label="LIE 2020.1"-->
+<!--                    @click="this.$store.dispatch('monuments/updateCurrentTab', 'LIE 2020.1')"-->
+<!--                />-->
               </q-list>
             </q-btn-dropdown>
           </q-tabs>
@@ -151,7 +171,7 @@
           :content-style="{ backgroundColor: '#bdbdbd' }"
       >
         <!-- drawer content -->
-        <search-panel></search-panel>
+        <lmi2015-search-panel-content></lmi2015-search-panel-content>
       </q-drawer>
 
       <!--      <q-page-sticky z-max position="bottom-right" :offset="[18, 18]">-->
@@ -168,12 +188,13 @@
           :content-style="{ backgroundColor: '#bdbdbd' }"
       >
         <!-- drawer content -->
-        <info-panel></info-panel>
+        <lmi2015-info-panel-content></lmi2015-info-panel-content>
         <q-page-sticky position="bottom-right" :offset="[50, 50]" v-if="this.$store.state.monuments.selectedItem">
           <q-btn fab color="blue-8" icon="o_visibility_off" type="button" @click="toggleRightPanel"/>
         </q-page-sticky>
       </q-drawer>
 
+      <!-- page container / map container -->
       <q-page-container id="map-enclosure-mobile">
         <router-view/>
         <q-page-sticky position="bottom-right" :offset="[50, 50]" v-if="this.$store.state.monuments.selectedItem">

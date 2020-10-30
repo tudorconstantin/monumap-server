@@ -20,6 +20,7 @@ const state = {
     albumDatesDialog: false,
     leftPanel: false,
     rightPanel: false,
+    currentTab: '',
 };
 
 
@@ -29,7 +30,7 @@ const state = {
 const getters = {
 
     getMapHeight() {
-        return document.getElementById('map-enclosure').offsetHeight || document.getElementById('map-enclosure-mobile').offsetHeight;
+        return this.$q.platform.is.desktop ? document.getElementById('map-enclosure').offsetHeight : document.getElementById('map-enclosure-mobile').offsetHeight;
     },
 
     getSelectedItem() {

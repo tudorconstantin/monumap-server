@@ -4,7 +4,7 @@
 
 <script>
 export default {
-name: "Lmi2015.vue"
+name: "Lmi2015"
 }
 </script>
 

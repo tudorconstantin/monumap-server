@@ -10,7 +10,7 @@
 import Map from "@/components/spatii_publice/spatii_publice";
 
 export default {
-  name: "mapview",
+  name: "SpatiiPublice",
   components: {
     Map,
   },
