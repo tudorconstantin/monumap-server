@@ -45,7 +45,7 @@
           </td>
         </tr>
         <tr>
-          <td class="text-left">Localitate</td>
+          <td class="text-left">Sector</td>
           <td class="text-left">
             {{ currentItem["SIRUTA"] }} {{ currentItem["localitate"] }}
           </td>

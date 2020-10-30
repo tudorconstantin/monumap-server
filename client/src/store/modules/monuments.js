@@ -167,7 +167,7 @@ const actions = {
         )['properties'];
 
         // request image list
-        const srvImgArrPath = `${fullMonument['SIRUTA_judet']}_${fullMonument['judet']}/${fullMonument['SIRUTA_UAT']}_${fullMonument['UAT']}/${fullMonument['SIRUTA']}_${fullMonument['localitate']}/${fullMonument['cod_lmi']}`;
+        const srvImgArrPath = `${fullMonument['SIRUTA_judet']}_${fullMonument['judet']}/${fullMonument['SIRUTA_UAT']}_${fullMonument['UAT']}/${fullMonument['SIRUTA']}_${fullMonument['localitate'].replace(' ', '-')}/${fullMonument['cod_lmi']}`;
         const imgArrReqPath = `/api/monument.images?monumentPath=${srvImgArrPath}`;
         const imgRes = await fetch(imgArrReqPath);
         const imgArr = await imgRes.json();
