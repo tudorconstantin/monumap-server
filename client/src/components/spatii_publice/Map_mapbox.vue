@@ -287,9 +287,9 @@ export default {
       const store = this.$store;
       // Center the map on the coordinates of any clicked symbol from the layer.
       mapObj.on('click', function (e) {
-        console.log('@click e: ', e);
+        // console.log('@click e: ', e);
         const clickedItem = (mapObj.queryRenderedFeatures(e.point) || [])[0];
-        console.log('clickedItem: ', clickedItem);
+        // console.log('clickedItem: ', clickedItem);
         // if clicked on item
         if (clickedItem) {
           // save selected item to store
@@ -353,7 +353,7 @@ export default {
 
     addHoverLayer(mapObj, layer, hoverLayer) {
       let hoveredItemId = this.hoveredItemId;
-      console.log('@hoveredItemId: ', hoveredItemId);
+      // console.log('@hoveredItemId: ', hoveredItemId);
       mapObj.addLayer({
         'id': hoverLayer.layerId,
         'type': hoverLayer.render.shape,
