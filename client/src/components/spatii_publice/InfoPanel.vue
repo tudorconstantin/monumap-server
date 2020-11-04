@@ -115,6 +115,21 @@
           </q-markup-table>
         </q-card>
 
+        <!-- date -->
+        <q-card class="my-card bg-grey-3">
+          <q-card-section>
+            <div class="text-subtitle1">Perioada evaluare</div>
+          </q-card-section>
+
+          <q-markup-table wrap-cells>
+            <tbody>
+            <tr>
+              <td class="text-left name-column">{{ currentItem.date }}</td>
+            </tr>
+            </tbody>
+          </q-markup-table>
+        </q-card>
+
         <!-- definition -->
         <q-card class="my-card bg-grey-3">
           <q-card-section>
@@ -138,8 +153,8 @@
 
           <q-markup-table wrap-cells>
             <tbody>
-            <tr>
-              <td class="text-left name-column">{{ currentItem.methodology }}</td>
+            <tr v-for="(item, index) in currentItem.methodology" :key="index">
+              <td class="text-left name-column">{{ item }}</td>
             </tr>
             </tbody>
           </q-markup-table>

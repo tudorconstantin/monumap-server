@@ -4,27 +4,46 @@
     "name": "spatii-abandonate",
     "title": "SPAȚII ABANDONATE",
     "definition": "Spațiile abandonate sunt spații publice deteriorate, unde nu se pot identifica intervenții recente asupra mobilierului urban, sistemului de iluminat, pavimentului, spațiului verde etc. În general, suprafețele acestora nu depășesc 5 hectare.",
-    "methodology": "Identificarea propriu-zisă a spațiilor și a componentelor lor a fost realizată cu ajutorul platformei Google Maps. Ulterior, pentru validarea informațiilor, au fost realizate și o serie de deplasări pe teren. Identificarea spațiilor reprezintă o muncă migăloasă și, din acest motiv, ea poate conține erori ce vor necesita îmbunătățiri pe parcurs."
+    "methodology": [
+      "Identificarea spațiilor nu a avut ca suport regimul juridic al proprietății. Din acest motiv, în cadrul analizei de față, spațiile publice sunt considerate toate acele spații cu acces public, neîngrădit.",
+      "Identificarea propriu-zisă a spațiilor și a componentelor lor a fost realizată cu ajutorul platformei Google Maps. Ulterior, pentru validarea informațiilor, au fost realizate și o serie de deplasări pe teren. Identificarea spațiilor reprezintă o muncă migăloasă și, din acest motiv, ea poate conține erori ce vor necesita îmbunătățiri pe parcurs."
+    ],
+    "date": "aprilie - iulie 2019"
   },
   {
     "id": "SPATII_PUNCTUALE",
     "name": "spatii-punctuale",
     "title": "SPAȚII PUNCTUALE",
+    "definition0": "",
     "definition": "Spațiile punctuale sunt spații publice cu dimensiuni reduse, de sub 3 hectare, care sunt preponderent de interes local. În această categorie sunt incluse scuaruri, piețe, piațete, locuri de joacă pentru copii etc. Aceste spații preiau rolul unor dotări de proximitate, motiv pentru care prezența lor în zonele de locuire este esențială.",
-    "methodology": "Identificarea propriu-zisă a spațiilor și a componentelor lor a fost realizată cu ajutorul platformei Google Maps. Ulterior, pentru validarea informațiilor, au fost realizate și o serie de deplasări pe teren. Identificarea spațiilor reprezintă o muncă migăloasă și, din acest motiv, ea poate conține erori ce vor necesita îmbunătățiri pe parcurs."
+    "methodology": [
+      "Identificarea spațiilor nu a avut ca suport regimul juridic al proprietății. Din acest motiv, în cadrul analizei de față, spațiile publice sunt considerate toate acele spații cu acces public, neîngrădit.",
+      "Identificarea propriu-zisă a spațiilor și a componentelor lor a fost realizată cu ajutorul platformei Google Maps. Ulterior, pentru validarea informațiilor, au fost realizate și o serie de deplasări pe teren. Identificarea spațiilor reprezintă o muncă migăloasă și, din acest motiv, ea poate conține erori ce vor necesita îmbunătățiri pe parcurs."
+    ],
+    "date": "aprilie - iulie 2019"
   },
   {
     "id": "SPATII_LINIARE",
     "name": "spatii-liniare",
     "title": "SPAȚII LINIARE",
+    "definition0": "",
     "definition": "Spațiile liniare sunt spații cu acces public, care reprezintă, de obicei, elemente de legătură în sistemul mai amplu de spații publice. În această categorie intră bulevardele, zonele pietonale reprezentative sau porțiuni de stradă cu amenajări specifice unui spațiu urban (mobilier urban, alveole, spații plantate etc.).",
-    "methodology": "Identificarea propriu-zisă a spațiilor și a componentelor lor a fost realizată cu ajutorul platformei Google Maps. Ulterior, pentru validarea informațiilor, au fost realizate și o serie de deplasări pe teren. Identificarea spațiilor reprezintă o muncă migăloasă și, din acest motiv, ea poate conține erori ce vor necesita îmbunătățiri pe parcurs."
+    "methodology":[
+      "Identificarea spațiilor nu a avut ca suport regimul juridic al proprietății. Din acest motiv, în cadrul analizei de față, spațiile publice sunt considerate toate acele spații cu acces public, neîngrădit.",
+      "Identificarea propriu-zisă a spațiilor și a componentelor lor a fost realizată cu ajutorul platformei Google Maps. Ulterior, pentru validarea informațiilor, au fost realizate și o serie de deplasări pe teren. Identificarea spațiilor reprezintă o muncă migăloasă și, din acest motiv, ea poate conține erori ce vor necesita îmbunătățiri pe parcurs."
+    ],
+    "date": "aprilie - iulie 2019"
   },
   {
     "id": "SPATII_SUPRAFATA",
     "name": "spatii suprafata",
     "title": "SPAȚII SUPRAFAȚĂ",
+    "definition0": "",
     "definition": "Spațiile de tip suprafață sunt spațiile publice ample. Ele reprezintă puncte de atracție la nivelul orașului, fiind utilizate preponderent pentru activități de recreere de către locuitori sau turiști. În general, aceste spații au suprafețe mai mari de 3 hectare. Aici intră grădinile publice (3-15 ha), parcurile (peste 15 ha) etc.",
-    "methodology": "Identificarea propriu-zisă a spațiilor și a componentelor lor a fost realizată cu ajutorul platformei Google Maps. Ulterior, pentru validarea informațiilor, au fost realizate și o serie de deplasări pe teren. Identificarea spațiilor reprezintă o muncă migăloasă și, din acest motiv, ea poate conține erori ce vor necesita îmbunătățiri pe parcurs."
+    "methodology": [
+      "Identificarea spațiilor nu a avut ca suport regimul juridic al proprietății. Din acest motiv, în cadrul analizei de față, spațiile publice sunt considerate toate acele spații cu acces public, neîngrădit.",
+      "Identificarea propriu-zisă a spațiilor și a componentelor lor a fost realizată cu ajutorul platformei Google Maps. Ulterior, pentru validarea informațiilor, au fost realizate și o serie de deplasări pe teren. Identificarea spațiilor reprezintă o muncă migăloasă și, din acest motiv, ea poate conține erori ce vor necesita îmbunătățiri pe parcurs."
+    ],
+    "date": "aprilie - iulie 2019"
   }
 ]

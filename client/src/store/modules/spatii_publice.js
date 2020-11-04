@@ -120,6 +120,7 @@ const mutations = {
       const details = state.metodologie.filter(item => item.id === value.layer.source)[0];
       state.selectedItem.definition = details.definition;
       state.selectedItem.methodology = details.methodology;
+      state.selectedItem.date = details.date;
     }
   },
 

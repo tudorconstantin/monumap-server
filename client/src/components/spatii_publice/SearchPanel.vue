@@ -141,22 +141,22 @@ export default {
       dummyFilterText: '',
       itemGroups: [
         {
-          code: 'SPATII_ABANDONATE',
+          id: 'SPATII_ABANDONATE',
           label: 'Spatii abandonate',
           checked: true,
         },
         {
-          code: 'SPATII_LINIARE',
+          id: 'SPATII_LINIARE',
           label: 'Spatii liniare',
           checked: true,
         },
         {
-          code: 'SPATII_SUPRAFATA',
+          id: 'SPATII_SUPRAFATA',
           label: 'Spatii suprafata',
           checked: true,
         },
         {
-          code: 'SPATII_PUNCTUALE',
+          id: 'SPATII_PUNCTUALE',
           label: 'Spatii punctuale',
           checked: true,
         },
