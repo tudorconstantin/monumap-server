@@ -13,22 +13,13 @@
     >
       <MglNavigationControl position="top-left"/>
       <MglGeolocateControl position="top-left"/>
-      <!--      <MglMarker-->
-      <!--          v-if="!!selectedItem"-->
-      <!--          :coordinates="[-->
-      <!--          selectedItem && selectedItem.x,-->
-      <!--          selectedItem && selectedItem.y,-->
-      <!--        ]"-->
-      <!--      >-->
-      <!--        <img slot="marker" src="../../assets/marker_selected.png"/>-->
-      <!--      </MglMarker>-->
     </MglMap>
   </div>
 </template>
 
 <script>
 
-import {matRoom} from '@quasar/extras/material-icons';
+// import {matRoom} from '@quasar/extras/material-icons';
 import MapBox from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
@@ -39,7 +30,7 @@ import {
   // MglMarker,
 } from 'vue-mapbox';
 
-import {mapGetters} from 'vuex';
+// import {mapGetters} from 'vuex';
 
 export default {
   name: 'SpatiiPubliceMap',
@@ -58,6 +49,7 @@ export default {
       filteredItems: [],
       currentItem: {},
       hoveredItemId: null,
+      highlightedItemId: null,
       layers: {
         spatiiAbandonate: {
           geometry: 'Point',
@@ -67,7 +59,7 @@ export default {
               'circle-radius': 10,
               'circle-color': '#ad0450',
               'circle-stroke-color': 'gray',
-              'circle-stroke-width': 1,
+              'circle-stroke-width': 3,
               'circle-opacity': 0.7
             },
           },
@@ -81,7 +73,7 @@ export default {
             paint: {
               'circle-radius': 10,
               'circle-color': '#ad0450',
-              'circle-stroke-color': 'red',
+              'circle-stroke-color': 'yellow',
               'circle-stroke-width': 5,
               'circle-opacity': [
                 'case',
@@ -100,6 +92,21 @@ export default {
           sourceId: 'SPATII_ABANDONATE',
           layerId: 'SPATII_ABANDONATE_HOVER',
         },
+        spatiiAbandonateHighlight: {
+          geometry: 'Point',
+          render: {
+            shape: 'circle',
+            paint: {
+              'circle-radius': 10,
+              'circle-color': '#ad0450',
+              'circle-stroke-color': 'red',
+              'circle-stroke-width': 5,
+            },
+            filter: ['==', ['get', 'id'], ''],
+          },
+          sourceId: 'SPATII_ABANDONATE',
+          layerId: 'SPATII_ABANDONATE_HIGHLIGHT',
+        },
 
         spatiiPunctuale: {
           geometry: 'Point',
@@ -109,7 +116,7 @@ export default {
               'circle-radius': 10,
               'circle-color': '#0247f3',
               'circle-stroke-color': 'gray',
-              'circle-stroke-width': 1,
+              'circle-stroke-width': 3,
               'circle-opacity': 0.8,
             },
           },
@@ -123,7 +130,7 @@ export default {
             paint: {
               'circle-radius': 10,
               'circle-color': '#0247f3',
-              'circle-stroke-color': 'red',
+              'circle-stroke-color': 'yellow',
               'circle-stroke-width': 5,
               'circle-opacity': [
                 'case',
@@ -141,6 +148,21 @@ export default {
           },
           sourceId: 'SPATII_PUNCTUALE',
           layerId: 'SPATII_PUNCTUALE_HOVER',
+        },
+        spatiiPunctualeHighlight: {
+          geometry: 'Point',
+          render: {
+            shape: 'circle',
+            paint: {
+              'circle-radius': 10,
+              'circle-color': '#0247f3',
+              'circle-stroke-color': 'red',
+              'circle-stroke-width': 5,
+            },
+            filter: ['==', ['get', 'id'], ''],
+          },
+          sourceId: 'SPATII_PUNCTUALE',
+          layerId: 'SPATII_PUNCTUALE_HIGHLIGHT',
         },
 
         spatiiLiniare: {
@@ -161,7 +183,7 @@ export default {
           render: {
             shape: 'line',
             paint: {
-              'line-color': 'red',
+              'line-color': 'yellow',
               'line-width': 5,
               'line-opacity': [
                 'case',
@@ -173,6 +195,19 @@ export default {
           },
           sourceId: 'SPATII_LINIARE',
           layerId: 'SPATII_LINIARE_HOVER',
+        },
+        spatiiLiniareHighlight: {
+          geometry: 'MultiLineString',
+          render: {
+            shape: 'line',
+            paint: {
+              'line-color': 'red',
+              'line-width': 5,
+            },
+            filter: ['==', ['get', 'id'], ''],
+          },
+          sourceId: 'SPATII_LINIARE',
+          layerId: 'SPATII_LINIARE_HIGHLIGHT',
         },
 
         spatiiSuprafata: {
@@ -192,7 +227,7 @@ export default {
           render: {
             shape: 'line',
             paint: {
-              'line-color': 'red',
+              'line-color': 'yellow',
               'line-width': 5,
               'line-opacity': [
                 'case',
@@ -204,6 +239,19 @@ export default {
           },
           sourceId: 'SPATII_SUPRAFATA',
           layerId: 'SPATII_SUPRAFATA_HOVER',
+        },
+        spatiiSuprafataHighlight: {
+          geometry: 'MultiPolygon',
+          render: {
+            shape: 'line',
+            paint: {
+              'line-color': 'red',
+              'line-width': 5,
+            },
+            filter: ['==', ['get', 'id'], ''],
+          },
+          sourceId: 'SPATII_SUPRAFATA',
+          layerId: 'SPATII_SUPRAFATA_HIGHLIGHT',
         },
       },
 
@@ -219,14 +267,20 @@ export default {
 
   async created() {
     this.map = null;
-    this.matRoom = matRoom;
+    // this.matRoom = matRoom;
   },
 
   computed: {
-    ...mapGetters({
-      polygons: 'polygons/filteredArray',
-    }),
-
+    myMap: {
+      // getter
+      get: function () {
+        return this.$store.state.myMap
+      },
+      // setter
+      set: function (newMap) {
+        this.$store.commit('loadMap', newMap)
+      }
+    },
     spatiiAbandonate() {
       return this.$store.getters["spatiiPublice/getSpatiiAbandonate"];
     },
@@ -243,7 +297,6 @@ export default {
 
   methods: {
     addMapLayer: function (mapObj, layer, data) {
-
       // add map source
       mapObj.addSource(layer.sourceId, {
         type: 'geojson',
@@ -287,11 +340,23 @@ export default {
       const store = this.$store;
       // Center the map on the coordinates of any clicked symbol from the layer.
       mapObj.on('click', function (e) {
-        // console.log('@click e: ', e);
+        console.log('@click e: ', e);
         const clickedItem = (mapObj.queryRenderedFeatures(e.point) || [])[0];
-        // console.log('clickedItem: ', clickedItem);
+        console.log('clickedItem: ', clickedItem);
         // if clicked on item
         if (clickedItem) {
+          // for each layer
+          ['SPATII_ABANDONATE', 'SPATII_PUNCTUALE', 'SPATII_LINIARE', 'SPATII_SUPRAFATA']
+            .forEach((item) => {
+              if(clickedItem.source === item) {
+                // highlight selected item
+                mapObj.setFilter(`${item}_HIGHLIGHT`, ['==', ['get', 'id'], clickedItem.properties.id]);
+              } else {
+                // de-highlight previous selection
+                mapObj.setFilter(`${item}_HIGHLIGHT`, ['==', ['get', 'id'], '']);
+              }
+            });
+
           // save selected item to store
           store.dispatch('spatiiPublice/selectItem', clickedItem);
           // set app right panel flag to true
@@ -339,6 +404,12 @@ export default {
             });
           }
         } else {
+          // de-highlight all layers
+          ['SPATII_ABANDONATE', 'SPATII_PUNCTUALE', 'SPATII_LINIARE', 'SPATII_SUPRAFATA']
+              .forEach((item) => {
+                mapObj.setFilter(`${item}_HIGHLIGHT`, ['==', ['get', 'id'], '']);
+              });
+
           // set selected item to null
           store.dispatch('spatiiPublice/selectItem', null);
           // set item selected flaf to false
@@ -349,8 +420,11 @@ export default {
         }
 
       });
+      // return new map obj
+      return mapObj;
     },
 
+    // add hover layer
     addHoverLayer(mapObj, layer, hoverLayer) {
       let hoveredItemId = this.hoveredItemId;
       // console.log('@hoveredItemId: ', hoveredItemId);
@@ -390,6 +464,24 @@ export default {
         }
         hoveredItemId = null;
       });
+      // return new map obj
+      return mapObj;
+    },
+
+    // add highlighted/selected item layer
+    addHighlightLayer(mapObj, highlightLayer) {
+      // let highlightedItemId = this.highlightedItemId;
+      // console.log('@hoveredItemId: ', hoveredItemId);
+      mapObj.addLayer({
+        'id': highlightLayer.layerId,
+        'type': highlightLayer.render.shape,
+        'source': highlightLayer.sourceId,
+        'layout': {},
+        'paint': highlightLayer.render.paint,
+        'filter': highlightLayer.render.filter,
+      });
+
+      // return new map obj
       return mapObj;
     },
 
@@ -409,18 +501,31 @@ export default {
       // add map layers
       // add layer for 'spatii-suprafata'
       map = this.addMapLayer(map, this.layers.spatiiSuprafata, this.spatiiSuprafata);
+      // add hover layer for 'spatii-suprafata'
+      map = this.addHoverLayer(map, this.layers.spatiiSuprafata, this.layers.spatiiSuprafataHover);
+      // add highlight/selection layer for 'spatii-suprafata'
+      map = this.addHighlightLayer(map, this.layers.spatiiSuprafataHighlight);
+
       // add layer for 'spatii-liniare'
       map = this.addMapLayer(map, this.layers.spatiiLiniare, this.spatiiLiniare);
+      // add hover layer for 'spatii-liniare'
+      map = this.addHoverLayer(map, this.layers.spatiiLiniare, this.layers.spatiiLiniareHover);
+      // add highlight/selection layer for 'spatii-liniare'
+      map = this.addHighlightLayer(map, this.layers.spatiiLiniareHighlight);
+
       // add layer for 'spatii-punctuale'
       map = this.addMapLayer(map, this.layers.spatiiPunctuale, this.spatiiPunctuale);
+      // add hover layer for 'spatii-punctuale'
+      map = this.addHoverLayer(map, this.layers.spatiiPunctuale, this.layers.spatiiPunctualeHover);
+      // add highlight/selection layer for 'spatii-punctuale'
+      map = this.addHighlightLayer(map, this.layers.spatiiPunctualeHighlight);
+
       // add layer for 'spatii-abandonate'
       map = this.addMapLayer(map, this.layers.spatiiAbandonate, this.spatiiAbandonate);
-      // add test hover layer
-      map = this.addHoverLayer(map, this.layers.spatiiSuprafata, this.layers.spatiiSuprafataHover);
-      map = this.addHoverLayer(map, this.layers.spatiiLiniare, this.layers.spatiiLiniareHover);
-      map = this.addHoverLayer(map, this.layers.spatiiPunctuale, this.layers.spatiiPunctualeHover);
+      // add hover layer for 'spatii-abandonate'
       map = this.addHoverLayer(map, this.layers.spatiiAbandonate, this.layers.spatiiAbandonateHover);
-
+      // add highlight/selection layer for 'spatii-abandonate'
+      map = this.addHighlightLayer(map, this.layers.spatiiAbandonateHighlight);
 
       // add click event handler
       map = this.addMapClickHandler(map);

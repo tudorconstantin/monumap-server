@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 
 import app from "./modules/app";
+import map from "./modules/map";
 import lmi2015 from "./modules/lmi2015";
 import photos from "./modules/lmi2015_photos";
 import lie2020_1 from "./modules/lie2020_1";
@@ -18,6 +19,7 @@ export default new Vuex.Store({
   actions: {},
   modules: {
     app,
+    map,
     lmi2015,
     photos,
     lie2020_1,

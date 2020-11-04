@@ -46,7 +46,7 @@
                 {{ currentItem.properties.tip_spatiu }}
               </td>
             </tr>
-            <tr>
+            <tr v-if="currentItem.layer.source !== 'SPATII_LINIARE'" >
               <td class="text-left">Suprafata</td>
               <td class="text-left">
                 {{ currentItem.properties.suprafata }} mp
