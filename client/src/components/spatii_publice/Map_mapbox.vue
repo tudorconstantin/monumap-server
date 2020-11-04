@@ -340,9 +340,9 @@ export default {
       const store = this.$store;
       // Center the map on the coordinates of any clicked symbol from the layer.
       mapObj.on('click', function (e) {
-        console.log('@click e: ', e);
+        // console.log('@click e: ', e);
         const clickedItem = (mapObj.queryRenderedFeatures(e.point) || [])[0];
-        console.log('clickedItem: ', clickedItem);
+        // console.log('clickedItem: ', clickedItem);
         // if clicked on item
         if (clickedItem) {
           // for each layer
@@ -483,16 +483,6 @@ export default {
 
       // return new map obj
       return mapObj;
-    },
-
-    /* eslint-disable-next-line no-unused-vars */
-    setFilter(filter) {
-      let filteredItems = [...this.items];
-      if (filter.text) {
-        filteredItems = filteredItems.filter(i => i.properties.denumire.toUpperCase().indexOf(filter.text.toUpperCase()) > -1);
-      }
-
-      this.filteredItems = filteredItems;
     },
 
     onMapLoaded(event) {

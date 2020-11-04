@@ -305,9 +305,9 @@ const mutations = {
   addClickHandler({state, dispatch}) {
     // Center the map on the coordinates of any clicked symbol from the layer.
     state.map.on('click', function (e) {
-      console.log('@click e: ', e);
+      // console.log('@click e: ', e);
       const clickedItem = (state.map.queryRenderedFeatures(e.point) || [])[0];
-      console.log('clickedItem: ', clickedItem);
+      // console.log('clickedItem: ', clickedItem);
       // if clicked on item
       if (clickedItem) {
         // for each layer
