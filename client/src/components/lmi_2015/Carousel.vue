@@ -1,3 +1,5 @@
+<!-- lmi-2015 :: carousel -->
+
 <template>
   <div class="fit column wrap content-center">
 
@@ -277,23 +279,23 @@ export default {
   computed: {
     photoGalleryDialog: {
       get() {
-        return this.$store.state.monuments.albumPhotoGalleryDialog;
+        return this.$store.state.lmi2015.albumPhotoGalleryDialog;
       },
       set: function () {
-        this.$store.dispatch("monuments/toggleAlbumPhotoGalleryDialog");
+        this.$store.dispatch("lmi2015/toggleAlbumPhotoGalleryDialog");
       }
     },
 
     photoAlbums() {
-      return this.$store.getters["monuments/getSelectedItemPhotoAlbums"];
+      return this.$store.getters["lmi2015/getSelectedItemPhotoAlbums"];
     },
 
     currentSectionIndex() {
-      return this.$store.state.monuments.selectedItem.albumSectionIndex;
+      return this.$store.state.lmi2015.selectedItem.albumSectionIndex;
     },
 
     currentAlbumSection() {
-      const returnItem = this.photoAlbums.filter(item => item.date === this.$store.state.monuments.selectedItem.albumDate)[0].sections[this.currentSectionIndex];
+      const returnItem = this.photoAlbums.filter(item => item.date === this.$store.state.lmi2015.selectedItem.albumDate)[0].sections[this.currentSectionIndex];
       // console.log('@Carousel.vue :: @currentAlbumSection >> ', returnItem);
       return returnItem;
     },

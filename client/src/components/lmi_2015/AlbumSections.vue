@@ -1,3 +1,5 @@
+<!-- lmi-2015 :: albumSections -->
+
 <template>
   <div class="">
     <q-dialog
@@ -24,7 +26,7 @@
                 :ripple="false"
                 class="text-h6"
                 @click="paDialog = false"
-                :label="this.$store.state.monuments.selectedItem ? this.$store.state.monuments.selectedItem['denumire'] : ''"
+                :label="this.$store.state.lmi2015.selectedItem ? this.$store.state.lmi2015.selectedItem['denumire'] : ''"
             />
             <q-btn
                 color="amber"
@@ -32,7 +34,7 @@
                 no-caps
                 :ripple="false"
                 class="text-h6 no-pointer-events"
-                :label="this.$store.state.monuments.selectedItem ? this.$store.state.monuments.selectedItem['albumDate'] : ''"
+                :label="this.$store.state.lmi2015.selectedItem ? this.$store.state.lmi2015.selectedItem['albumDate'] : ''"
             />
             <q-btn
                 round
@@ -139,7 +141,7 @@
                 :ripple="false"
                 class="text-h7"
                 @click="paDialog = false"
-                :label="this.$store.state.monuments.selectedItem ? this.$store.state.monuments.selectedItem['denumire'] : ''"
+                :label="this.$store.state.lmi2015.selectedItem ? this.$store.state.lmi2015.selectedItem['denumire'] : ''"
             />
             <q-btn
                 color="grey-8"
@@ -147,7 +149,7 @@
                 no-caps
                 :ripple="false"
                 class="text-h7 no-pointer-events"
-                :label="this.$store.state.monuments.selectedItem ? this.$store.state.monuments.selectedItem['albumDate'] : ''"
+                :label="this.$store.state.lmi2015.selectedItem ? this.$store.state.lmi2015.selectedItem['albumDate'] : ''"
             />
           </q-btn-group>
 
@@ -218,26 +220,26 @@ export default {
   computed: {
     paDialog: {
       get() {
-        return this.$store.state.monuments.albumSectionsDialog;
+        return this.$store.state.lmi2015.albumSectionsDialog;
       },
       set: function () {
-        this.$store.dispatch("monuments/toggleAlbumSectionsDialog");
+        this.$store.dispatch("lmi2015/toggleAlbumSectionsDialog");
       }
     },
 
     photoAlbums() {
-      return this.$store.getters["monuments/getSelectedItemPhotoAlbums"];
+      return this.$store.getters["lmi2015/getSelectedItemPhotoAlbums"];
     },
 
     selectedDate() {
       // console.log('selectedDate()...');
-      // return this.$store.getters["monuments/getSelectedPhotoDate"];
-      return this.$store.state.monuments.selectedItem.albumDate;
+      // return this.$store.getters["lmi2015/getSelectedPhotoDate"];
+      return this.$store.state.lmi2015.selectedItem.albumDate;
     },
 
     currentDateAlbum() {
-      const returnItem = this.$store.state.monuments.selectedItem && this.$store.state.monuments.selectedItem.images.length > 0 ?
-          this.photoAlbums.filter(item => item.date === this.$store.state.monuments.selectedItem.albumDate)[0].sections : [];
+      const returnItem = this.$store.state.lmi2015.selectedItem && this.$store.state.lmi2015.selectedItem.images.length > 0 ?
+          this.photoAlbums.filter(item => item.date === this.$store.state.lmi2015.selectedItem.albumDate)[0].sections : [];
       // console.log('@Carousel.vue :: @currentAlbumSection >> ', returnItem);
       return returnItem;
     },
@@ -248,10 +250,10 @@ export default {
     openNext: function (selectedSection) {
       // console.log('@AlbumSections.vue :: @openNext >> selected section: ', selectedSection);
       // set new section
-      this.$store.dispatch("monuments/setAlbumSelectedSection", selectedSection);
+      this.$store.dispatch("lmi2015/setAlbumSelectedSection", selectedSection);
       // next step for selected date
       // console.log('@AlbumSections.vue :: @openAlbumPhotoGallery');
-      this.$store.dispatch("monuments/toggleAlbumPhotoGalleryDialog");
+      this.$store.dispatch("lmi2015/toggleAlbumPhotoGalleryDialog");
 
     },
   },

@@ -1,9 +1,14 @@
 import Vue from "vue";
 import Vuex from "vuex";
 
-import monuments from "./modules/monuments";
+import app from "./modules/app";
+import lmi2015 from "./modules/lmi2015";
+import photos from "./modules/lmi2015_photos";
+import lie2020_1 from "./modules/lie2020_1";
 import polygons from "./modules/polygons";
-import photos from "./modules/photos";
+import spatiiPublice from "./modules/spatii_publice";
+import serviciiMedicale from "./modules/servicii_medicale";
+import toaletePublice from "../components/toalete_publice/toalete_publice";
 
 Vue.use(Vuex);
 
@@ -12,8 +17,13 @@ export default new Vuex.Store({
   mutations: {},
   actions: {},
   modules: {
-    monuments,
+    app,
+    lmi2015,
     photos,
+    lie2020_1,
     polygons,
+    spatiiPublice,
+    serviciiMedicale,
+    toaletePublice,
   }
 });

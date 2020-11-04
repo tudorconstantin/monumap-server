@@ -1,3 +1,5 @@
+<!-- lmi-2015 :: map -->
+
 <template>
   <div id="mapContainer" :style="cssVars()">
     <MglMap
@@ -11,6 +13,7 @@
     >
       <MglNavigationControl position="top-left" />
       <MglGeolocateControl position="top-left" />
+      <!-- selected item marker -->
       <MglMarker
         v-if="!!selectedItem"
         :coordinates="[
@@ -18,7 +21,7 @@
           selectedItem && selectedItem.latitudine_y,
         ]"
       >
-        <img slot="marker" src="../assets/marker_selected.png"/>
+        <img slot="marker" src="../../assets/marker_selected.png"/>
       </MglMarker>
     </MglMap>
   </div>
@@ -39,12 +42,15 @@ import {
 import { mapGetters } from 'vuex';
 
 export default {
+  name: "Lmi2015Map",
+
   components: {
     MglMap,
     MglNavigationControl,
     MglGeolocateControl,
     MglMarker,
   },
+
   data() {
     return {
       accessToken:
@@ -64,9 +70,9 @@ export default {
   },
   computed: {
     ...mapGetters({
-      selectedItem: 'monuments/getSelectedItem',
-      monuments: 'monuments/filteredArray',
-      geoJSON: 'monuments/filteredGeoJSON',
+      selectedItem: 'lmi2015/getSelectedItem',
+      monuments: 'lmi2015/filteredArray',
+      geoJSON: 'lmi2015/filteredGeoJSON',
     }),
   },
   watch: {
@@ -156,15 +162,16 @@ export default {
           if (clickedMonument) {
             this.onMonumentClicked(clickedMonument.properties);
           } else {
-            this.$store.dispatch('monuments/selectItem', null);
+            this.$store.dispatch('lmi2015/selectItem', null);
+            this.$store.dispatch('app/updateItemSelected', false)
           }
         })
-        .on('zoomend', () => {
-          this.$store.dispatch('monuments/mapViewChanged');
-        })
-        .on('moveend', () => {
-          this.$store.dispatch('monuments/mapViewChanged');
-        });
+        // .on('zoomend', () => {
+        //   this.$store.dispatch('lmi2015/mapViewChanged');
+        // })
+        // .on('moveend', () => {
+        //   this.$store.dispatch('lmi2015/mapViewChanged');
+        // });
     },
     onMapLoaded(event) {
       const map = event.map;
@@ -186,12 +193,14 @@ export default {
     },
 
     onMonumentClicked(monument) {
-      if (!monument) return this.$store.dispatch('monuments/selectItem', null);
-      this.$store.dispatch('monuments/selectItem', monument['cod_lmi']);
+      if (!monument) return this.$store.dispatch('lmi2015/selectItem', null);
+      this.$store.dispatch('lmi2015/selectItem', monument['cod_lmi']);
+      this.$store.dispatch('app/updateRightPanel', true);
+      this.$store.dispatch('app/updateItemSelected', true);
     },
     filterMap() {
       if (!this.$store.map) return;
-      const filteredGeoJSON = this.$store.getters['monuments/filteredGeoJSON'];
+      const filteredGeoJSON = this.$store.getters['lmi2015/filteredGeoJSON'];
 
       for (const mt in constants.monumentTypes) {
         const geoJSONByMonumentType = {

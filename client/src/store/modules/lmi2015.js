@@ -13,14 +13,14 @@ const state = {
     filtruScaraMon: '',
 
     selectedItem: null,
-    monumentDisplayed: false,
+    // monumentDisplayed: false,
     filterText: '',
     albumPhotoGalleryDialog: false,
     albumSectionsDialog: false,
     albumDatesDialog: false,
     leftPanel: false,
     rightPanel: false,
-    currentTab: '',
+    currentTab: 'lmi-2015',
 };
 
 
@@ -158,7 +158,8 @@ const actions = {
         // if null value
         if (!codLmi) {
             commit("setSelectedItem", undefined);
-            commit("setMonumentDisplay", false);
+            // commit("setMonumentDisplay", false);
+            commit("setRightPanel", false);
             return;
         }
 
@@ -203,7 +204,8 @@ const actions = {
         fullMonument.albumSectionIndex = 0;
 
         commit("setSelectedItem", fullMonument);
-        commit("setMonumentDisplay", true);
+        // commit("setMonumentDisplay", true);
+        commit("setRightPanel", true);
 
     },
 
@@ -266,12 +268,12 @@ const actions = {
         commit('setSelectedItem', null);
     },
 
-    setLeftPanel({commit}, value) {
+    updateLeftPanel({commit}, value) {
         // console.log('store: setLeftPanel: ', value);
         commit('setLeftPanel', value);
     },
 
-    setRightPanel({commit}, value) {
+    updateRightPanel({commit}, value) {
         commit('setRightPanel', value);
     },
 

@@ -1,3 +1,5 @@
+<!-- lmi-2015 :: albumDates -->
+
 <template>
   <div class="">
     <q-dialog
@@ -23,7 +25,7 @@
                 no-caps
                 :ripple="false"
                 class="text-h6 no-pointer-events"
-                :label="this.$store.state.monuments.selectedItem ? this.$store.state.monuments.selectedItem['cod_lmi'] : ''"
+                :label="this.$store.state.lmi2015.selectedItem ? this.$store.state.lmi2015.selectedItem['cod_lmi'] : ''"
             />
             <q-btn
                 color="amber-14"
@@ -31,7 +33,7 @@
                 no-caps
                 :ripple="false"
                 class="text-h6 no-pointer-events"
-                :label="this.$store.state.monuments.selectedItem ? this.$store.state.monuments.selectedItem['denumire'] : ''"
+                :label="this.$store.state.lmi2015.selectedItem ? this.$store.state.lmi2015.selectedItem['denumire'] : ''"
             />
             <q-btn
                 round
@@ -118,7 +120,7 @@
                 no-caps
                 :ripple="false"
                 class="text-h7 no-pointer-events"
-                :label="this.$store.state.monuments.selectedItem ? this.$store.state.monuments.selectedItem['cod_lmi'] : ''"
+                :label="this.$store.state.lmi2015.selectedItem ? this.$store.state.lmi2015.selectedItem['cod_lmi'] : ''"
             />
             <q-btn
                 color="amber-14"
@@ -126,7 +128,7 @@
                 no-caps
                 :ripple="false"
                 class="text-h7 no-pointer-events"
-                :label="this.$store.state.monuments.selectedItem ? this.$store.state.monuments.selectedItem['denumire'] : ''"
+                :label="this.$store.state.lmi2015.selectedItem ? this.$store.state.lmi2015.selectedItem['denumire'] : ''"
             />
             <q-btn
                 round
@@ -216,15 +218,15 @@ export default {
   computed: {
     dialog: {
       get() {
-        return this.$store.state.monuments.albumDatesDialog;
+        return this.$store.state.lmi2015.albumDatesDialog;
       },
       set: function () {
-        this.$store.dispatch("monuments/toggleAlbumDatesDialog");
+        this.$store.dispatch("lmi2015/toggleAlbumDatesDialog");
       }
     },
 
     photoAlbums() {
-      return this.$store.getters["monuments/getSelectedItemPhotoAlbums"];
+      return this.$store.getters["lmi2015/getSelectedItemPhotoAlbums"];
     },
   },
 
@@ -236,18 +238,18 @@ export default {
 
     openAlbumSections: (vueStore, selectedDate) => {
       // console.log('@AlbumDates.vue :: @openAlbumSections >> selectedDate: ', selectedDate);
-      vueStore.dispatch("monuments/toggleAlbumSectionsDialog", selectedDate);
+      vueStore.dispatch("lmi2015/toggleAlbumSectionsDialog", selectedDate);
     },
 
     openAlbumPhotoGallery: (vueStore) => {
       // console.log('@AlbumDates.vue :: @openAlbumPhotoGallery');
-      vueStore.dispatch("monuments/toggleAlbumPhotoGalleryDialog");
+      vueStore.dispatch("lmi2015/toggleAlbumPhotoGalleryDialog");
     },
 
     openNext: function (selectedDate) {
       // console.log('@AlbumDates.vue :: @openNext >> selected date: ', selectedDate);
       // set new date
-      this.$store.dispatch("monuments/setAlbumSelectedDate", selectedDate);
+      this.$store.dispatch("lmi2015/setAlbumSelectedDate", selectedDate);
 
       // next step for selected date
       // console.log('selectedDateAlbum: ', this.selectedDateAlbum(selectedDate));

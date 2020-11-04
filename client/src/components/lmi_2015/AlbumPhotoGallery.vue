@@ -1,3 +1,5 @@
+<!-- lmi-2015 :: albumPhotoGallery -->
+
 <template>
   <div>
     <q-dialog
@@ -25,7 +27,7 @@
                 :ripple="false"
                 class="text-h6"
                 @click="apDialog = false"
-                :label="this.$store.state.monuments.selectedItem ? this.$store.state.monuments.selectedItem['albumDate'] : ''"
+                :label="this.$store.state.lmi2015.selectedItem ? this.$store.state.lmi2015.selectedItem['albumDate'] : ''"
             />
             <q-btn
                 v-if="currentAlbumSection().title !== 'Ansamblu'"
@@ -106,7 +108,7 @@
                 :ripple="false"
                 class="text-h7"
                 @click="apDialog = false"
-                :label="this.$store.state.monuments.selectedItem ? this.$store.state.monuments.selectedItem['albumDate'] : ''"
+                :label="this.$store.state.lmi2015.selectedItem ? this.$store.state.lmi2015.selectedItem['albumDate'] : ''"
             />
             <q-btn
                 v-if="currentAlbumSection().title !== 'Ansamblu'"
@@ -155,21 +157,21 @@ export default {
   computed: {
     apDialog: {
       get() {
-        return this.$store.state.monuments.albumPhotoGalleryDialog;
+        return this.$store.state.lmi2015.albumPhotoGalleryDialog;
       },
       set: function () {
-        this.$store.dispatch("monuments/toggleAlbumPhotoGalleryDialog");
+        this.$store.dispatch("lmi2015/toggleAlbumPhotoGalleryDialog");
       }
     },
 
     photoAlbums() {
-      return this.$store.getters["monuments/getSelectedItemPhotoAlbums"];
+      return this.$store.getters["lmi2015/getSelectedItemPhotoAlbums"];
     },
   },
 
   methods: {
     currentAlbumSection() {
-      const returnItem = this.$store.state.monuments.selectedItem && this.$store.state.monuments.selectedItem.images.length > 0 ? this.photoAlbums.filter(item => item.date === this.$store.state.monuments.selectedItem.albumDate)[0].sections[this.$store.state.monuments.selectedItem.albumSectionIndex] : [];
+      const returnItem = this.$store.state.lmi2015.selectedItem && this.$store.state.lmi2015.selectedItem.images.length > 0 ? this.photoAlbums.filter(item => item.date === this.$store.state.lmi2015.selectedItem.albumDate)[0].sections[this.$store.state.lmi2015.selectedItem.albumSectionIndex] : [];
       // console.log('@AlbumPhotoGallery :: @currentAlbumSection >> ', returnItem);
       return returnItem;
     },

@@ -1,10 +1,20 @@
+<!-- lmi-2015 :: searchPanel -->
+
 <template>
-  <div class="bg-grey-5">
+  <!-- drawer container -->
+  <q-drawer
+      :overlay="true"
+      v-model="leftPanel"
+      side="left"
+      bordered
+      :content-style="{ backgroundColor: '#bdbdbd' }"
+      class="bg-grey-5"
+  >
 
     <!-- menu list -->
     <q-list padding bordered class="rounded-borders">
 
-      <!-- descarcare date -->
+      <!-- download data -->
       <q-expansion-item
           dense
           dense-toggle
@@ -22,7 +32,7 @@
         </q-card>
       </q-expansion-item>
 
-      <!-- filtrare tip patrimoniu -->
+      <!-- filter tip patrimoniu -->
       <q-expansion-item
           dense
           dense-toggle
@@ -99,7 +109,7 @@
         </q-card>
       </q-expansion-item>
 
-      <!-- cautare -->
+      <!-- search box -->
       <q-expansion-item
           default-opened
           dense
@@ -139,27 +149,27 @@
             <div style="padding-top: 15px"></div>
 
             <q-list separator class="q-pt-md">
-                <q-item
-                    dense
-                    clickable
-                    v-ripple
-                    v-for="(item, index) in monFilteredList"
-                    :key="index"
-                    @click="selectMonument(item['cod_lmi'])"
-                    class="row items-start no-padding"
-                >
-                  <q-item-section class="column q-pt-xs">
-                    <q-item-label class="q-pa-xs" style="min-height: 20px">
-                      {{item.nr}}. {{ item["denumire"] }}
-                    </q-item-label>
-                    <q-item-label class="text-caption text-grey-7 q-pa-xs no-border no-margin" style="min-height: 20px">
-                      {{ item["adresa"] }}
-                    </q-item-label>
-                  </q-item-section>
-                  <q-item-section class="q-pa-xs no-border no-margin" style="max-width: 26px">
-                    <q-icon class="" name="fiber_manual_record" size="24px" :color="colorCodes[item['icon_code']]"/>
-                  </q-item-section>
-                </q-item>
+              <q-item
+                  dense
+                  clickable
+                  v-ripple
+                  v-for="(item, index) in monFilteredList"
+                  :key="index"
+                  @click="selectMonument(item['cod_lmi'])"
+                  class="row items-start no-padding"
+              >
+                <q-item-section class="column q-pt-xs">
+                  <q-item-label class="q-pa-xs" style="min-height: 20px">
+                    {{ item.nr }}. {{ item["denumire"] }}
+                  </q-item-label>
+                  <q-item-label class="text-caption text-grey-7 q-pa-xs no-border no-margin" style="min-height: 20px">
+                    {{ item["adresa"] }}
+                  </q-item-label>
+                </q-item-section>
+                <q-item-section class="q-pa-xs no-border no-margin" style="max-width: 26px">
+                  <q-icon class="" name="fiber_manual_record" size="24px" :color="colorCodes[item['icon_code']]"/>
+                </q-item-section>
+              </q-item>
             </q-list>
 
           </q-card-section>
@@ -167,12 +177,15 @@
       </q-expansion-item>
 
     </q-list>
-  </div>
+
+  </q-drawer>
 </template>
 
 <script>
+import {mapState} from 'vuex';
+
 export default {
-  name: "Lmi2015SearchPanelContent",
+  name: "Lmi2015SearchPanel",
 
   data() {
     return {
@@ -191,41 +204,56 @@ export default {
     };
   },
   computed: {
+    leftPanel: {
+      get() {
+        // console.log('app: getLeftPanel');
+        return this.$store.state.lmi2015.leftPanel;
+      }
+      ,
+      set: function (value) {
+        // console.log('app: setLeftPanel: ', value);
+        this.$store.dispatch('lmi2015/updateLeftPanel', value);
+      },
+    },
     filterText: {
       get() {
-        return this.$store.state.monuments.filterText || "";
+        return this.$store.state.lmi2015.filterText || "";
       },
       set: function (value) {
-        this.$store.dispatch("monuments/setFilterText", value);
+        this.$store.dispatch("lmi2015/setFilterText", value);
       }
     },
     filtruTipPatrimoniu: {
       get() {
-        return this.$store.state.monuments.filtruTipPatrimoniu || "";
+        return this.$store.state.lmi2015.filtruTipPatrimoniu || "";
       },
       set(value) {
-        this.$store.dispatch("monuments/setFiltruTipPatrimoniu", value);
+        this.$store.dispatch("lmi2015/setFiltruTipPatrimoniu", value);
       }
     },
     filtruValoareMon: {
       get() {
-        return this.$store.state.monuments.filtruValoareMon || "";
+        return this.$store.state.lmi2015.filtruValoareMon || "";
       },
       set(value) {
-        this.$store.dispatch("monuments/setFiltruValoareMon", value);
+        this.$store.dispatch("lmi2015/setFiltruValoareMon", value);
       }
     },
     filtruScaraMon: {
       get() {
-        return this.$store.state.monuments.filtruScaraMon || "";
+        return this.$store.state.lmi2015.filtruScaraMon || "";
       },
       set(value) {
-        this.$store.dispatch("monuments/setFiltruScaraMon", value);
+        this.$store.dispatch("lmi2015/setFiltruScaraMon", value);
       }
     },
 
+    ...mapState({
+      monumentDisplayed: (state) => state.lmi2015.monumentDisplayed,
+    }),
+
     monFilteredList() {
-      return this.$store.getters["monuments/filteredArray"];
+      return this.$store.getters["lmi2015/filteredArray"];
     },
     countFilteredList() {
       return this.monFilteredList.length;
@@ -234,12 +262,21 @@ export default {
       return this.colorCodes[value];
     }
   },
+
   methods: {
+    toggleLeftPanel() {
+      this.$store.dispatch('lmi2015/toggleLeftPanel');
+    },
     selectMonument(codLmi) {
-      this.$store.dispatch("monuments/selectItem", codLmi);
-      if (this.$q.platform.is.mobile) this.$store.dispatch('monuments/setLeftPanel', false);
+      this.$store.dispatch("lmi2015/selectItem", codLmi);
+      if (this.$q.platform.is.mobile) this.$store.dispatch('lmi2015/updateLeftPanel', false);
     }
-  }
+  },
+
+  created: async function () {
+    // open the left panel
+    if (this.$q.platform.is.desktop) this.leftPanel = true;
+  },
 };
 </script>
 
