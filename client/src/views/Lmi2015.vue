@@ -76,7 +76,7 @@ export default {
     },
   },
 
-  created: async function () {
+  async created() {
     // if client platform is desktop, show the left panel
     if (this.$q.platform.is.desktop) this.leftPanel = true;
   },

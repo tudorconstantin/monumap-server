@@ -347,15 +347,15 @@ export default {
         if (clickedItem) {
           // for each layer
           ['SPATII_ABANDONATE', 'SPATII_PUNCTUALE', 'SPATII_LINIARE', 'SPATII_SUPRAFATA']
-            .forEach((item) => {
-              if(clickedItem.source === item) {
-                // highlight selected item
-                mapObj.setFilter(`${item}_HIGHLIGHT`, ['==', ['get', 'id'], clickedItem.properties.id]);
-              } else {
-                // de-highlight previous selection
-                mapObj.setFilter(`${item}_HIGHLIGHT`, ['==', ['get', 'id'], '']);
-              }
-            });
+              .forEach((item) => {
+                if(clickedItem.source === item) {
+                  // highlight selected item
+                  mapObj.setFilter(`${item}_HIGHLIGHT`, ['==', ['get', 'id'], clickedItem.properties.id]);
+                } else {
+                  // de-highlight previous selection
+                  mapObj.setFilter(`${item}_HIGHLIGHT`, ['==', ['get', 'id'], '']);
+                }
+              });
 
           // save selected item to store
           store.dispatch('spatiiPublice/selectItem', clickedItem);
@@ -487,7 +487,7 @@ export default {
 
     onMapLoaded(event) {
       let map = event.map;
-      this.$store.map = map;
+      this.$store.map.myMap = map;
       // add map layers
       // add layer for 'spatii-suprafata'
       map = this.addMapLayer(map, this.layers.spatiiSuprafata, this.spatiiSuprafata);

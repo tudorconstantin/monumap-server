@@ -107,8 +107,6 @@ export default {
   },
 
   created: async function () {
-    // create map
-    this.$store.dispatch('map/loadMap');
 
     // get lmi2015 monuments list
     await this.$store.dispatch('lmi2015/getAllMonuments');

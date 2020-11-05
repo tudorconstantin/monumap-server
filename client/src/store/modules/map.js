@@ -6,7 +6,7 @@ import Mapbox from 'mapbox-gl';
 // STATE
 
 const state = {
-  map: {},
+  // myMap: null,
   mapLoaded: false,
   currentItem: null,
   layers: {
@@ -247,8 +247,11 @@ const actions = {
   },
 
   // add map layer
-  addLayer({commit}, layer, data) {
-    commit('addLayer', layer, data);
+  addLayer({commit}, layer) {
+    const newData = getters["spatiiPublice/getSpatiiSuprafata"];
+    console.log('layer: ', layer);
+    console.log('newData: ', newData);
+    commit('addLayer', layer, newData);
   },
 
   // add map click event handler
