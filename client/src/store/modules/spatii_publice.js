@@ -11,210 +11,210 @@ const state = {
   myMap: null,
   mapLoaded: false,
   currentItem: null,
-  layers: {
-    spatiiAbandonate: {
-      geometry: 'Point',
-      render: {
-        shape: 'circle',
-        paint: {
-          'circle-radius': 10,
-          'circle-color': '#ad0450',
-          'circle-stroke-color': 'gray',
-          'circle-stroke-width': 3,
-          'circle-opacity': 0.7
-        },
-      },
-      sourceId: 'SPATII_ABANDONATE',
-      layerId: 'SPATII_ABANDONATE',
-    },
-    spatiiAbandonateHover: {
-      geometry: 'Point',
-      render: {
-        shape: 'circle',
-        paint: {
-          'circle-radius': 10,
-          'circle-color': '#ad0450',
-          'circle-stroke-color': 'yellow',
-          'circle-stroke-width': 5,
-          'circle-opacity': [
-            'case',
-            ['boolean', ['feature-state', 'hover'], false],
-            1,
-            0
-          ],
-          'circle-stroke-opacity': [
-            'case',
-            ['boolean', ['feature-state', 'hover'], false],
-            1,
-            0
-          ]
-        },
-      },
-      sourceId: 'SPATII_ABANDONATE',
-      layerId: 'SPATII_ABANDONATE_HOVER',
-    },
-    spatiiAbandonateHighlight: {
-      geometry: 'Point',
-      render: {
-        shape: 'circle',
-        paint: {
-          'circle-radius': 10,
-          'circle-color': '#ad0450',
-          'circle-stroke-color': 'red',
-          'circle-stroke-width': 5,
-        },
-        filter: ['==', ['get', 'id'], ''],
-      },
-      sourceId: 'SPATII_ABANDONATE',
-      layerId: 'SPATII_ABANDONATE_HIGHLIGHT',
-    },
-
-    spatiiPunctuale: {
-      geometry: 'Point',
-      render: {
-        shape: 'circle',
-        paint: {
-          'circle-radius': 10,
-          'circle-color': '#0247f3',
-          'circle-stroke-color': 'gray',
-          'circle-stroke-width': 3,
-          'circle-opacity': 0.8,
-        },
-      },
-      sourceId: 'SPATII_PUNCTUALE',
-      layerId: 'SPATII_PUNCTUALE',
-    },
-    spatiiPunctualeHover: {
-      geometry: 'Point',
-      render: {
-        shape: 'circle',
-        paint: {
-          'circle-radius': 10,
-          'circle-color': '#0247f3',
-          'circle-stroke-color': 'yellow',
-          'circle-stroke-width': 5,
-          'circle-opacity': [
-            'case',
-            ['boolean', ['feature-state', 'hover'], false],
-            1,
-            0
-          ],
-          'circle-stroke-opacity': [
-            'case',
-            ['boolean', ['feature-state', 'hover'], false],
-            1,
-            0
-          ]
-        },
-      },
-      sourceId: 'SPATII_PUNCTUALE',
-      layerId: 'SPATII_PUNCTUALE_HOVER',
-    },
-    spatiiPunctualeHighlight: {
-      geometry: 'Point',
-      render: {
-        shape: 'circle',
-        paint: {
-          'circle-radius': 10,
-          'circle-color': '#0247f3',
-          'circle-stroke-color': 'red',
-          'circle-stroke-width': 5,
-        },
-        filter: ['==', ['get', 'id'], ''],
-      },
-      sourceId: 'SPATII_PUNCTUALE',
-      layerId: 'SPATII_PUNCTUALE_HIGHLIGHT',
-    },
-
-    spatiiLiniare: {
-      geometry: 'MultiLineString',
-      render: {
-        shape: 'line',
-        paint: {
-          'line-color': '#ffde02',
-          'line-width': 5,
-          'line-opacity': 0.6,
-        },
-      },
-      sourceId: 'SPATII_LINIARE',
-      layerId: 'SPATII_LINIARE',
-    },
-    spatiiLiniareHover: {
-      geometry: 'MultiLineString',
-      render: {
-        shape: 'line',
-        paint: {
-          'line-color': 'yellow',
-          'line-width': 5,
-          'line-opacity': [
-            'case',
-            ['boolean', ['feature-state', 'hover'], false],
-            1,
-            0.1
-          ]
-        },
-      },
-      sourceId: 'SPATII_LINIARE',
-      layerId: 'SPATII_LINIARE_HOVER',
-    },
-    spatiiLiniareHighlight: {
-      geometry: 'MultiLineString',
-      render: {
-        shape: 'line',
-        paint: {
-          'line-color': 'red',
-          'line-width': 5,
-        },
-        filter: ['==', ['get', 'id'], ''],
-      },
-      sourceId: 'SPATII_LINIARE',
-      layerId: 'SPATII_LINIARE_HIGHLIGHT',
-    },
-
-    spatiiSuprafata: {
-      geometry: 'MultiPolygon',
-      render: {
-        shape: 'fill',
-        paint: {
-          'fill-color': '#16e802',
-          'fill-opacity': 0.3,
-        },
-      },
-      sourceId: 'SPATII_SUPRAFATA',
-      layerId: 'SPATII_SUPRAFATA',
-    },
-    spatiiSuprafataHover: {
-      geometry: 'MultiPolygon',
-      render: {
-        shape: 'line',
-        paint: {
-          'line-color': 'yellow',
-          'line-width': 5,
-          'line-opacity': [
-            'case',
-            ['boolean', ['feature-state', 'hover'], false],
-            1,
-            0.1
-          ]
-        },
-      },
-      sourceId: 'SPATII_SUPRAFATA',
-      layerId: 'SPATII_SUPRAFATA_HOVER',
-    },
-    spatiiSuprafataHighlight: {
-      geometry: 'MultiPolygon',
-      render: {
-        shape: 'line',
-        paint: {
-          'line-color': 'red',
-          'line-width': 5,
-        },
-        filter: ['==', ['get', 'id'], ''],
-      },
-      sourceId: 'SPATII_SUPRAFATA',
-      layerId: 'SPATII_SUPRAFATA_HIGHLIGHT',
-    },
-  },
+  // layers: {
+  //   spatiiAbandonate: {
+  //     geometry: 'Point',
+  //     render: {
+  //       shape: 'circle',
+  //       paint: {
+  //         'circle-radius': 10,
+  //         'circle-color': '#ad0450',
+  //         'circle-stroke-color': 'gray',
+  //         'circle-stroke-width': 3,
+  //         'circle-opacity': 0.7
+  //       },
+  //     },
+  //     sourceId: 'SPATII_ABANDONATE',
+  //     layerId: 'SPATII_ABANDONATE',
+  //   },
+  //   spatiiAbandonateHover: {
+  //     geometry: 'Point',
+  //     render: {
+  //       shape: 'circle',
+  //       paint: {
+  //         'circle-radius': 10,
+  //         'circle-color': '#ad0450',
+  //         'circle-stroke-color': 'yellow',
+  //         'circle-stroke-width': 5,
+  //         'circle-opacity': [
+  //           'case',
+  //           ['boolean', ['feature-state', 'hover'], false],
+  //           1,
+  //           0
+  //         ],
+  //         'circle-stroke-opacity': [
+  //           'case',
+  //           ['boolean', ['feature-state', 'hover'], false],
+  //           1,
+  //           0
+  //         ]
+  //       },
+  //     },
+  //     sourceId: 'SPATII_ABANDONATE',
+  //     layerId: 'SPATII_ABANDONATE_HOVER',
+  //   },
+  //   spatiiAbandonateHighlight: {
+  //     geometry: 'Point',
+  //     render: {
+  //       shape: 'circle',
+  //       paint: {
+  //         'circle-radius': 10,
+  //         'circle-color': '#ad0450',
+  //         'circle-stroke-color': 'red',
+  //         'circle-stroke-width': 5,
+  //       },
+  //       filter: ['==', ['get', 'id'], ''],
+  //     },
+  //     sourceId: 'SPATII_ABANDONATE',
+  //     layerId: 'SPATII_ABANDONATE_HIGHLIGHT',
+  //   },
+  //
+  //   spatiiPunctuale: {
+  //     geometry: 'Point',
+  //     render: {
+  //       shape: 'circle',
+  //       paint: {
+  //         'circle-radius': 10,
+  //         'circle-color': '#0247f3',
+  //         'circle-stroke-color': 'gray',
+  //         'circle-stroke-width': 3,
+  //         'circle-opacity': 0.8,
+  //       },
+  //     },
+  //     sourceId: 'SPATII_PUNCTUALE',
+  //     layerId: 'SPATII_PUNCTUALE',
+  //   },
+  //   spatiiPunctualeHover: {
+  //     geometry: 'Point',
+  //     render: {
+  //       shape: 'circle',
+  //       paint: {
+  //         'circle-radius': 10,
+  //         'circle-color': '#0247f3',
+  //         'circle-stroke-color': 'yellow',
+  //         'circle-stroke-width': 5,
+  //         'circle-opacity': [
+  //           'case',
+  //           ['boolean', ['feature-state', 'hover'], false],
+  //           1,
+  //           0
+  //         ],
+  //         'circle-stroke-opacity': [
+  //           'case',
+  //           ['boolean', ['feature-state', 'hover'], false],
+  //           1,
+  //           0
+  //         ]
+  //       },
+  //     },
+  //     sourceId: 'SPATII_PUNCTUALE',
+  //     layerId: 'SPATII_PUNCTUALE_HOVER',
+  //   },
+  //   spatiiPunctualeHighlight: {
+  //     geometry: 'Point',
+  //     render: {
+  //       shape: 'circle',
+  //       paint: {
+  //         'circle-radius': 10,
+  //         'circle-color': '#0247f3',
+  //         'circle-stroke-color': 'red',
+  //         'circle-stroke-width': 5,
+  //       },
+  //       filter: ['==', ['get', 'id'], ''],
+  //     },
+  //     sourceId: 'SPATII_PUNCTUALE',
+  //     layerId: 'SPATII_PUNCTUALE_HIGHLIGHT',
+  //   },
+  //
+  //   spatiiLiniare: {
+  //     geometry: 'MultiLineString',
+  //     render: {
+  //       shape: 'line',
+  //       paint: {
+  //         'line-color': '#ffde02',
+  //         'line-width': 5,
+  //         'line-opacity': 0.6,
+  //       },
+  //     },
+  //     sourceId: 'SPATII_LINIARE',
+  //     layerId: 'SPATII_LINIARE',
+  //   },
+  //   spatiiLiniareHover: {
+  //     geometry: 'MultiLineString',
+  //     render: {
+  //       shape: 'line',
+  //       paint: {
+  //         'line-color': 'yellow',
+  //         'line-width': 5,
+  //         'line-opacity': [
+  //           'case',
+  //           ['boolean', ['feature-state', 'hover'], false],
+  //           1,
+  //           0.1
+  //         ]
+  //       },
+  //     },
+  //     sourceId: 'SPATII_LINIARE',
+  //     layerId: 'SPATII_LINIARE_HOVER',
+  //   },
+  //   spatiiLiniareHighlight: {
+  //     geometry: 'MultiLineString',
+  //     render: {
+  //       shape: 'line',
+  //       paint: {
+  //         'line-color': 'red',
+  //         'line-width': 5,
+  //       },
+  //       filter: ['==', ['get', 'id'], ''],
+  //     },
+  //     sourceId: 'SPATII_LINIARE',
+  //     layerId: 'SPATII_LINIARE_HIGHLIGHT',
+  //   },
+  //
+  //   spatiiSuprafata: {
+  //     geometry: 'MultiPolygon',
+  //     render: {
+  //       shape: 'fill',
+  //       paint: {
+  //         'fill-color': '#16e802',
+  //         'fill-opacity': 0.3,
+  //       },
+  //     },
+  //     sourceId: 'SPATII_SUPRAFATA',
+  //     layerId: 'SPATII_SUPRAFATA',
+  //   },
+  //   spatiiSuprafataHover: {
+  //     geometry: 'MultiPolygon',
+  //     render: {
+  //       shape: 'line',
+  //       paint: {
+  //         'line-color': 'yellow',
+  //         'line-width': 5,
+  //         'line-opacity': [
+  //           'case',
+  //           ['boolean', ['feature-state', 'hover'], false],
+  //           1,
+  //           0.1
+  //         ]
+  //       },
+  //     },
+  //     sourceId: 'SPATII_SUPRAFATA',
+  //     layerId: 'SPATII_SUPRAFATA_HOVER',
+  //   },
+  //   spatiiSuprafataHighlight: {
+  //     geometry: 'MultiPolygon',
+  //     render: {
+  //       shape: 'line',
+  //       paint: {
+  //         'line-color': 'red',
+  //         'line-width': 5,
+  //       },
+  //       filter: ['==', ['get', 'id'], ''],
+  //     },
+  //     sourceId: 'SPATII_SUPRAFATA',
+  //     layerId: 'SPATII_SUPRAFATA_HIGHLIGHT',
+  //   },
+  // },
   accessToken: 'pk.eyJ1IjoidHVkb3Jjb25zdGFudGluIiwiYSI6ImNrM29yN2t3cjBiMDkzaG80cTdiczhzMmIifQ.fqelSp0srqiSV3qkfbE2qQ',
   mapStyle: 'mapbox://styles/tudorconstantin/ck6e0nrah6h571ipdkgakat2u',
   container: 'mapContainer',

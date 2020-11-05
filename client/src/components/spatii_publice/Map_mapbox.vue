@@ -487,7 +487,8 @@ export default {
 
     onMapLoaded(event) {
       let map = event.map;
-      this.$store.map.myMap = map;
+      // this.$store.spatiiPublice.myMap = map;
+      this.$store.dispatch('spatiiPublice/saveMap', map);
       // add map layers
       // add layer for 'spatii-suprafata'
       map = this.addMapLayer(map, this.layers.spatiiSuprafata, this.spatiiSuprafata);
