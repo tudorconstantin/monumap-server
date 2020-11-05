@@ -294,7 +294,7 @@ const actions = {
 
   // add map data source
   async addSource({commit}, sourceId) {
-    console.log('store > actions >> addSource: ', sourceId);
+    // console.log('store > actions >> addSource: ', sourceId);
     const data = await state.spatiiSuprafata;
     commit('addSource', { sourceId, data });
   },
@@ -311,7 +311,7 @@ const actions = {
 
   // add hover layer
   addHoverLayer({commit}, { layer, hoverLayer }) {
-    console.log('store > @addHoverLayer >> hoverLayer: ', hoverLayer);
+    // console.log('store > @addHoverLayer >> hoverLayer: ', hoverLayer);
     commit('addHoverLayer', { layer, hoverLayer });
   },
 
@@ -377,7 +377,7 @@ const mutations = {
   },
 
   async addSource(state, { sourceId, data }) {
-    console.log('store > mutations >> addSource: ', sourceId);
+    // console.log('store > mutations >> addSource: ', sourceId);
     state.myMap.addSource(sourceId, {
       type: 'geojson',
       data: {
@@ -413,7 +413,7 @@ const mutations = {
   },
 
   addClickHandler(state, dispatch) {
-    console.log('@addClickHandler > state: ', state);
+    // console.log('@addClickHandler > state: ', state);
     // Center the map on the coordinates of any clicked symbol from the layer.
     state.myMap.on('click', function (e) {
       // console.log('@click e: ', e);

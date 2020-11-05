@@ -249,8 +249,8 @@ const actions = {
   // add map layer
   addLayer({commit}, layer) {
     const newData = getters["spatiiPublice/getSpatiiSuprafata"];
-    console.log('layer: ', layer);
-    console.log('newData: ', newData);
+    // console.log('layer: ', layer);
+    // console.log('newData: ', newData);
     commit('addLayer', layer, newData);
   },
 
