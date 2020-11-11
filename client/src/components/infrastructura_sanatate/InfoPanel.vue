@@ -127,8 +127,8 @@ export default {
 
   computed: {
     currentItem() {
-      const item = this.$store.state.infrastructuraSanatate.selectedItem;
-      console.log('@infoPanel > currentItem: ', item);
+      // const item = this.$store.state.infrastructuraSanatate.selectedItem;
+      // console.log('@infoPanel > currentItem: ', item);
       return this.$store.state.infrastructuraSanatate.selectedItem;
     }
   },

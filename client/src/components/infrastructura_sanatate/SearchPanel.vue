@@ -203,7 +203,7 @@ export default {
 
     unitSelected: async (item) => {
       const selectedItem = await this.$store.state.infrastructuraSanatate.selectedItem;
-      console.log('listItem: ', item);
+      // console.log('listItem: ', item);
       return {
         active: selectedItem ? selectedItem.id === item.id : false,
       };
@@ -235,7 +235,7 @@ export default {
     async selectItem(item) {
       // load map object
       const map = this.$store.state.infrastructuraSanatate.map;
-      console.log('@list > selectItem >> item: ', item);
+      // console.log('@list > selectItem >> item: ', item);
       // deselect previous selection
       const previousSelectedItem = this.$store.state.infrastructuraSanatate.selectedItem;
       // console.log('previousSelectedItem: ', previousSelectedItem);
@@ -254,7 +254,7 @@ export default {
         map.setFilter(`${item.layer.id}_HIGHLIGHT`, ['==', ['get', 'id'], item.properties.id]);
         this.$store.dispatch('app/updateRightPanel', true);
         this.$store.dispatch('app/updateItemSelected', true);
-        console.log('@Map_mapbox > selectItem: ', item);
+        // console.log('@Map_mapbox > selectItem: ', item);
         // this.selectedItem = fullPolygon;
         // let coordinates;
         // if (fullPolygon.geometry.type === 'MultiPolygon') {

@@ -514,7 +514,7 @@ export default {
         // console.log('@click e: ', e);
         // find clicked item
         const clickedItem = (map.queryRenderedFeatures(e.point, { layers: layersIdsArr }) || [])[0];
-        console.log('clickedItem: ', clickedItem);
+        // console.log('clickedItem: ', clickedItem);
         // deselect previous selection
         const previousSelectedItem = store.state.infrastructuraSanatate.selectedItem;
         // console.log('previousSelectedItem: ', previousSelectedItem);

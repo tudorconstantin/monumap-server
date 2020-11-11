@@ -736,7 +736,7 @@ const mutations = {
   setAllData(state, {units, services}) {
     // set units
     state.unitsArr = units;
-    console.log('@store > setAllData >> units: ', units);
+    // console.log('@store > setAllData >> units: ', units);
     state.itemGroups[0].data = units;
     state.itemGroups[0].layers.forEach((layer) => {
       const features = units.features.filter((i) => i.properties.tip_unit === layer.name);
@@ -748,10 +748,10 @@ const mutations = {
     });
     // set services
     state.servicesArr = services;
-    console.log('@store > setAllData >> services: ', services);
+    // console.log('@store > setAllData >> services: ', services);
     state.itemGroups[1].data = services;
     state.itemGroups[1].layers.forEach((layer) => {
-      const features = units.features.filter((i) => i.properties.tip_serv === layer.name);
+      const features = services.features.filter((i) => i.properties.tip_serv === layer.name);
       layer.data = features.map((feature) => {
         const newFeature = feature;
         newFeature.layer = { id: layer.id };
