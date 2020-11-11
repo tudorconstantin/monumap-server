@@ -49,15 +49,12 @@
 <script>
 import SearchPanel from './SearchPanel';
 import InfoPanel from './InfoPanel';
-import {matRoom} from '@quasar/extras/material-icons';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import constants from '@/util/constants.js';
 
 import {MglMap, MglNavigationControl, MglGeolocateControl} from 'vue-mapbox';
 import Mapbox from 'mapbox-gl';
 
 import {mapGetters} from 'vuex';
-// import infrastructuraSanatate from "../../store/modules/infrastructura_sanatate";
 
 export default {
   components: {
@@ -69,37 +66,7 @@ export default {
   },
   data() {
     return {
-      geoJSON: {},
-      items: [],
-      units: [],
-      services: [],
-      filteredItems: [],
       hoverItemId: null,
-      geometryTypes: {
-        MultiPolygon: {
-          paint: {
-            'fill-color': '#088',
-            'fill-opacity': 0.8,
-          },
-          type: 'fill',
-        },
-        Point: {
-          paint: {
-            'circle-radius': 10,
-            'circle-color': '#B42222',
-            'circle-opacity': 0.5,
-          },
-          type: 'circle',
-        },
-        MultiLineString: {
-          paint: {
-            'line-color': 'black',
-            'line-width': 3,
-          },
-          type: 'line',
-        },
-      },
-
       accessToken:
           'pk.eyJ1IjoidHVkb3Jjb25zdGFudGluIiwiYSI6ImNrM29yN2t3cjBiMDkzaG80cTdiczhzMmIifQ.fqelSp0srqiSV3qkfbE2qQ',
       mapStyle: 'mapbox://styles/tudorconstantin/ck6e0nrah6h571ipdkgakat2u',
@@ -110,71 +77,12 @@ export default {
     };
   },
 
-  async created() {
-    this.map = null;
-    this.matRoom = matRoom;
-    this.constants = constants;
-    // const [unitati, servicii] = await Promise.all([
-    //   fetch('/geojson/infrastructura_sanatate/cnas_unitati.geojson').then((r) => {
-    //         const res = r.json();
-    //         this.$store.dispatch('infrastructuraSanatate/updateUnits', res);
-    //         return res;
-    //       }
-    //   ),
-    //   fetch('/geojson/infrastructura_sanatate/cnas_servicii.geojson').then((r) => {
-    //     const res = r.json();
-    //     this.$store.dispatch('infrastructuraSanatate/updateServices', res);
-    //     return res;
-    //   }),
-    // ]);
-
-    // let features = [];
-    //
-    // features = features.concat(
-    //     (unitati?.features || []).map((i) => {
-    //       i.properties = i.properties || {};
-    //       i.properties.source = 'UNITATI';
-    //       return i;
-    //     })
-    // );
-    //
-    // features = features.concat(
-    //     (servicii?.features || [])
-    //         .filter((i) => i?.geometry?.type)
-    //         .map((i) => {
-    //           i.properties = i.properties || {};
-    //           i.properties.source = 'SERVICII';
-    //           return i;
-    //         })
-    // );
-    //
-    // features = features.sort((a, b) => {
-    //   const A = a?.properties?.denumire?.toUpperCase();
-    //   const B = b?.properties?.denumire?.toUpperCase();
-    //
-    //   if (A < B) return -1;
-    //   if (A > B) return 1;
-    //   return 0;
-    // });
-    //
-    // const geoJSON = {
-    //   type: 'FeatureCollection',
-    //   name: 'infrastructuraSanatate',
-    //   features,
-    // };
-    // this.geoJSON = geoJSON;
-    // this.filteredItems = geoJSON.features;
-    // this.items = geoJSON.features;
-  },
-
   computed: {
-
     leftPanel: {
       get() {
         // console.log('app: getLeftPanel');
         return this.$store.state.infrastructuraSanatate.leftPanel;
-      }
-      ,
+      },
       set: function (value) {
         // console.log('app: setLeftPanel: ', value);
         this.$store.dispatch('infrastructuraSanatate/updateLeftPanel', value);
@@ -184,8 +92,7 @@ export default {
     rightPanel: {
       get() {
         return this.$store.state.infrastructuraSanatate.rightPanel;
-      }
-      ,
+      },
       set: function (value) {
         this.$store.dispatch('infrastructuraSanatate/updateRightPanel', value);
       },
@@ -195,8 +102,7 @@ export default {
       get() {
         // console.log('app: getLeftPanel');
         return this.$store.state.infrastructuraSanatate.selectedItem;
-      }
-      ,
+      },
       set: function (value) {
         // console.log('app: setLeftPanel: ', value);
         this.$store.dispatch('infrastructuraSanatate/selectItem', value);
@@ -254,7 +160,6 @@ export default {
   },
 
   methods: {
-
     // add map source
     addMapSource(sourceId, data) {
       // load map object
@@ -284,7 +189,7 @@ export default {
           'visibility': 'visible',
         },
         paint: layer.render.paint,
-        filter: ['==', ['get', 'tip_unit'], layer.name],
+        filter: layer.sourceId === 'UNITATI' ? ['==', ['get', 'tip_unit'], layer.name] : ['==', ['get', 'tip_serv'], layer.name],
       });
 
       // Change the cursor to a pointer when the it enters a feature in the 'symbols' layer.
@@ -305,25 +210,28 @@ export default {
         'id': hoverLayerId,
         'type': layer.hover.shape,
         'source': layer.sourceId,
-        'layout': {},
+        'layout': {
+          // make layer visible by default
+          'visibility': 'visible'
+        },
         'paint': layer.hover.paint,
       });
       // When the user moves their mouse over the state-fill layer, we'll update the
       // feature state for the feature under the mouse.
       map.on('mousemove', hoverLayerId, function (e) {
-            if (e.features.length > 0) {
-              if (hoveredItemId) {
-                map.setFeatureState(
-                    {source: layer.sourceId, id: hoveredItemId},
-                    {hover: false}
-                );
-              }
-              hoveredItemId = e.features[0].id;
-              map.setFeatureState(
-                  {source: layer.sourceId, id: hoveredItemId},
-                  {hover: true}
-              );
-            }
+        if (e.features.length > 0) {
+          if (hoveredItemId) {
+            map.setFeatureState(
+                {source: layer.sourceId, id: hoveredItemId},
+                {hover: false}
+            );
+          }
+          hoveredItemId = e.features[0].id;
+          map.setFeatureState(
+              {source: layer.sourceId, id: hoveredItemId},
+              {hover: true}
+          );
+        }
       });
 
       // When the mouse leaves the state-fill layer, update the feature state of the
@@ -344,7 +252,10 @@ export default {
         'id': highlightLayerId,
         'type': layer.highlight.shape,
         'source': layer.sourceId,
-        'layout': {},
+        'layout': {
+          // make layer visible by default
+          'visibility': 'visible'
+        },
         'paint': layer.highlight.paint,
         'filter': layer.highlight.filter,
       });
@@ -362,12 +273,12 @@ export default {
       map.on('click', function (e) {
         // console.log('@click e: ', e);
         // find clicked item
-        const clickedItem = (map.queryRenderedFeatures(e.point, { layers: layersIdsArr }) || [])[0];
+        const clickedItem = (map.queryRenderedFeatures(e.point, {layers: layersIdsArr}) || [])[0];
         // console.log('clickedItem: ', clickedItem);
         // deselect previous selection
         const previousSelectedItem = store.state.infrastructuraSanatate.selectedItem;
         // console.log('previousSelectedItem: ', previousSelectedItem);
-        if(previousSelectedItem) map.setFilter(`${previousSelectedItem.layer.id}_HIGHLIGHT`, ['==', ['get', 'id'], '']);
+        if (previousSelectedItem) map.setFilter(`${previousSelectedItem.layer.id}_HIGHLIGHT`, ['==', ['get', 'id'], '']);
         // if clicked on item
         if (clickedItem) {
           // highlight selected item
@@ -385,7 +296,7 @@ export default {
             // console.log('Geometry Type: ', e.features[0].geometry.type);
             map.flyTo({
               center: clickedItem.geometry.coordinates,
-              zoom: 15,
+              zoom: 17,
             });
           } else if (clickedItem.geometry.type === 'LineString') {
             // console.log('Geometry Type: ', clickedItem.geometry.type);
@@ -405,7 +316,7 @@ export default {
             // });
             map.flyTo({
               center: bounds.getCenter(),
-              zoom: 15,
+              zoom: 17,
             });
           } else {
             // console.log('Geometry Type: ', clickedItem.geometry.type);
@@ -417,7 +328,7 @@ export default {
             }, new Mapbox.LngLatBounds(coordinates[0][0], coordinates[0][1]));
             map.flyTo({
               center: bounds.getCenter(),
-              zoom: 15,
+              zoom: 17,
             });
           }
         } else {
@@ -444,27 +355,18 @@ export default {
       await this.addMapSource('UNITATI', unitsArr);
       const servicesArr = await this.$store.state.infrastructuraSanatate.servicesArr;
       await this.addMapSource('SERVICII', servicesArr);
-      // console.log('mapSource: ', map.getSource('UNITATI'));
       // add map layers
       // add layers for 'UNITATI'
       const unitatiLayers = this.$store.state.infrastructuraSanatate.itemGroups[0].layers;
       // console.log('unitatiLayers: ', unitatiLayers.layers);
-      unitatiLayers.forEach((layer) => {
-        this.addMapLayer(layer)
-      });
+      unitatiLayers.forEach((layer) => { this.addMapLayer(layer) });
       // add layers for 'SERVICII'
       const serviciiLayers = this.$store.state.infrastructuraSanatate.itemGroups[1].layers;
       // console.log('serviciiLayers: ', serviciiLayers.layers);
-      serviciiLayers.forEach((layer) => {
-        this.addMapLayer(layer)
-      });
-
+      serviciiLayers.forEach((layer) => { this.addMapLayer(layer) });
+      // add click handler
       this.addMapClickHandler();
-      // this.addHoverLayer(map, this.layers.spatiiSuprafata, this.layers.spatiiSuprafataHover);
 
-
-      // add click event handler
-      // this.addMapClickHandler();
 
     },
 
