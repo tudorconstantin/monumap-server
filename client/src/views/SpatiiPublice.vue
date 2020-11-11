@@ -5,7 +5,6 @@
     <!-- left panel -->
     <search-panel
         v-if="isSpatiiPubliceRoute
-        && this.$store.state.app.leftPanel
         && this.leftPanel"
     ></search-panel>
 

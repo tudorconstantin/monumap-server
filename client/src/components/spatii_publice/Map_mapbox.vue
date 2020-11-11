@@ -20,7 +20,7 @@
 <script>
 
 // import {matRoom} from '@quasar/extras/material-icons';
-import MapBox from 'mapbox-gl';
+import Mapbox from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 import {
@@ -58,7 +58,7 @@ export default {
             paint: {
               'circle-radius': 10,
               'circle-color': '#ad0450',
-              'circle-stroke-color': 'gray',
+              'circle-stroke-color': '#906e7d',
               'circle-stroke-width': 3,
               'circle-opacity': 0.7
             },
@@ -73,7 +73,7 @@ export default {
             paint: {
               'circle-radius': 10,
               'circle-color': '#ad0450',
-              'circle-stroke-color': 'yellow',
+              'circle-stroke-color': '#fcf127',
               'circle-stroke-width': 5,
               'circle-opacity': [
                 'case',
@@ -99,7 +99,7 @@ export default {
             paint: {
               'circle-radius': 10,
               'circle-color': '#ad0450',
-              'circle-stroke-color': 'red',
+              'circle-stroke-color': '#FF0220',
               'circle-stroke-width': 5,
             },
             filter: ['==', ['get', 'id'], ''],
@@ -115,7 +115,7 @@ export default {
             paint: {
               'circle-radius': 10,
               'circle-color': '#0247f3',
-              'circle-stroke-color': 'gray',
+              'circle-stroke-color': '#79849c',
               'circle-stroke-width': 3,
               'circle-opacity': 0.8,
             },
@@ -130,7 +130,7 @@ export default {
             paint: {
               'circle-radius': 10,
               'circle-color': '#0247f3',
-              'circle-stroke-color': 'yellow',
+              'circle-stroke-color': '#fcf127',
               'circle-stroke-width': 5,
               'circle-opacity': [
                 'case',
@@ -156,7 +156,7 @@ export default {
             paint: {
               'circle-radius': 10,
               'circle-color': '#0247f3',
-              'circle-stroke-color': 'red',
+              'circle-stroke-color': '#FF0220',
               'circle-stroke-width': 5,
             },
             filter: ['==', ['get', 'id'], ''],
@@ -173,6 +173,7 @@ export default {
               'line-color': '#ffde02',
               'line-width': 5,
               'line-opacity': 0.6,
+              'line-dasharray': [10, 5],
             },
           },
           sourceId: 'SPATII_LINIARE',
@@ -183,7 +184,7 @@ export default {
           render: {
             shape: 'line',
             paint: {
-              'line-color': 'yellow',
+              'line-color': '#fcf127',
               'line-width': 5,
               'line-opacity': [
                 'case',
@@ -201,7 +202,7 @@ export default {
           render: {
             shape: 'line',
             paint: {
-              'line-color': 'red',
+              'line-color': '#ff0220',
               'line-width': 5,
             },
             filter: ['==', ['get', 'id'], ''],
@@ -227,8 +228,9 @@ export default {
           render: {
             shape: 'line',
             paint: {
-              'line-color': 'yellow',
+              'line-color': '#fcf127',
               'line-width': 5,
+              'line-dasharray': [10, 4],
               'line-opacity': [
                 'case',
                 ['boolean', ['feature-state', 'hover'], false],
@@ -245,7 +247,7 @@ export default {
           render: {
             shape: 'line',
             paint: {
-              'line-color': 'red',
+              'line-color': '#FF0220',
               'line-width': 5,
             },
             filter: ['==', ['get', 'id'], ''],
@@ -256,8 +258,8 @@ export default {
       },
 
       accessToken:
-          'pk.eyJ1IjoidHVkb3Jjb25zdGFudGluIiwiYSI6ImNrM29yN2t3cjBiMDkzaG80cTdiczhzMmIifQ.fqelSp0srqiSV3qkfbE2qQ',
-      mapStyle: 'mapbox://styles/tudorconstantin/ck6e0nrah6h571ipdkgakat2u',
+          'pk.eyJ1IjoiYWxpbmNoaXMiLCJhIjoiY2toNHQ3eGdzMGVmaTJyczVyanN0dWY0YiJ9.cmyaXMKo-Q055Iu2y5V7fQ',
+      mapStyle: 'mapbox://styles/alinchis/ckh4tdtog05ii19ocdg2rywt0',
       container: 'mapContainer',
       center: [26.0986, 44.4365],
       zoom: 12.5,
@@ -331,7 +333,7 @@ export default {
       // save map object to store
       this.$store.map = mapObj;
       // return new map object
-      return mapObj;
+      // return mapObj;
     },
 
     // add map click event handler
@@ -382,7 +384,7 @@ export default {
             // console.log('coordinates: ', coordinates);
             const bounds = coordinates.reduce(function (bounds, coord) {
               return bounds.extend(coord);
-            }, new MapBox.LngLatBounds(coordinates[0], coordinates[0]));
+            }, new Mapbox.LngLatBounds(coordinates[0], coordinates[0]));
             // mapObj.fitBounds(bounds, {
             //   padding: 400
             // });
@@ -397,7 +399,7 @@ export default {
             // console.log('coordinates: ', coordinates);
             const bounds = coordinates[0].reduce(function (bounds, coord) {
               return bounds.extend(coord);
-            }, new MapBox.LngLatBounds(coordinates[0][0], coordinates[0][1]));
+            }, new Mapbox.LngLatBounds(coordinates[0][0], coordinates[0][1]));
             mapObj.flyTo({
               center: bounds.getCenter(),
               zoom: 15,
@@ -421,7 +423,7 @@ export default {
 
       });
       // return new map obj
-      return mapObj;
+      // return mapObj;
     },
 
     // add hover layer
@@ -465,7 +467,7 @@ export default {
         hoveredItemId = null;
       });
       // return new map obj
-      return mapObj;
+      // return mapObj;
     },
 
     // add highlighted/selected item layer
@@ -482,7 +484,7 @@ export default {
       });
 
       // return new map obj
-      return mapObj;
+      // return mapObj;
     },
 
     onMapLoaded(event) {
@@ -491,35 +493,35 @@ export default {
       this.$store.dispatch('spatiiPublice/saveMap', map);
       // add map layers
       // add layer for 'spatii-suprafata'
-      map = this.addMapLayer(map, this.layers.spatiiSuprafata, this.spatiiSuprafata);
+      this.addMapLayer(map, this.layers.spatiiSuprafata, this.spatiiSuprafata);
       // add hover layer for 'spatii-suprafata'
-      map = this.addHoverLayer(map, this.layers.spatiiSuprafata, this.layers.spatiiSuprafataHover);
+      this.addHoverLayer(map, this.layers.spatiiSuprafata, this.layers.spatiiSuprafataHover);
       // add highlight/selection layer for 'spatii-suprafata'
-      map = this.addHighlightLayer(map, this.layers.spatiiSuprafataHighlight);
+      this.addHighlightLayer(map, this.layers.spatiiSuprafataHighlight);
 
       // add layer for 'spatii-liniare'
-      map = this.addMapLayer(map, this.layers.spatiiLiniare, this.spatiiLiniare);
+      this.addMapLayer(map, this.layers.spatiiLiniare, this.spatiiLiniare);
       // add hover layer for 'spatii-liniare'
-      map = this.addHoverLayer(map, this.layers.spatiiLiniare, this.layers.spatiiLiniareHover);
+      this.addHoverLayer(map, this.layers.spatiiLiniare, this.layers.spatiiLiniareHover);
       // add highlight/selection layer for 'spatii-liniare'
-      map = this.addHighlightLayer(map, this.layers.spatiiLiniareHighlight);
+      this.addHighlightLayer(map, this.layers.spatiiLiniareHighlight);
 
       // add layer for 'spatii-punctuale'
-      map = this.addMapLayer(map, this.layers.spatiiPunctuale, this.spatiiPunctuale);
+      this.addMapLayer(map, this.layers.spatiiPunctuale, this.spatiiPunctuale);
       // add hover layer for 'spatii-punctuale'
-      map = this.addHoverLayer(map, this.layers.spatiiPunctuale, this.layers.spatiiPunctualeHover);
+      this.addHoverLayer(map, this.layers.spatiiPunctuale, this.layers.spatiiPunctualeHover);
       // add highlight/selection layer for 'spatii-punctuale'
-      map = this.addHighlightLayer(map, this.layers.spatiiPunctualeHighlight);
+      this.addHighlightLayer(map, this.layers.spatiiPunctualeHighlight);
 
       // add layer for 'spatii-abandonate'
-      map = this.addMapLayer(map, this.layers.spatiiAbandonate, this.spatiiAbandonate);
+      this.addMapLayer(map, this.layers.spatiiAbandonate, this.spatiiAbandonate);
       // add hover layer for 'spatii-abandonate'
-      map = this.addHoverLayer(map, this.layers.spatiiAbandonate, this.layers.spatiiAbandonateHover);
+      this.addHoverLayer(map, this.layers.spatiiAbandonate, this.layers.spatiiAbandonateHover);
       // add highlight/selection layer for 'spatii-abandonate'
-      map = this.addHighlightLayer(map, this.layers.spatiiAbandonateHighlight);
+      this.addHighlightLayer(map, this.layers.spatiiAbandonateHighlight);
 
       // add click event handler
-      map = this.addMapClickHandler(map);
+      this.addMapClickHandler(map);
 
     },
 

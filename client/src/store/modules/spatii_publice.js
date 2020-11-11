@@ -2,7 +2,7 @@
 
 import Mapbox from 'mapbox-gl';
 // const fs = require('fs-extra');
-const spS = fetch('/geojson/spatii_publice/spatii-suprafata.geojson').then((r) => r.json());
+// const spS = fetch('/geojson/spatii_publice/spatii-suprafata.geojson').then((r) => r.json());
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // STATE
@@ -227,7 +227,7 @@ const state = {
   selectedItem: null,
   spatiiAbandonate: null,
   spatiiLiniare: null,
-  spatiiSuprafata: spS,
+  spatiiSuprafata: null,
   spatiiPunctuale: null,
 };
 
@@ -292,33 +292,33 @@ const actions = {
     commit('saveMap', value);
   },
 
-  // add map data source
-  async addSource({commit}, sourceId) {
-    // console.log('store > actions >> addSource: ', sourceId);
-    const data = await state.spatiiSuprafata;
-    commit('addSource', { sourceId, data });
-  },
-
-  // add map layer
-  async addLayer({commit}, layer) {
-    await commit('addLayer', layer);
-  },
-
-  // add map click event handler
-  addClickHandler({dispatch, commit}) {
-    commit('addClickHandler', dispatch);
-  },
-
-  // add hover layer
-  addHoverLayer({commit}, { layer, hoverLayer }) {
-    // console.log('store > @addHoverLayer >> hoverLayer: ', hoverLayer);
-    commit('addHoverLayer', { layer, hoverLayer });
-  },
-
-  // add highlight layer
-  addHighlightLayer({commit}, highlightLayer) {
-    commit('addHighlightLayer', highlightLayer);
-  },
+  // // add map data source
+  // async addSource({commit}, sourceId) {
+  //   // console.log('store > actions >> addSource: ', sourceId);
+  //   const data = await state.spatiiSuprafata;
+  //   commit('addSource', { sourceId, data });
+  // },
+  //
+  // // add map layer
+  // async addLayer({commit}, layer) {
+  //   await commit('addLayer', layer);
+  // },
+  //
+  // // add map click event handler
+  // addClickHandler({dispatch, commit}) {
+  //   commit('addClickHandler', dispatch);
+  // },
+  //
+  // // add hover layer
+  // addHoverLayer({commit}, { layer, hoverLayer }) {
+  //   // console.log('store > @addHoverLayer >> hoverLayer: ', hoverLayer);
+  //   commit('addHoverLayer', { layer, hoverLayer });
+  // },
+  //
+  // // add highlight layer
+  // addHighlightLayer({commit}, highlightLayer) {
+  //   commit('addHighlightLayer', highlightLayer);
+  // },
 
   async selectItem({commit}, value) {
     // if null value
@@ -326,11 +326,11 @@ const actions = {
       commit("setSelectedItem", undefined);
       // commit("setMonumentDisplay", false);
       commit("setRightPanel", false);
+    } else {
+      commit('setSelectedItem', value);
+      commit('setItemSelected', true);
+      commit('setRightPanel', true);
     }
-
-    commit('setSelectedItem', value);
-    commit('setItemSelected', true);
-    commit('setRightPanel', true);
   },
 
   updateLeftPanel({commit}, value) {
@@ -376,183 +376,183 @@ const mutations = {
     state.myMap = value;
   },
 
-  async addSource(state, { sourceId, data }) {
-    // console.log('store > mutations >> addSource: ', sourceId);
-    state.myMap.addSource(sourceId, {
-      type: 'geojson',
-      data: {
-        type: data.type,
-        features: data.features,
-      },
-      generateId: true, // This ensures that all features have unique IDs
-    });
-  },
-
-  addLayer(state, layer) {
-    // add map layer
-    state.myMap.addLayer({
-      id: layer.layerId,
-      type: layer.render.shape,
-      source: layer.sourceId,
-      layout: {
-        // make layer visible by default
-        'visibility': 'visible',
-      },
-      paint: layer.render.paint,
-    });
-
-    // Change the cursor to a pointer when the it enters a feature in the 'symbols' layer.
-    state.myMap.on('mouseenter', layer.layerId, function () {
-      state.myMap.getCanvas().style.cursor = 'pointer';
-    });
-
-    // Change it back to a pointer when it leaves.
-    state.myMap.on('mouseleave', layer.layerId, function () {
-      state.myMap.getCanvas().style.cursor = '';
-    });
-  },
-
-  addClickHandler(state, dispatch) {
-    // console.log('@addClickHandler > state: ', state);
-    // Center the map on the coordinates of any clicked symbol from the layer.
-    state.myMap.on('click', function (e) {
-      // console.log('@click e: ', e);
-      const clickedItem = (state.myMap.queryRenderedFeatures(e.point) || [])[0];
-      // console.log('clickedItem: ', clickedItem);
-      // if clicked on item
-      if (clickedItem) {
-        // for each layer
-        ['SPATII_ABANDONATE', 'SPATII_PUNCTUALE', 'SPATII_LINIARE', 'SPATII_SUPRAFATA']
-          .forEach((item) => {
-            if(clickedItem.source === item) {
-              // highlight selected item
-              state.myMap.setFilter(`${item}_HIGHLIGHT`, ['==', ['get', 'id'], clickedItem.properties.id]);
-            } else {
-              // de-highlight previous selection
-              state.myMap.setFilter(`${item}_HIGHLIGHT`, ['==', ['get', 'id'], '']);
-            }
-          });
-
-        // save selected item to store
-        dispatch('spatiiPublice/selectItem', clickedItem, {root:true});
-        // set app right panel flag to true
-        dispatch('app/updateRightPanel', true, {root:true});
-        // set app item selected flag to true
-        dispatch('app/updateItemSelected', true, {root:true});
-        // move to item or center of bounding box
-        if (clickedItem.geometry.type === 'Point') {
-          // console.log('Geometry Type: ', e.features[0].geometry.type);
-          state.myMap.flyTo({
-            center: clickedItem.geometry.coordinates,
-            zoom: 15,
-          });
-        } else if (clickedItem.geometry.type === 'LineString') {
-          // console.log('Geometry Type: ', clickedItem.geometry.type);
-          // Geographic coordinates for LineString
-          const coordinates = clickedItem.geometry.coordinates;
-          // Pass the first coordinates in the LineString to `lngLatBounds` &
-          // wrap each coordinate pair in `extend` to include them in the bounds
-          // result. A variation of this technique could be applied to zooming
-          // to the bounds of multiple Points or Polygon geometries - it just
-          // requires wrapping all the coordinates with the extend method.
-          // console.log('coordinates: ', coordinates);
-          const bounds = coordinates.reduce(function (bounds, coord) {
-            return bounds.extend(coord);
-          }, new Mapbox.LngLatBounds(coordinates[0], coordinates[0]));
-          // state.myMap.fitBounds(bounds, {
-          //   padding: 400
-          // });
-          state.myMap.flyTo({
-            center: bounds.getCenter(),
-            zoom: 15,
-          });
-        } else {
-          // console.log('Geometry Type: ', clickedItem.geometry.type);
-          // Geographic coordinates for MultiLineString or Polygon
-          const coordinates = clickedItem.geometry.coordinates;
-          // console.log('coordinates: ', coordinates);
-          const bounds = coordinates[0].reduce(function (bounds, coord) {
-            return bounds.extend(coord);
-          }, new Mapbox.LngLatBounds(coordinates[0][0], coordinates[0][1]));
-          state.myMap.flyTo({
-            center: bounds.getCenter(),
-            zoom: 15,
-          });
-        }
-      } else {
-        // de-highlight all layers
-        ['SPATII_ABANDONATE', 'SPATII_PUNCTUALE', 'SPATII_LINIARE', 'SPATII_SUPRAFATA']
-          .forEach((item) => {
-            state.myMap.setFilter(`${item}_HIGHLIGHT`, ['==', ['get', 'id'], '']);
-          });
-
-        // set selected item to null
-        dispatch('spatiiPublice/selectItem', null, {root:true});
-        // set item selected flaf to false
-        dispatch('spatiiPublice/updateItemSelected', false, {root:true});
-        // set app related flags to false
-        dispatch('app/updateRightPanel', false, {root:true});
-        dispatch('app/updateItemSelected', false, {root:true});
-      }
-
-    });
-  },
-
-  // add hover layer
-  addHoverLayer(state, { layer, hoverLayer }) {
-    // let hoveredItemId = this.hoveredItemId;
-    // console.log('store > @addHoverLayer >> hoverLayer: ', state.myMap.getSource('SPATII_SUPRAFATA'));
-    state.myMap.addLayer({
-      'id': hoverLayer.layerId,
-      'type': hoverLayer.render.shape,
-      'source': hoverLayer.sourceId,
-      'layout': {},
-      'paint': hoverLayer.render.paint,
-    });
-    // When the user moves their mouse over the state-fill layer, we'll update the
-    // feature state for the feature under the mouse.
-    state.myMap.on('mousemove', layer.layerId, function (e) {
-      if (e.features.length > 0) {
-        if (state.hoveredItemId) {
-          state.myMap.setFeatureState(
-            {source: layer.sourceId, id: state.hoveredItemId},
-            {hover: false}
-          );
-        }
-        state.hoveredItemId = e.features[0].id;
-        state.myMap.setFeatureState(
-          {source: layer.sourceId, id: state.hoveredItemId},
-          {hover: true}
-        );
-      }
-    });
-
-    // When the mouse leaves the state-fill layer, update the feature state of the
-    // previously hovered feature.
-    state.myMap.on('mouseleave', `${layer.layerId}`, function () {
-      if (state.hoveredItemId) {
-        state.myMap.setFeatureState(
-          {source: layer.sourceId, id: state.hoveredItemId},
-          {hover: false}
-        );
-      }
-      state.hoveredItemId = null;
-    });
-  },
-
-  // add highlighted/selected item layer
-  addHighlightLayer(state, highlightLayer) {
-    // let highlightedItemId = this.highlightedItemId;
-    // console.log('@hoveredItemId: ', hoveredItemId);
-    state.myMap.addLayer({
-      'id': highlightLayer.layerId,
-      'type': highlightLayer.render.shape,
-      'source': highlightLayer.sourceId,
-      'layout': {},
-      'paint': highlightLayer.render.paint,
-      'filter': highlightLayer.render.filter,
-    });
-  },
+  // async addSource(state, { sourceId, data }) {
+  //   // console.log('store > mutations >> addSource: ', sourceId);
+  //   state.myMap.addSource(sourceId, {
+  //     type: 'geojson',
+  //     data: {
+  //       type: data.type,
+  //       features: data.features,
+  //     },
+  //     generateId: true, // This ensures that all features have unique IDs
+  //   });
+  // },
+  //
+  // addLayer(state, layer) {
+  //   // add map layer
+  //   state.myMap.addLayer({
+  //     id: layer.layerId,
+  //     type: layer.render.shape,
+  //     source: layer.sourceId,
+  //     layout: {
+  //       // make layer visible by default
+  //       'visibility': 'visible',
+  //     },
+  //     paint: layer.render.paint,
+  //   });
+  //
+  //   // Change the cursor to a pointer when the it enters a feature in the 'symbols' layer.
+  //   state.myMap.on('mouseenter', layer.layerId, function () {
+  //     state.myMap.getCanvas().style.cursor = 'pointer';
+  //   });
+  //
+  //   // Change it back to a pointer when it leaves.
+  //   state.myMap.on('mouseleave', layer.layerId, function () {
+  //     state.myMap.getCanvas().style.cursor = '';
+  //   });
+  // },
+  //
+  // addClickHandler(state, dispatch) {
+  //   // console.log('@addClickHandler > state: ', state);
+  //   // Center the map on the coordinates of any clicked symbol from the layer.
+  //   state.myMap.on('click', function (e) {
+  //     // console.log('@click e: ', e);
+  //     const clickedItem = (state.myMap.queryRenderedFeatures(e.point) || [])[0];
+  //     // console.log('clickedItem: ', clickedItem);
+  //     // if clicked on item
+  //     if (clickedItem) {
+  //       // for each layer
+  //       ['SPATII_ABANDONATE', 'SPATII_PUNCTUALE', 'SPATII_LINIARE', 'SPATII_SUPRAFATA']
+  //         .forEach((item) => {
+  //           if(clickedItem.source === item) {
+  //             // highlight selected item
+  //             state.myMap.setFilter(`${item}_HIGHLIGHT`, ['==', ['get', 'id'], clickedItem.properties.id]);
+  //           } else {
+  //             // de-highlight previous selection
+  //             state.myMap.setFilter(`${item}_HIGHLIGHT`, ['==', ['get', 'id'], '']);
+  //           }
+  //         });
+  //
+  //       // save selected item to store
+  //       dispatch('spatiiPublice/selectItem', clickedItem, {root:true});
+  //       // set app right panel flag to true
+  //       dispatch('app/updateRightPanel', true, {root:true});
+  //       // set app item selected flag to true
+  //       dispatch('app/updateItemSelected', true, {root:true});
+  //       // move to item or center of bounding box
+  //       if (clickedItem.geometry.type === 'Point') {
+  //         // console.log('Geometry Type: ', e.features[0].geometry.type);
+  //         state.myMap.flyTo({
+  //           center: clickedItem.geometry.coordinates,
+  //           zoom: 15,
+  //         });
+  //       } else if (clickedItem.geometry.type === 'LineString') {
+  //         // console.log('Geometry Type: ', clickedItem.geometry.type);
+  //         // Geographic coordinates for LineString
+  //         const coordinates = clickedItem.geometry.coordinates;
+  //         // Pass the first coordinates in the LineString to `lngLatBounds` &
+  //         // wrap each coordinate pair in `extend` to include them in the bounds
+  //         // result. A variation of this technique could be applied to zooming
+  //         // to the bounds of multiple Points or Polygon geometries - it just
+  //         // requires wrapping all the coordinates with the extend method.
+  //         // console.log('coordinates: ', coordinates);
+  //         const bounds = coordinates.reduce(function (bounds, coord) {
+  //           return bounds.extend(coord);
+  //         }, new Mapbox.LngLatBounds(coordinates[0], coordinates[0]));
+  //         // state.myMap.fitBounds(bounds, {
+  //         //   padding: 400
+  //         // });
+  //         state.myMap.flyTo({
+  //           center: bounds.getCenter(),
+  //           zoom: 15,
+  //         });
+  //       } else {
+  //         // console.log('Geometry Type: ', clickedItem.geometry.type);
+  //         // Geographic coordinates for MultiLineString or Polygon
+  //         const coordinates = clickedItem.geometry.coordinates;
+  //         // console.log('coordinates: ', coordinates);
+  //         const bounds = coordinates[0].reduce(function (bounds, coord) {
+  //           return bounds.extend(coord);
+  //         }, new Mapbox.LngLatBounds(coordinates[0][0], coordinates[0][1]));
+  //         state.myMap.flyTo({
+  //           center: bounds.getCenter(),
+  //           zoom: 15,
+  //         });
+  //       }
+  //     } else {
+  //       // de-highlight all layers
+  //       ['SPATII_ABANDONATE', 'SPATII_PUNCTUALE', 'SPATII_LINIARE', 'SPATII_SUPRAFATA']
+  //         .forEach((item) => {
+  //           state.myMap.setFilter(`${item}_HIGHLIGHT`, ['==', ['get', 'id'], '']);
+  //         });
+  //
+  //       // set selected item to null
+  //       dispatch('spatiiPublice/selectItem', null, {root:true});
+  //       // set item selected flaf to false
+  //       dispatch('spatiiPublice/updateItemSelected', false, {root:true});
+  //       // set app related flags to false
+  //       dispatch('app/updateRightPanel', false, {root:true});
+  //       dispatch('app/updateItemSelected', false, {root:true});
+  //     }
+  //
+  //   });
+  // },
+  //
+  // // add hover layer
+  // addHoverLayer(state, { layer, hoverLayer }) {
+  //   // let hoveredItemId = this.hoveredItemId;
+  //   // console.log('store > @addHoverLayer >> hoverLayer: ', state.myMap.getSource('SPATII_SUPRAFATA'));
+  //   state.myMap.addLayer({
+  //     'id': hoverLayer.layerId,
+  //     'type': hoverLayer.render.shape,
+  //     'source': hoverLayer.sourceId,
+  //     'layout': {},
+  //     'paint': hoverLayer.render.paint,
+  //   });
+  //   // When the user moves their mouse over the state-fill layer, we'll update the
+  //   // feature state for the feature under the mouse.
+  //   state.myMap.on('mousemove', layer.layerId, function (e) {
+  //     if (e.features.length > 0) {
+  //       if (state.hoveredItemId) {
+  //         state.myMap.setFeatureState(
+  //           {source: layer.sourceId, id: state.hoveredItemId},
+  //           {hover: false}
+  //         );
+  //       }
+  //       state.hoveredItemId = e.features[0].id;
+  //       state.myMap.setFeatureState(
+  //         {source: layer.sourceId, id: state.hoveredItemId},
+  //         {hover: true}
+  //       );
+  //     }
+  //   });
+  //
+  //   // When the mouse leaves the state-fill layer, update the feature state of the
+  //   // previously hovered feature.
+  //   state.myMap.on('mouseleave', `${layer.layerId}`, function () {
+  //     if (state.hoveredItemId) {
+  //       state.myMap.setFeatureState(
+  //         {source: layer.sourceId, id: state.hoveredItemId},
+  //         {hover: false}
+  //       );
+  //     }
+  //     state.hoveredItemId = null;
+  //   });
+  // },
+  //
+  // // add highlighted/selected item layer
+  // addHighlightLayer(state, highlightLayer) {
+  //   // let highlightedItemId = this.highlightedItemId;
+  //   // console.log('@hoveredItemId: ', hoveredItemId);
+  //   state.myMap.addLayer({
+  //     'id': highlightLayer.layerId,
+  //     'type': highlightLayer.render.shape,
+  //     'source': highlightLayer.sourceId,
+  //     'layout': {},
+  //     'paint': highlightLayer.render.paint,
+  //     'filter': highlightLayer.render.filter,
+  //   });
+  // },
 
   setSelectedItem(state, value) {
     state.selectedItem = value;

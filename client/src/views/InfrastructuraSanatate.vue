@@ -7,7 +7,7 @@
 
 <script>
 // import Map from "@/components/Map_leaflet";
-import Map from "@/components/servicii_medicale/servicii_medicale";
+import Map from "@/components/infrastructura_sanatate/Map_mapbox";
 
 export default {
   name: "mapview",

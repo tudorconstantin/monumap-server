@@ -8,7 +8,7 @@ import photos from "./modules/lmi2015_photos";
 import lie2020_1 from "./modules/lie2020_1";
 import polygons from "./modules/polygons";
 import spatiiPublice from "./modules/spatii_publice";
-import serviciiMedicale from "./modules/servicii_medicale";
+import infrastructuraSanatate from "./modules/infrastructura_sanatate";
 import toaletePublice from "../components/toalete_publice/toalete_publice";
 
 Vue.use(Vuex);
@@ -25,7 +25,7 @@ export default new Vuex.Store({
     lie2020_1,
     polygons,
     spatiiPublice,
-    serviciiMedicale,
+    infrastructuraSanatate,
     toaletePublice,
   }
 });

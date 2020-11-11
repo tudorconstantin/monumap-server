@@ -32,10 +32,10 @@ const routes = [
       import(/* webpackChunkName: "map" */ "../views/SpatiiPublice.vue")
   },
   {
-    path: "/servicii-medicale",
-    name: "servicii-medicale",
+    path: "/infrastructura-sanatate",
+    name: "infrastructura-sanatate",
     component: () =>
-      import(/* webpackChunkName: "map" */ "../views/ServiciiMedicale.vue")
+      import(/* webpackChunkName: "map" */ "../views/InfrastructuraSanatate.vue")
   },
   {
     path: "/toalete-publice",

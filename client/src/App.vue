@@ -48,7 +48,7 @@
         <q-tabs align="left">
           <q-route-tab to="/lmi-2015" label="LMI 2015"/>
           <q-route-tab to="/spatii-publice" label="Spatii Publice"/>
-          <q-route-tab to="/servicii-medicale" label="Servicii Medicale"/>
+          <q-route-tab to="/infrastructura-sanatate" label="Infrastructura Sanatate"/>
           <q-route-tab to="/toalete-publice" label="Toalete Publice"/>
           <!-- <q-route-tab to="/lie-2020-1" label="LIE 2020.1" /> -->
         </q-tabs>
@@ -116,6 +116,9 @@ export default {
 
     // load 'spatii publice' data into store
     await this.$store.dispatch(('spatiiPublice/loadAllData'));
+
+    // load 'infrastructura sanatate' data into store
+    await this.$store.dispatch(('infrastructuraSanatate/loadAllData'));
 
     // if client platform is desktop, show the left panel
     // if (this.$q.platform.is.desktop) this.leftPanel = true;
