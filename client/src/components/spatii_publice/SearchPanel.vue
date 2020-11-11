@@ -281,7 +281,7 @@ export default {
 
   methods: {
     selectItem(item) {
-      console.log('@selectItem > item: ', item);
+      // console.log('@selectItem > item: ', item);
       this.$store.state.spatiiPublice.myMap.flyTo({
         center: [item.geometry.coordinates[0], item.geometry.coordinates[1]],
         zoom: 18
