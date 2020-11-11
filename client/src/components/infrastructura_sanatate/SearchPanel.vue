@@ -211,7 +211,7 @@ export default {
         return this.$store.state.infrastructuraSanatate.filtruUnitatiToate;
       },
       set: function (value) {
-        console.log('@leftPanel > updateUnitatiFilterToate: ', value);
+        // console.log('@leftPanel > updateUnitatiFilterToate: ', value);
         this.$store.dispatch('infrastructuraSanatate/updateUnitsFilterToate', value);
       },
     },
@@ -222,7 +222,7 @@ export default {
         return this.$store.state.infrastructuraSanatate.filtruUnitati;
       },
       set: function (value) {
-        console.log('@leftPanel > updateUnitsFilter: ', value);
+        // console.log('@leftPanel > updateUnitsFilter: ', value);
         this.$store.dispatch('infrastructuraSanatate/updateUnitsFilter', value);
       },
     },
@@ -233,7 +233,7 @@ export default {
         return this.$store.state.infrastructuraSanatate.filtruServiciiToate;
       },
       set: function (value) {
-        console.log('@leftPanel > updateServiciiFilterToate: ', value);
+        // console.log('@leftPanel > updateServiciiFilterToate: ', value);
         this.$store.dispatch('infrastructuraSanatate/updateServicesFilterToate', value);
       },
     },
@@ -244,7 +244,7 @@ export default {
         return this.$store.state.infrastructuraSanatate.filtruServicii;
       },
       set: function (value) {
-        console.log('@leftPanel > updateServicesFilter: ', value);
+        // console.log('@leftPanel > updateServicesFilter: ', value);
         this.$store.dispatch('infrastructuraSanatate/updateServicesFilter', value);
       },
     },
