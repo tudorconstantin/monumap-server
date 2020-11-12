@@ -7,10 +7,10 @@
 
 <script>
 // import Map from "@/components/Map_leaflet";
-import Map from "@/components/toalete_publice/toalete_publice";
+import Map from "@/components/toalete_publice/Map_mapbox";
 
 export default {
-  name: "mapview",
+  name: "ToaletePubliceView",
   components: {
     Map,
   },

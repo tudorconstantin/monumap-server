@@ -118,7 +118,10 @@ export default {
     await this.$store.dispatch(('spatiiPublice/loadAllData'));
 
     // load 'infrastructura sanatate' data into store
-    await this.$store.dispatch(('infrastructuraSanatate/loadAllData'));
+    this.$store.dispatch(('infrastructuraSanatate/loadAllData'));
+
+    // load 'toalete publice' data into store
+    this.$store.dispatch(('toaletePublice/loadAllData'));
 
     // if client platform is desktop, show the left panel
     // if (this.$q.platform.is.desktop) this.leftPanel = true;

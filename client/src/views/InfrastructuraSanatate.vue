@@ -10,7 +10,7 @@
 import Map from "@/components/infrastructura_sanatate/Map_mapbox";
 
 export default {
-  name: "mapview",
+  name: "InfrastructuraSanatateView",
   components: {
     Map,
   },

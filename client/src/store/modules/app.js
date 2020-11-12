@@ -36,6 +36,7 @@ const actions = {
   toggleRightPanel({commit, dispatch, state}) {
     commit('setRightPanel', !state.rightPanel);
     dispatch('infrastructuraSanatate/toggleRightPanel', null, {root: true});
+    dispatch('toaletePublice/toggleRightPanel', null, {root: true});
   },
 
   updateItemSelected({commit}, value) {

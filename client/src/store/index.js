@@ -9,7 +9,7 @@ import lie2020_1 from "./modules/lie2020_1";
 import polygons from "./modules/polygons";
 import spatiiPublice from "./modules/spatii_publice";
 import infrastructuraSanatate from "./modules/infrastructura_sanatate";
-import toaletePublice from "../components/toalete_publice/toalete_publice";
+import toaletePublice from "./modules/toalete_publice";
 
 Vue.use(Vuex);
 

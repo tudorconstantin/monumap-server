@@ -1,126 +1,164 @@
+<!-- toalete-publice :: infoPanel -->
+
 <template>
-  <div
-    v-if="!!currentItem && currentItem['cod_lmi']"
-    class="q-pa-md q-gutter-md bg-grey-5"
-  >
-    <q-card class="my-card">
-      <q-img
-        :src="currentItem.images[0] || require('@/assets/no-image.png')"
-        :alt="currentItem.cod_lmi"
-        basic
-      >
-        <div
-          class="
-        absolute-bottom
-        text-subtitle2
-        text-left"
-        >
-          {{ currentItem['cod_lmi'] }}: {{ currentItem['denumire'] }}
-        </div>
-      </q-img>
-    </q-card>
+  <div v-if="currentItem">
+    <q-list class="q-pa-xs q-gutter-xs" separator>
 
-    <q-card class="my-card bg-grey-3">
-      <q-card-section>
-        <div class="text-subtitle1">Localizare</div>
-      </q-card-section>
+      <!-- ID info -->
+      <q-card class="my-card bg-grey-3">
+        <q-card-section>
+          <div class="text-subtitle1">Identificare</div>
+        </q-card-section>
 
-      <q-markup-table wrap-cells>
-        <tbody>
+        <q-markup-table wrap-cells bordered separator="horizontal">
+          <tbody>
           <tr>
-            <td class="text-left name-column">Coordonate</td>
+            <td class="text-left" style="width: 100px;">Denumire</td>
             <td class="text-left">
-              {{ formatGPSCoord(currentItem['latitudine_y']) }},
-              {{ formatGPSCoord(currentItem['longitudine_x']) }}
+              {{ currentItem.properties.locatie.toUpperCase() }}
             </td>
           </tr>
           <tr>
-            <td class="text-left">Localitate</td>
+            <td class="text-left">Toalete ecologice</td>
             <td class="text-left">
-              {{ currentItem['SIRUTA'] }} {{ currentItem['localitate'] }}
+              {{ currentItem.properties.ecologice !== 'null' ? currentItem.properties.ecologice : '' }}
             </td>
           </tr>
           <tr>
-            <td class="text-left">Adresa</td>
+            <td class="text-left">Toalete automate</td>
             <td class="text-left">
-              {{ currentItem['adresa'] }}
+              {{ currentItem.properties.automat !== 'null' ? currentItem.properties.automat : '' }}
             </td>
           </tr>
-        </tbody>
-      </q-markup-table>
-    </q-card>
-
-    <q-card class="my-card bg-grey-3">
-      <q-card-section>
-        <div class="text-subtitle1">Încadrare</div>
-      </q-card-section>
-
-      <q-markup-table wrap-cells>
-        <tbody>
           <tr>
-            <td class="text-left name-column">Patrimoniu</td>
-            <td class="text-left">{{ currentItem['tip_patrimoniu'] }}</td>
-          </tr>
-          <tr>
-            <td class="text-left name-column">Program</td>
-            <td class="text-left">{{ currentItem['program_arhitectura'] }}</td>
-          </tr>
-          <tr>
-            <td class="text-left name-column">Monument</td>
-            <td class="text-left">{{ currentItem['tip_monument'] }}</td>
-          </tr>
-          <tr>
-            <td class="text-left name-column">Datare</td>
-            <td class="text-left">{{ currentItem['datare'] }}</td>
-          </tr>
-        </tbody>
-      </q-markup-table>
-    </q-card>
-
-    <q-card class="my-card bg-grey-3">
-      <q-card-section>
-        <div class="text-subtitle1">Evaluare</div>
-      </q-card-section>
-
-      <q-markup-table wrap-cells>
-        <tbody>
-          <tr>
-            <td class="text-left name-column">Stare generală</td>
-            <td class="text-left">{{ currentItem['stare'] }}</td>
-          </tr>
-          <tr>
-            <td class="text-left name-column">Observații</td>
+            <td class="text-left">Perioada functionare</td>
             <td class="text-left">
-              {{ currentItem['observatii'] }}<br />
-              {{ currentItem['observatii_corina'] }}
+              {{ currentItem.properties.perioada_f !== 'null' ? currentItem.properties.perioada_f : '' }}
             </td>
           </tr>
-        </tbody>
-      </q-markup-table>
-    </q-card>
+          <tr>
+            <td class="text-left">GPS</td>
+            <td class="text-left">
+              {{ formatGPSCoord(currentItem.geometry.coordinates[0]) }},
+              {{ formatGPSCoord(currentItem.geometry.coordinates[1]) }}
+            </td>
+          </tr>
+          </tbody>
+        </q-markup-table>
+      </q-card>
+
+      <!-- source -->
+      <q-card class="my-card bg-grey-3">
+        <q-card-section>
+          <div class="text-subtitle1">Sursa datelor</div>
+        </q-card-section>
+        <q-markup-table wrap-cells>
+          <tbody>
+          <tr>
+            <td class="text-left" style="width: 100px;">Sursa</td>
+            <td class="text-left">InfoCons - Asociație pentru Protecția Consumatorilor</td>
+          </tr>
+          <tr>
+            <td class="text-left">URL</td>
+            <td class="text-left">
+              https://bit.ly/36xpBIO
+              <q-tooltip>https://www.infocons.ro/vault/upload/Studiu/tabel_complet_toalete_+_cismele.pdf</q-tooltip>
+            </td>
+<!--            <td class="text-left">https://www.infocons.ro/vault/upload/Studiu/tabel_complet_toalete_+_cismele.pdf</td>-->
+          </tr>
+          <tr>
+            <td class="text-left">Data</td>
+            <td class="text-left">2020-05-28</td>
+          </tr>
+          </tbody>
+        </q-markup-table>
+      </q-card>
+
+      <!-- methodology -->
+      <q-card class="my-card bg-grey-3">
+        <q-card-section>
+          <div class="text-subtitle1">Metodologie</div>
+        </q-card-section>
+        <q-markup-table wrap-cells>
+          <tbody>
+          <tr>
+            <td class="text-left">1. Datele sunt obtinute de pe pagina de internet a InfoCons sub forma de tabel PDF.</td>
+          </tr>
+          <tr>
+            <td class="text-left">2. Tabelul PDF a fost transformat in format CSV cu servicii gratuite on-line.
+              Dupa transformare, a fost prelucrat suplimentar manual pentru a putea fi integrat in aplicatii.</td>
+          </tr>
+          <tr>
+            <td class="text-left">3. Locatiile au fost geo-referentiate cu QGis + extensia MMQgis si serviciul GoogleAPI.
+              Coordonatele indica zona deservita, conform tabelului original, nu pozitia actuala a toaletelor.</td>
+          </tr>
+          <tr>
+            <td class="text-left">4. Exista diferente de reprezentare a punctelor pe hartile cu
+              suport fotografic intre serviciile de harti Google, Bing si OSM.</td>
+          </tr>
+          </tbody>
+        </q-markup-table>
+      </q-card>
+
+      <!-- info -->
+      <q-card class="my-card bg-grey-3">
+        <q-card-section>
+          <div class="text-subtitle1">@InfoCons</div>
+        </q-card-section>
+        <q-markup-table wrap-cells>
+          <tbody>
+          <tr>
+            <td class="text-left">In București există o toaletă publică la fiecare 10.000 de persoane, adică 220 de toalete publice în total.</td>
+          </tr>
+          <tr>
+            <td class="text-left">Cele 220 de toalete publice sunt împărțite în 2 tipuri: ecologice și automate.
+              Toaletele publice se află în subordinea Primăriilor de Sector sau țin de Administratia Lacuri Parcuri Si Agrement Bucuresti.</td>
+          </tr>
+          <tr>
+            <td class="text-left">În Sectorul 1 sunt 74 de toalete publice,
+              in Sectorul 2 sunt 9 toalete publice,
+              in Sectorul 3 sunt 17 toalete publice,
+              in Sectorul 4 sunt 42 de toalete publice,
+              in Sectorul 5 sunt 14 toalete publice, iar
+              in Sectorul 6 sunt 64 de toalete publice.</td>
+          </tr>
+          <tr>
+            <td class="text-left">50% din toalete au un program de funcționare în intervalul 07.00 - 22.00.
+              Doar toaletele aflate în subordinea Primăriei Sectorului 1 și cea din Piața Veteranilor I,
+              din cadrul Primăriei Sectorului 6, au un program de funcționare NON-STOP.</td>
+          </tr>
+          <tr>
+            <td class="text-left">
+              Sursa: https://bit.ly/3mTGyEa
+              <q-tooltip>https://www.infocons.ro/ro/i-in-bucuresti-o-singura-toaleta-publica-pentru-10000-de-persoane-MjIyODYtMQ.html</q-tooltip>
+            </td>
+          </tr>
+          </tbody>
+        </q-markup-table>
+      </q-card>
+
+    </q-list>
+
   </div>
 </template>
 
 <script>
-
 export default {
-  name: 'InfoBar',
-  props: [
-    'currentItem'
-  ],
-  created() {
-  },
+  name: 'InfoPanel',
+
   methods: {
     formatGPSCoord(number) {
       return parseFloat(number).toFixed(6);
     },
   },
+
+  computed: {
+    currentItem() {
+      return this.$store.state.toaletePublice.selectedItem;
+    }
+  },
 };
 </script>
 
 <style lang="sass" scoped>
-.name-column
-  width: 20px
-q-img
-  image-orientation: from-image
 </style>

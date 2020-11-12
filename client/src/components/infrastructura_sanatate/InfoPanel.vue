@@ -76,7 +76,7 @@
           </tr>
           <tr>
             <td class="text-left">Data</td>
-            <td class="text-left">2020-11-04</td>
+            <td class="text-left">2020-04-11</td>
           </tr>
           </tbody>
         </q-markup-table>
