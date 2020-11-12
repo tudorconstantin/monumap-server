@@ -102,7 +102,7 @@ export default {
     async selectItem(item) {
       // load map object
       const map = this.$store.state.toaletePublice.map;
-      console.log('@list > selectItem >> item: ', item);
+      // console.log('@list > selectItem >> item: ', item);
       // deselect previous selection
       const previousSelectedItem = this.$store.state.toaletePublice.selectedItem;
       // console.log('previousSelectedItem: ', previousSelectedItem);
