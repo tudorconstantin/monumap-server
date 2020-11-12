@@ -3,10 +3,10 @@
 const circleRadius = 7;
 const circleOpacity = 0.9;
 
-const unitsCircleStrokeColor = '#b4b4b4';
+const unitsCircleStrokeColor = '#efefef';
 const unitsCircleStrokeWidth = 3;
 
-const servicesCircleStrokeColor = '#636363';
+const servicesCircleStrokeColor = '#313131';
 const servicesCircleStrokeWidth = 3;
 
 const unitsColors = {
@@ -36,7 +36,7 @@ const servicesColors = {
 };
 
 const servicesInfoPanelColors = {
-  'TOATE': 'grey-8',
+  'TOATE': 'grey-9',
   'IMAGISTICA_MEDICALA': 'cyan-4',
   'AMBULANTA': 'light-blue-8',
   'REABILITARE_RECUPERARE': 'indigo-6',
