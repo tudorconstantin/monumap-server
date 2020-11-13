@@ -19,6 +19,12 @@
             </td>
           </tr>
           <tr>
+            <td class="text-left" style="width: 100px;">Institutie</td>
+            <td class="text-left">
+              {{ currentItem.properties.institutie }}
+            </td>
+          </tr>
+          <tr>
             <td class="text-left">Toalete ecologice</td>
             <td class="text-left">
               {{ currentItem.properties.ecologice !== 'null' ? currentItem.properties.ecologice : '' }}
@@ -41,6 +47,12 @@
             <td class="text-left">
               {{ formatGPSCoord(currentItem.geometry.coordinates[0]) }},
               {{ formatGPSCoord(currentItem.geometry.coordinates[1]) }}
+            </td>
+          </tr>
+          <tr>
+            <td class="text-left">Observatii</td>
+            <td class="text-left">
+              {{ currentItem.properties.locatie_ob !== 'null' ? currentItem.properties.locatie_ob : '' }}
             </td>
           </tr>
           </tbody>
@@ -82,18 +94,24 @@
         <q-markup-table wrap-cells>
           <tbody>
           <tr>
-            <td class="text-left">1. Datele sunt obtinute de pe pagina de internet a InfoCons sub forma de tabel PDF.</td>
+            <td class="text-left">1. Datele au fost obtinute de pe pagina de internet a InfoCons sub forma de tabel PDF.</td>
           </tr>
           <tr>
             <td class="text-left">2. Tabelul PDF a fost transformat in format CSV cu servicii gratuite on-line.
               Dupa transformare, a fost prelucrat manual suplimentar pentru a putea fi integrat in aplicatii.</td>
           </tr>
           <tr>
-            <td class="text-left">3. Locatiile au fost geo-referentiate cu QGis + extensia MMQgis si serviciul GoogleAPI.
+            <td class="text-left">3. Localizarile s-au facut manual, fie pe baza la paginile de internet ale autoritatilor
+              responsabile, unde au fost disponibile, fie pe baza serviciilor Google Maps si OSM.
               Coordonatele indica zona deservita, conform tabelului original, nu pozitia actuala a toaletelor.</td>
           </tr>
           <tr>
-            <td class="text-left">4. Exista diferente de reprezentare a punctelor pe hartile cu
+            <td class="text-left">4. Nu am reusit sa identificam Parcul 1 Decembrie 1989, din Sectorul 6.
+              Unde am considerat necesar, am adaugat observatii.
+            </td>
+          </tr>
+          <tr>
+            <td class="text-left">5. Exista diferente de reprezentare a punctelor pe hartile cu
               suport fotografic intre serviciile de harti Google, Bing si OSM.</td>
           </tr>
           </tbody>

@@ -39,6 +39,21 @@ const highlightStyle = {
   filter: ['==', ['get', 'id'], ''],
 };
 
+const textStyle = {
+  shape: 'symbol',
+  layout: {
+    'visibility': 'visible',
+  },
+  paint: {
+    'circle-radius': ['+', ['get', 'totalToalete'], 10],
+    'circle-color': '#000000',
+    'circle-opacity': ['case', ['boolean', ['feature-state', 'hover'], false], 0.01, 0],
+    'circle-stroke-color': '#fafafa',
+    'circle-stroke-width': 3,
+    'circle-stroke-opacity': ['case', ['boolean', ['feature-state', 'hover'], false], 1, 0],
+  },
+};
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // STATE
@@ -78,6 +93,7 @@ const state = {
         },
         hover: hoverStyle,
         highlight: highlightStyle,
+        text: textStyle,
       },
     ],
   },
@@ -105,7 +121,7 @@ const actions = {
     const [
       items,
     ] = await Promise.all([
-      fetch('/geojson/toalete_publice/toalete-publice.geojson').then((r) => r.json()),
+      fetch('/geojson/toalete_publice/toalete_bucuresti_point.geojson').then((r) => r.json()),
     ]);
     commit("setAllData", {items});
   },
