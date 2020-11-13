@@ -251,33 +251,6 @@ export default {
       });
     },
 
-    // add map text
-    addMapText(layerId) {
-      // load map object
-      const map = this.$store.state.toaletePublice.map;
-      // load store
-      // add text property
-      // map.on('load', function () {
-        map.setLayoutProperty(layerId, 'text-field', 'test'
-        //     [
-        //   'format',
-        //   ['get', 'locatie'],
-        //   {'font-scale': 1.2},
-        //   '\n123',
-        //   {},
-        //   ['get', 'automat'],
-        //   {
-        //     'font-scale': 0.8,
-        //     'text-font': [
-        //       'literal',
-        //       ['DIN Offc Pro Italic', 'Arial Unicode MS Regular']
-        //     ]
-        //   }
-        // ]
-        );
-      // });
-    },
-
     // add map click event handler
     addMapClickHandler() {
       // load map object
@@ -375,9 +348,7 @@ export default {
       // add map layers
       // add layers for 'TOALETE_PUBLICE'
       this.addMapLayer(this.$store.state.toaletePublice.items.layers[0]);
-      //
-      // // add text property
-      // this.addMapText('TOALETE_PUBLICE');
+
 
       // add click handler
       this.addMapClickHandler();
@@ -394,6 +365,9 @@ export default {
       };
     },
   },
+
+  created() {
+  }
 };
 </script>
 

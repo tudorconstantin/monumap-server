@@ -86,7 +86,7 @@
           </tr>
           <tr>
             <td class="text-left">2. Tabelul PDF a fost transformat in format CSV cu servicii gratuite on-line.
-              Dupa transformare, a fost prelucrat suplimentar manual pentru a putea fi integrat in aplicatii.</td>
+              Dupa transformare, a fost prelucrat manual suplimentar pentru a putea fi integrat in aplicatii.</td>
           </tr>
           <tr>
             <td class="text-left">3. Locatiile au fost geo-referentiate cu QGis + extensia MMQgis si serviciul GoogleAPI.

@@ -119,12 +119,13 @@ export default {
               'icon-image': symbol,
               'icon-allow-overlap': false,
               // "text-field": ['get', 'denumire'],
-              //"text-field": ".",
+              // "text-field": "testing...",
               // "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
               // "text-size": 11,
               // // "text-transform": "uppercase",
               // "text-letter-spacing": 0.05,
               // "text-offset": [0, 1.5]
+              'visibility': 'visible',
             },
             paint: {
               // "icon-color": "#fff",

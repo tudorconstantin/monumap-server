@@ -1,7 +1,7 @@
 // store >> toalete_publice.js
 
-const circleRadius = 7;
-const circleOpacity = 0.9;
+const circleRadius = ['+', ['get', 'totalToalete'], 6];
+const circleOpacity = 0.7;
 
 const unitsCircleStrokeColor = '#efefef';
 const unitsCircleStrokeWidth = 3;
@@ -17,7 +17,7 @@ const itemsInfoPanelColors = {
 const hoverStyle = {
   shape: 'circle',
   paint: {
-    'circle-radius': 11,
+    'circle-radius': ['+', ['get', 'totalToalete'], 10],
     'circle-color': '#000000',
     'circle-opacity': ['case', ['boolean', ['feature-state', 'hover'], false], 0.01, 0],
     'circle-stroke-color': '#fafafa',
@@ -29,7 +29,7 @@ const hoverStyle = {
 const highlightStyle = {
   shape: 'circle',
   paint: {
-    'circle-radius': 11,
+    'circle-radius': ['+', ['get', 'totalToalete'], 10],
     'circle-color': '#000000',
     'circle-opacity': 0.01,
     'circle-stroke-color': '#faec01',
@@ -38,6 +38,7 @@ const highlightStyle = {
   },
   filter: ['==', ['get', 'id'], ''],
 };
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // STATE
@@ -158,8 +159,14 @@ const mutations = {
     // set units
     state.items.data = items;
     state.items.layers[0].data = items.features.map((feature) => {
-      const newFeature = feature;
+      const newFeature = { ...feature };
       newFeature.layer = {id: 'TOALETE_PUBLICE'};
+
+      // if both types of toilets ane 'null' set 'ecologice' value to 1
+      if(feature.properties.ecologice === null && feature.properties.automat === null) newFeature.properties.ecologice = 1;
+      // calculate total value
+      newFeature.properties.totalToalete = newFeature.properties.ecologice + newFeature.properties.automat;
+      // return new feature
       return newFeature;
     });
   },
