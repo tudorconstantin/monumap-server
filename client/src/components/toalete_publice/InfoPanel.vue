@@ -106,7 +106,9 @@
               Coordonatele indica zona deservita, conform tabelului original, nu pozitia actuala a toaletelor.</td>
           </tr>
           <tr>
-            <td class="text-left">4. Nu am reusit sa identificam Parcul 1 Decembrie 1989, din Sectorul 6.
+            <td class="text-left">4. Nu am reusit sa identificam Parcul de agrement 1 Decembrie 1989 (#41) din Sectorul 6,
+              am ales coordonatele la inceputul Str. 1 Decembrie 1989.
+              Nu am identificat Terenul de Joaca Piata Amzei (#20) din Sectorul 1, am ales coordonatele pe cladirea pietei.
               Unde am considerat necesar, am adaugat observatii.
             </td>
           </tr>
