@@ -109,7 +109,7 @@
         </q-card>
       </q-expansion-item>
 
-      <!-- search box -->
+      <!-- search area -->
       <q-expansion-item
           default-opened
           dense
@@ -118,14 +118,14 @@
           icon="search"
           label="Cautare"
       >
-        <q-card>
-          <q-card-section class="column bg-grey-4">
-
+        <q-list>
+          <!-- search box -->
             <q-input
                 bottom-slots
                 v-model="filterText"
                 label="Căutare"
                 :dense="true"
+                class="q-pl-xs q-pr-xs q-pb-xl"
             >
               <template v-slot:prepend>
                 <q-icon name="place"/>
@@ -146,9 +146,8 @@
               </template>
             </q-input>
 
-            <div style="padding-top: 15px"></div>
-
-            <q-list separator class="q-pt-md">
+          <!-- items list -->
+            <q-list separator class="bg-grey-4">
               <q-item
                   dense
                   clickable
@@ -157,23 +156,27 @@
                   :key="index"
                   @click="selectMonument(item['cod_lmi'])"
                   class="row items-start no-padding"
+                  v-bind:class="{active: (selectedItem ? item.cod_lmi === selectedItem.cod_lmi : false)}"
+
               >
+                <q-item-section class="q-pa-xs no-border no-margin" style="max-width: 40px">
+                  <q-item-label class="q-pa-xs" style="min-height: 20px"> {{ item.nr }}. </q-item-label>
+                </q-item-section>
                 <q-item-section class="column q-pt-xs">
                   <q-item-label class="q-pa-xs" style="min-height: 20px">
-                    {{ item.nr }}. {{ item["denumire"] }}
+                    {{ item["denumire"] }}
                   </q-item-label>
                   <q-item-label class="text-caption text-grey-7 q-pa-xs no-border no-margin" style="min-height: 20px">
                     {{ item["adresa"] }}
                   </q-item-label>
                 </q-item-section>
-                <q-item-section class="q-pa-xs no-border no-margin" style="max-width: 26px">
+                <q-item-section class="q-pa-xs no-border no-margin" style="max-width: 32px">
                   <q-icon class="" name="fiber_manual_record" size="24px" :color="colorCodes[item['icon_code']]"/>
                 </q-item-section>
               </q-item>
             </q-list>
 
-          </q-card-section>
-        </q-card>
+        </q-list>
       </q-expansion-item>
 
     </q-list>
@@ -215,6 +218,11 @@ export default {
         this.$store.dispatch('lmi2015/updateLeftPanel', value);
       },
     },
+
+    selectedItem() {
+      return this.$store.state.lmi2015.selectedItem;
+    },
+
     filterText: {
       get() {
         return this.$store.state.lmi2015.filterText || "";
@@ -223,6 +231,7 @@ export default {
         this.$store.dispatch("lmi2015/setFilterText", value);
       }
     },
+
     filtruTipPatrimoniu: {
       get() {
         return this.$store.state.lmi2015.filtruTipPatrimoniu || "";
@@ -231,6 +240,7 @@ export default {
         this.$store.dispatch("lmi2015/setFiltruTipPatrimoniu", value);
       }
     },
+
     filtruValoareMon: {
       get() {
         return this.$store.state.lmi2015.filtruValoareMon || "";
@@ -239,6 +249,7 @@ export default {
         this.$store.dispatch("lmi2015/setFiltruValoareMon", value);
       }
     },
+
     filtruScaraMon: {
       get() {
         return this.$store.state.lmi2015.filtruScaraMon || "";
@@ -281,6 +292,9 @@ export default {
 </script>
 
 <style lang="sass" scoped>
+.active
+  background-color: #F2C037
+
 p
   padding: 0 30px
 </style>
