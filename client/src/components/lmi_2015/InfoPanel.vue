@@ -119,6 +119,78 @@
                 {{ currentItem["observatii"] }}
               </td>
             </tr>
+            <tr>
+              <td class="text-left">Perioada evaluare</td>
+              <td class="text-left">sept 2019 - fev 2020</td>
+            </tr>
+            </tbody>
+          </q-markup-table>
+        </q-card>
+
+        <!-- source -->
+        <q-card class="my-card bg-grey-3">
+          <q-card-section>
+            <div class="text-subtitle1">Sursa datelor</div>
+          </q-card-section>
+          <q-markup-table wrap-cells>
+            <tbody>
+            <tr>
+              <td class="text-left" style="width: 100px;">Sursa datelor</td>
+              <td class="text-left">Institutul Național al Patrimoniului</td>
+            </tr>
+            <tr>
+              <td class="text-left">URL</td>
+              <td class="text-left">
+                https://bit.ly/35FVzU6
+                <q-tooltip>https://patrimoniu.ro/images/lmi-2015/LMI-B.pdf</q-tooltip>
+              </td>
+              <!--            <td class="text-left">https://www.infocons.ro/vault/upload/Studiu/tabel_complet_toalete_+_cismele.pdf</td>-->
+            </tr>
+            <tr>
+              <td class="text-left">Data</td>
+              <td class="text-left">2019-06-15</td>
+            </tr>
+            </tbody>
+          </q-markup-table>
+        </q-card>
+
+        <!-- methodology -->
+        <q-card class="my-card bg-grey-3">
+          <q-card-section>
+            <div class="text-subtitle1">Metodologie</div>
+          </q-card-section>
+          <q-markup-table wrap-cells>
+            <tbody>
+            <tr>
+              <td class="text-left">1. Am descarcat Lista Monumentelor Istorice publicată în 2015, în format PDF,
+                de pe pagina oficială a Institutului National al Patrimoniului.</td>
+            </tr>
+            <tr>
+              <td class="text-left">2. Tabelul PDF a fost transformat in format CSV cu servicii gratuite on-line.</td>
+            </tr>
+            <tr>
+              <td class="text-left">3. După procesul de conversie, am corectat manual erori de conversie generate fie la
+                identificarea caracterelor, fie la identificarea celulelor de tabel. Cele mai intalnite erori sunt
+                create de caracterele: „i”, „1”, „ l” și „I” (confuzie alimentată de fontul utilizat), care
+                generează erori la adrese gen: „l(e vorba de caracterul L). C. Brătianu” și „Carol 1”. O alta sursa de
+                erori este generata de lipsa liniilor verticale în tabel si celule impartite pe doua pagini.</td>
+            </tr>
+            <tr>
+              <td class="text-left">4. In studiul de fata am utilizat doar monumentele de arhitectura.</td>
+            </tr>
+            <tr>
+              <td class="text-left">5. Pentru geo-localizare am utilizat serviciul Google API. Google oferă adrese
+                aproximative, unele pe parcele, dar cele mai multe în axul străzii. O parte din adresele rezultate au
+                fost mutate manual pe parcela corespunzătoare.</td>
+            </tr>
+            <tr>
+              <td class="text-left">6. Exista diferente de reprezentare a punctelor pe hartile cu suport fotografic
+                intre serviciile de harti Google, Bing si OSM.</td>
+            </tr>
+            <tr>
+              <td class="text-left">7. Cladirile vizitate au fost fotografiate. La evaluare, starea generala reprezinta
+                parearea evaluatorului despre starea generala a exteriorului cladirii.</td>
+            </tr>
             </tbody>
           </q-markup-table>
         </q-card>
