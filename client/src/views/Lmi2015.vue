@@ -17,7 +17,7 @@
     ></info-panel>
     <!-- mobile only -->
     <q-page-sticky
-        v-if="$q.platform.is.mobile && this.$store.state.lmi2015.selectedItem"
+        v-if="$q.platform.is.mobile && this.$store.state.app.itemSelected"
         position="bottom-right"
         :offset="[50, 50]"
     >
@@ -78,7 +78,10 @@ export default {
 
   async created() {
     // if client platform is desktop, show the left panel
-    if (this.$q.platform.is.desktop) this.leftPanel = true;
+    if (this.$q.platform.is.desktop) {
+      // this.leftPanel = true;
+      this.$store.dispatch('app/updateLeftPanel', true);
+    }
   },
 }
 </script>

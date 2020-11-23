@@ -23,7 +23,7 @@
       >
         <q-card>
           <q-card-section class="column bg-grey-4">
-            <q-btn flat no-caps label="spatii_publice [SHP @206KB]" align="between" type="a"
+            <q-btn flat no-caps label="Date [SHP @280KB]" align="between" type="a"
                    href="/downloads/spatii_publice/spatii_publice_shp_wgs84.zip" target="_blank"/>
           </q-card-section>
         </q-card>
@@ -38,34 +38,35 @@
           icon="scatter_plot"
           :label="`Spatii abandonate [${spatiiAbandonate.length}]`"
       >
-        <q-card>
-          <q-card-section class="column bg-grey-4">
-            <q-list separator class="">
-              <q-item
-                  dense
-                  clickable
-                  v-ripple
-                  v-for="(item, index) in spatiiAbandonate"
-                  :key="index"
-                  @click="selectItem(item)"
-                  class="row items-start no-padding"
-              >
-                <q-item-section class="column q-pt-xs">
-                  <q-item-label class="q-pa-xs" style="min-height: 20px">
-                    {{ index + 1 }}. {{ item.properties.denumire }}
-                  </q-item-label>
-                  <q-item-label class="text-caption text-grey-7 q-pa-xs no-border no-margin" style="min-height: 20px">
-                    {{ item.properties.cartier }}
-                  </q-item-label>
-                </q-item-section>
-                <q-item-section class="q-pa-xs no-border no-margin" style="max-width: 26px">
-                  <q-icon class="" name="fiber_manual_record" size="24px"
-                          color="pink-7"/>
-                </q-item-section>
-              </q-item>
-            </q-list>
-          </q-card-section>
-        </q-card>
+        <q-list separator class="bg-grey-4">
+          <q-item
+              dense
+              clickable
+              v-ripple
+              v-for="(item, index) in spatiiAbandonate"
+              :key="index"
+              @click="selectItem(item, {layerId: 'SPATII_ABANDONATE', sourceId: 'SPATII_ABANDONATE'})"
+              class="row items-start no-padding"
+              v-bind:class="{active: (selectedItem ? item.properties.id === selectedItem.properties.id : false)}"
+
+          >
+            <q-item-section class="q-pa-xs no-border no-margin" style="max-width: 40px">
+              <q-item-label class="q-pa-xs" style="min-height: 20px">{{ index + 1 }}.</q-item-label>
+            </q-item-section>
+            <q-item-section class="column q-pt-xs">
+              <q-item-label class="q-pa-xs" style="min-height: 20px">
+                {{ item.properties.denumire }}
+              </q-item-label>
+              <q-item-label class="text-caption text-grey-7 q-pa-xs no-border no-margin" style="min-height: 20px">
+                {{ item.properties.cartier }}
+              </q-item-label>
+            </q-item-section>
+            <q-item-section class="q-pa-xs no-border no-margin" style="max-width: 32px">
+              <q-icon class="" name="fiber_manual_record" size="24px"
+                      color="pink-7"/>
+            </q-item-section>
+          </q-item>
+        </q-list>
       </q-expansion-item>
 
       <!-- spatii punctuale -->
@@ -77,34 +78,35 @@
           icon="scatter_plot"
           :label="`Spatii punctuale [${spatiiPunctuale.length}]`"
       >
-        <q-card>
-          <q-card-section class="column bg-grey-4">
-            <q-list separator class="">
-              <q-item
-                  dense
-                  clickable
-                  v-ripple
-                  v-for="(item, index) in spatiiPunctuale"
-                  :key="index"
-                  @click="selectItem(item)"
-                  class="row items-start no-padding"
-              >
-                <q-item-section class="column q-pt-xs">
-                  <q-item-label class="q-pa-xs" style="min-height: 20px">
-                    {{ index + 1 }}. {{ item.properties.denumire }}
-                  </q-item-label>
-                  <q-item-label class="text-caption text-grey-7 q-pa-xs no-border no-margin" style="min-height: 20px">
-                    {{ item.properties.cartier }}
-                  </q-item-label>
-                </q-item-section>
-                <q-item-section class="q-pa-xs no-border no-margin" style="max-width: 26px">
-                  <q-icon class="" name="fiber_manual_record" size="24px"
-                          color="blue-13"/>
-                </q-item-section>
-              </q-item>
-            </q-list>
-          </q-card-section>
-        </q-card>
+        <q-list separator class="bg-grey-4">
+          <q-item
+              dense
+              clickable
+              v-ripple
+              v-for="(item, index) in spatiiPunctuale"
+              :key="index"
+              @click="selectItem(item, {layerId: 'SPATII_PUNCTUALE', sourceId: 'SPATII_PUNCTUALE'})"
+              class="row items-start no-padding"
+              v-bind:class="{active: (selectedItem ? item.properties.id === selectedItem.properties.id : false)}"
+
+          >
+            <q-item-section class="q-pa-xs no-border no-margin" style="max-width: 40px">
+              <q-item-label class="q-pa-xs" style="min-height: 20px">{{ index + 1 }}.</q-item-label>
+            </q-item-section>
+            <q-item-section class="column q-pt-xs">
+              <q-item-label class="q-pa-xs" style="min-height: 20px">
+                {{ item.properties.denumire }}
+              </q-item-label>
+              <q-item-label class="text-caption text-grey-7 q-pa-xs no-border no-margin" style="min-height: 20px">
+                {{ item.properties.cartier }}
+              </q-item-label>
+            </q-item-section>
+            <q-item-section class="q-pa-xs no-border no-margin" style="max-width: 32px">
+              <q-icon class="" name="fiber_manual_record" size="24px"
+                      color="blue-13"/>
+            </q-item-section>
+          </q-item>
+        </q-list>
       </q-expansion-item>
 
       <!-- spatii liniare -->
@@ -116,34 +118,35 @@
           icon="show_chart"
           :label="`Spatii liniare [${spatiiLiniare.length}]`"
       >
-        <q-card>
-          <q-card-section class="column bg-grey-4">
-            <q-list separator class="">
-              <q-item
-                  dense
-                  clickable
-                  v-ripple
-                  v-for="(item, index) in spatiiLiniare"
-                  :key="index"
-                  @click="selectItem(item)"
-                  class="row items-start no-padding"
-              >
-                <q-item-section class="column q-pt-xs">
-                  <q-item-label class="q-pa-xs" style="min-height: 20px">
-                    {{ index + 1 }}. {{ item.properties.denumire }}
-                  </q-item-label>
-                  <q-item-label class="text-caption text-grey-7 q-pa-xs no-border no-margin" style="min-height: 20px">
-                    {{ item.properties.cartier }}
-                  </q-item-label>
-                </q-item-section>
-                <q-item-section class="q-pa-xs no-border no-margin" style="max-width: 26px">
-                  <q-icon class="" name="fiber_manual_record" size="24px"
-                          color="amber"/>
-                </q-item-section>
-              </q-item>
-            </q-list>
-          </q-card-section>
-        </q-card>
+        <q-list separator class="bg-grey-4">
+          <q-item
+              dense
+              clickable
+              v-ripple
+              v-for="(item, index) in spatiiLiniare"
+              :key="index"
+              @click="selectItem(item, {layerId: 'SPATII_LINIARE', sourceId: 'SPATII_LINIARE'})"
+              class="row items-start no-padding"
+              v-bind:class="{active: (selectedItem ? item.properties.id === selectedItem.properties.id : false)}"
+
+          >
+            <q-item-section class="q-pa-xs no-border no-margin" style="max-width: 40px">
+              <q-item-label class="q-pa-xs" style="min-height: 20px">{{ index + 1 }}.</q-item-label>
+            </q-item-section>
+            <q-item-section class="column q-pt-xs">
+              <q-item-label class="q-pa-xs" style="min-height: 20px">
+                {{ item.properties.denumire }}
+              </q-item-label>
+              <q-item-label class="text-caption text-grey-7 q-pa-xs no-border no-margin" style="min-height: 20px">
+                {{ item.properties.cartier }}
+              </q-item-label>
+            </q-item-section>
+            <q-item-section class="q-pa-xs no-border no-margin" style="max-width: 32px">
+              <q-icon class="" name="fiber_manual_record" size="24px"
+                      color="amber"/>
+            </q-item-section>
+          </q-item>
+        </q-list>
       </q-expansion-item>
 
       <!-- spatii suprafata -->
@@ -155,35 +158,35 @@
           icon="crop_3_2"
           :label="`Spatii suprafata [${spatiiSuprafata.length}]`"
       >
-        <q-card>
-          <q-card-section class="column bg-grey-4">
-            <q-list separator class="">
-              <q-item
-                  dense
-                  clickable
-                  v-ripple
-                  v-for="(item, index) in spatiiSuprafata"
-                  :key="index"
-                  @click="selectItem(item)"
-                  class="row items-start no-padding"
-              >
-                <q-item-section class="column q-pt-xs">
-                  <q-item-label class="q-pa-xs" style="min-height: 20px">
-                    {{ index + 1 }}. {{ item.properties.denumire }}
-                  </q-item-label>
-                  <q-item-label class="text-caption text-grey-7 q-pa-xs no-border no-margin" style="min-height: 20px">
-                    {{ item.properties.cartier }}
-                  </q-item-label>
-                </q-item-section>
-                <q-item-section class="q-pa-xs no-border no-margin" style="max-width: 26px">
-                  <q-icon class="" name="fiber_manual_record" size="24px"
-                          color="green-7"/>
-                </q-item-section>
-              </q-item>
-            </q-list>
+        <q-list separator class="bg-grey-4">
+          <q-item
+              dense
+              clickable
+              v-ripple
+              v-for="(item, index) in spatiiSuprafata"
+              :key="index"
+              @click="selectItem(item, {layerId: 'SPATII_SUPRAFATA', sourceId: 'SPATII_SUPRAFATA'})"
+              class="row items-start no-padding"
+              v-bind:class="{active: (selectedItem ? item.properties.id === selectedItem.properties.id : false)}"
 
-          </q-card-section>
-        </q-card>
+          >
+            <q-item-section class="q-pa-xs no-border no-margin" style="max-width: 40px">
+              <q-item-label class="q-pa-xs" style="min-height: 20px">{{ index + 1 }}.</q-item-label>
+            </q-item-section>
+            <q-item-section class="column q-pt-xs">
+              <q-item-label class="q-pa-xs" style="min-height: 20px">
+                {{ item.properties.denumire }}
+              </q-item-label>
+              <q-item-label class="text-caption text-grey-7 q-pa-xs no-border no-margin" style="min-height: 20px">
+                {{ item.properties.cartier }}
+              </q-item-label>
+            </q-item-section>
+            <q-item-section class="q-pa-xs no-border no-margin" style="max-width: 32px">
+              <q-icon class="" name="fiber_manual_record" size="24px"
+                      color="green-7"/>
+            </q-item-section>
+          </q-item>
+        </q-list>
       </q-expansion-item>
 
     </q-list>
@@ -191,40 +194,10 @@
 </template>
 
 <script>
+import Mapbox from 'mapbox-gl';
+
 export default {
   name: 'SpatiiPubliceSearchPanel',
-
-  data() {
-    return {
-      // dummyFilterText: '',
-      // itemGroups: [
-      //   {
-      //     id: 'SPATII_ABANDONATE',
-      //     label: 'Spatii abandonate',
-      //     checked: true,
-      //     color: 'red',
-      //   },
-      //   {
-      //     id: 'SPATII_PUNCTUALE',
-      //     label: 'Spatii punctuale',
-      //     checked: true,
-      //     color: 'blue',
-      //   },
-      //   {
-      //     id: 'SPATII_LINIARE',
-      //     label: 'Spatii liniare',
-      //     checked: true,
-      //     color: 'orange',
-      //   },
-      //   {
-      //     id: 'SPATII_SUPRAFATA',
-      //     label: 'Spatii suprafata',
-      //     checked: true,
-      //     color: 'green',
-      //   },
-      // ],
-    };
-  },
 
   computed: {
     leftPanel: {
@@ -251,69 +224,82 @@ export default {
           this.$store.getters['spatiiPublice/getSpatiiLiniare'].features : [];
     },
     spatiiSuprafata() {
-      // return this.$store.getters['spatiiPublice/getSpatiiSuprafata'] ?
-      //     this.$store.getters['spatiiPublice/getSpatiiSuprafata'].features : [];
-      return this.$store.state.spatiiPublice.myMap.querySourceFeatures('SPATII_SUPRAFATA', {
-            sourceLayer: 'SPATII_SUPRAFATA'
-          });
+      return this.$store.getters['spatiiPublice/getSpatiiSuprafata'] ?
+          this.$store.getters['spatiiPublice/getSpatiiSuprafata'].features : [];
     },
-    // filteredItems() {
-    //   const items = this.$store.state.spatiiPublice.myMap.querySourceFeatures('SPATII_SUPRAFATA', {
-    //     sourceLayer: 'SPATII_SUPRAFATA'
-    //   });
-    //   console.log('items: ', items);
-    //   return items;
-    //   // return this.$store.getters["monuments/filteredArray"];
-    // },
-    // countFilteredList() {
-    //   return this?.filteredItems?.length;
-    // },
-    // filterText: {
-    //   set(newVal) {
-    //     this.$props.setFilter({text: newVal});
-    //     this.dummyFilterText = newVal;
-    //   },
-    //   get() {
-    //     return this.dummyFilterText;
-    //   },
-    // },
+    selectedItem() {
+      return this.$store.state.toaletePublice.selectedItem;
+    },
   },
 
   methods: {
-    selectItem(item) {
-      // console.log('@selectItem > item: ', item);
-      this.$store.state.spatiiPublice.myMap.flyTo({
-        center: [item.geometry.coordinates[0], item.geometry.coordinates[1]],
-        zoom: 18
-      });
+    selectItem(clickedItem, {layerId, sourceId}) {
+      // add layerId and sourceId to item
+      const item = clickedItem;
+      item.layer = {};
+      item.layer.id = layerId;
+      item.layer.source = sourceId;
+      console.log('@selectItem > item: ', item);
+
+      // load map object
+      const mapObj = this.$store.state.spatiiPublice.myMap;
+
+      // de-highlight all layers
+      ['SPATII_ABANDONATE', 'SPATII_PUNCTUALE', 'SPATII_LINIARE', 'SPATII_SUPRAFATA']
+          .forEach((item) => {
+            mapObj.setFilter(`${item}_HIGHLIGHT`, ['==', ['get', 'id'], '']);
+          });
+
+      // highlight clicked item
+      if (item) mapObj.setFilter(`${item.layer.id}_HIGHLIGHT`, ['==', ['get', 'id'], item.properties.id]);
+
+      // center view on selected item
+      if (item.geometry.type === 'Point') {
+        // console.log('Geometry Type: ', e.features[0].geometry.type);
+        mapObj.flyTo({
+          center: item.geometry.coordinates,
+          zoom: 15,
+        });
+      } else if (item.geometry.type === 'LineString') {
+        // console.log('Geometry Type: ', item.geometry.type);
+        // Geographic coordinates for LineString
+        const coordinates = item.geometry.coordinates;
+        // Pass the first coordinates in the LineString to `lngLatBounds` &
+        // wrap each coordinate pair in `extend` to include them in the bounds
+        // result. A variation of this technique could be applied to zooming
+        // to the bounds of multiple Points or Polygon geometries - it just
+        // requires wrapping all the coordinates with the extend method.
+        // console.log('coordinates: ', coordinates);
+        const bounds = coordinates.reduce(function (bounds, coord) {
+          return bounds.extend(coord);
+        }, new Mapbox.LngLatBounds(coordinates[0], coordinates[0]));
+        // mapObj.fitBounds(bounds, {
+        //   padding: 400
+        // });
+        mapObj.flyTo({
+          center: bounds.getCenter(),
+          zoom: 15,
+        });
+      } else {
+        // console.log('Geometry Type: ', item.geometry.type);
+        // Geographic coordinates for MultiLineString or Polygon
+        const coordinates = clickedItem.geometry.coordinates;
+        // console.log('coordinates: ', coordinates);
+        const bounds = coordinates[0].reduce(function (bounds, coord) {
+          return bounds.extend(coord);
+        }, new Mapbox.LngLatBounds(coordinates[0][0], coordinates[0][1]));
+        mapObj.flyTo({
+          center: bounds.getCenter(),
+          zoom: 15,
+        });
+      }
+
+      // save new selected item to store
       this.$store.dispatch("spatiiPublice/selectItem", item);
+      // update flags
       if (this.$q.platform.is.mobile) this.$store.dispatch('spatiiPublice/updateLeftPanel', false);
       this.$store.dispatch('app/updateRightPanel', true);
       this.$store.dispatch('app/updateItemSelected', true);
-    },
-
-    mSpatiiAbandonate() {
-      return this.$store.state.spatiiPublice.myMap.querySourceFeatures('SPATII_ABANDONATE', {
-        sourceLayer: 'SPATII_ABANDONATE'
-      });
-    },
-
-    mSpatiiPunctuale() {
-      return this.$store.state.spatiiPublice.myMap.querySourceFeatures('SPATII_PUNCTUALE', {
-        sourceLayer: 'SPATII_PUNCTUALE'
-      });
-    },
-
-    mSpatiiLiniare() {
-      return this.$store.state.spatiiPublice.myMap.querySourceFeatures('SPATII_LINIARE', {
-        sourceLayer: 'SPATII_LINIARE'
-      });
-    },
-
-    mSpatiiSuprafata() {
-      return this.$store.state.spatiiPublice.myMap.querySourceFeatures('SPATII_SUPRAFATA', {
-        sourceLayer: 'SPATII_SUPRAFATA'
-      });
     },
   },
 
@@ -338,4 +324,7 @@ export default {
 <style lang="sass" scoped>
 p
   padding: 0 30px
+
+.active
+  background-color: #F2C037
 </style>

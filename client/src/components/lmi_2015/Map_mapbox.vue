@@ -3,20 +3,20 @@
 <template>
   <div id="mapContainer" :style="cssVars()">
     <MglMap
-      :accessToken="accessToken"
-      :mapStyle.sync="mapStyle"
-      :container="container"
-      :center="center"
-      :zoom="zoom"
-      height="1000px"
-      @load="onMapLoaded"
+        :accessToken="accessToken"
+        :mapStyle.sync="mapStyle"
+        :container="container"
+        :center="center"
+        :zoom="zoom"
+        height="1000px"
+        @load="onMapLoaded"
     >
-      <MglNavigationControl position="top-left" />
-      <MglGeolocateControl position="top-left" />
+      <MglNavigationControl position="top-left"/>
+      <MglGeolocateControl position="top-left"/>
       <!-- selected item marker -->
       <MglMarker
-        v-if="!!selectedItem"
-        :coordinates="[
+          v-if="!!selectedItem"
+          :coordinates="[
           selectedItem && selectedItem.longitudine_x,
           selectedItem && selectedItem.latitudine_y,
         ]"
@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { matRoom } from '@quasar/extras/material-icons';
+import {matRoom} from '@quasar/extras/material-icons';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import constants from '@/util/constants.js';
 
@@ -39,7 +39,7 @@ import {
   MglMarker,
 } from 'vue-mapbox';
 
-import { mapGetters } from 'vuex';
+import {mapGetters} from 'vuex';
 
 export default {
   name: "Lmi2015Map",
@@ -54,7 +54,7 @@ export default {
   data() {
     return {
       accessToken:
-        "pk.eyJ1IjoidHVkb3Jjb25zdGFudGluIiwiYSI6ImNrM29yN2t3cjBiMDkzaG80cTdiczhzMmIifQ.fqelSp0srqiSV3qkfbE2qQ",
+          "pk.eyJ1IjoidHVkb3Jjb25zdGFudGluIiwiYSI6ImNrM29yN2t3cjBiMDkzaG80cTdiczhzMmIifQ.fqelSp0srqiSV3qkfbE2qQ",
       mapStyle: "mapbox://styles/tudorconstantin/ckb6h17g326dr1iuz4vf53dsr",
       container: "mapContainer",
       center: [26.0986, 44.4365],
@@ -84,26 +84,27 @@ export default {
     selectedItem(newValue, oldValue) {
       // re-center map view
       if (newValue && newValue.longitudine_x)
-        this.$store.map.flyTo({ center: [newValue.longitudine_x, newValue.latitudine_y], zoom: 18 });
+        this.$store.state.lmi2015.map.flyTo({center: [newValue.longitudine_x, newValue.latitudine_y], zoom: 18});
     },
   },
   methods: {
     customizeMap() {
-      const map = this.$store.map;
+      const map = this.$store.state.lmi2015.map;
       for (const mt in constants.monumentTypes) {
         const img = constants.monumentTypes[mt];
+        // add map data source
         map.addSource(mt, {
           type: 'geojson',
           data: {
-            ...this.geoJSON,
+            type: this.geoJSON.type,
             features: this.geoJSON.features.filter(
-              m => m.properties.icon_code === mt
+                m => m.properties.icon_code === mt
             ),
           },
           generateId: true, // This ensures that all features have unique IDs
         });
         /* eslint-disable no-unused-vars*/
-        map.loadImage(img, function(error, image) {
+        map.loadImage(img, function (error, image) {
           let symbol = '';
           if (error) {
             symbol = 'music';
@@ -156,62 +157,61 @@ export default {
       }
 
       map
-        .on('click', (e) => {
-          const clickedMonument = (this.$store.map.queryRenderedFeatures(
-            e.point
-          ) || [])[0];
-          if (clickedMonument) {
-            this.onMonumentClicked(clickedMonument.properties);
-          } else {
-            this.$store.dispatch('lmi2015/selectItem', null);
-            this.$store.dispatch('app/updateItemSelected', false)
-          }
-        })
-        // .on('zoomend', () => {
-        //   this.$store.dispatch('lmi2015/mapViewChanged');
-        // })
-        // .on('moveend', () => {
-        //   this.$store.dispatch('lmi2015/mapViewChanged');
-        // });
+          .on('click', (e) => {
+            const clickedMonument = (this.$store.state.lmi2015.map.queryRenderedFeatures(
+                e.point
+            ) || [])[0];
+            this.onMonumentClicked(clickedMonument);
+          })
+      // .on('zoomend', () => {
+      //   this.$store.dispatch('lmi2015/mapViewChanged');
+      // })
+      // .on('moveend', () => {
+      //   this.$store.dispatch('lmi2015/mapViewChanged');
+      // });
     },
     onMapLoaded(event) {
       const map = event.map;
-      this.$store.map = map;
+      // save map reference to store
+      this.$store.dispatch('lmi2015/saveMap', map);
       this.customizeMap();
     },
+    // calculate map height, required by mapbox
     cssVars() {
       //https://www.telerik.com/blogs/passing-variables-to-css-on-a-vue-component
       return {
         "--height": this.$q.platform.is.desktop ?
-          window.innerHeight -
-          document.getElementById("header").offsetHeight +
-          "px" :
             window.innerHeight -
-            document.getElementById("header-mobile").offsetHeight +
-            "px" ,
+            document.getElementById("header").offsetHeight +
+            "px" :
+            window.innerHeight -
+            (document.getElementById("header-mobile-portrait") ?
+                document.getElementById("header-mobile-portrait") :
+                document.getElementById("header-mobile-landscape")).offsetHeight +
+            "px",
         "--width": window.innerWidth + "px",
       };
     },
 
     onMonumentClicked(monument) {
-      if (!monument) return this.$store.dispatch('lmi2015/selectItem', null);
-      this.$store.dispatch('lmi2015/selectItem', monument['cod_lmi']);
-      this.$store.dispatch('app/updateRightPanel', true);
-      this.$store.dispatch('app/updateItemSelected', true);
+      // console.log('monument: ', monument);
+      const desktopFlag = this.$q.platform.is.desktop;
+      this.$store.dispatch('lmi2015/selectItem', {monument, desktopFlag});
     },
+
     filterMap() {
-      if (!this.$store.map) return;
+      if (!this.$store.state.lmi2015.map) return;
       const filteredGeoJSON = this.$store.getters['lmi2015/filteredGeoJSON'];
 
       for (const mt in constants.monumentTypes) {
         const geoJSONByMonumentType = {
           ...filteredGeoJSON,
           features: filteredGeoJSON.features.filter(
-            m => m.properties.icon_code === mt
+              m => m.properties.icon_code === mt
           ),
         };
 
-          if (!this.$store.map) this.$store.map.getSource(mt).setData(geoJSONByMonumentType);
+        if (!this.$store.state.lmi2015.map) this.$store.state.lmi2015.map.getSource(mt).setData(geoJSONByMonumentType);
       }
     },
   },

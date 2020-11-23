@@ -10,7 +10,7 @@
         >
         <h2 class="text-h2 text-blue-grey-10">Patrimoniul, locuirea și spațiile publice</h2>
         <q-btn
-            to="lmi"
+            to="lmi-2015"
             push
             rounded
             color="indigo-10"
@@ -37,7 +37,7 @@
         >
         <h2 class="text-h5 text-center text-blue-grey-10">Patrimoniul, locuirea și spațiile publice</h2>
         <q-btn
-            to="lmi"
+            to="lmi-2015"
             push
             rounded
             color="indigo-10"

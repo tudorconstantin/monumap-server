@@ -354,14 +354,20 @@ export default {
       this.addMapClickHandler();
     },
 
+    // calculate map height, required by mapbox
     cssVars() {
       //https://www.telerik.com/blogs/passing-variables-to-css-on-a-vue-component
       return {
-        '--height':
+        "--height": this.$q.platform.is.desktop ?
             window.innerHeight -
-            document.getElementById('header').offsetHeight +
-            'px',
-        '--width': window.innerWidth + 'px',
+            document.getElementById("header").offsetHeight +
+            "px" :
+            window.innerHeight -
+            (document.getElementById("header-mobile-portrait") ?
+                document.getElementById("header-mobile-portrait") :
+                document.getElementById("header-mobile-landscape")).offsetHeight +
+            "px" ,
+        "--width": window.innerWidth + "px",
       };
     },
   },

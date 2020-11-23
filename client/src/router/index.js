@@ -26,6 +26,12 @@ const routes = [
       import(/* webpackChunkName: "map" */ "../views/Lmi2015.vue")
   },
   {
+    path: "/lie-2020-1",
+    name: "lie-2020-1",
+    component: () =>
+      import(/* webpackChunkName: "map" */ "../views/Lie2020_1.vue")
+  },
+  {
     path: "/spatii-publice",
     name: "spatii-publice",
     component: () =>
@@ -43,12 +49,12 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "map" */ "../views/ToaletePublice.vue")
   },
-  // {
-  //   path: "/lie-2020-1",
-  //   name: "lie-2020-1",
-  //   component: () =>
-  //     import(/* webpackChunkName: "map" */ "../views/Lie2020_1.vue")
-  // }
+  {
+    path: "/reabilitare-termica",
+    name: "reabilitare-termica",
+    component: () =>
+      import(/* webpackChunkName: "map" */ "../views/ReabilitareTermica.vue")
+  },
 ];
 
 const router = new VueRouter({

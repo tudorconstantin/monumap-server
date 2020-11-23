@@ -24,10 +24,10 @@
       >
         <q-card>
           <q-card-section class="column bg-grey-4">
-            <q-btn flat no-caps label="Lista monumente [CSV @745KB]" align="between" type="a"
-                   href="/data/lmi-2015_bucuresti.csv" target="_blank"/>
-            <q-btn disable flat no-caps label="Arhiva poze [JPG @3.2GB]" align="between" type="a"
-                   href="/data/lmi-2015_bucuresti.csv" target="_blank"/>
+            <q-btn flat no-caps label="Date [CSV SHP @380KB]" align="between" type="a"
+                   href="/downloads/lmi2015/lmi-2015_bucuresti.zip" target="_blank"/>
+            <q-btn flat no-caps label="Arhiva poze [JPG @3.1GB]" align="between" type="a"
+                   href="https://www.myqnapcloud.com/smartshare/6h8f83m54l6p709vu494x222_6iGOWN0" target="_blank"/>
           </q-card-section>
         </q-card>
       </q-expansion-item>
@@ -154,24 +154,24 @@
                   v-ripple
                   v-for="(item, index) in monFilteredList"
                   :key="index"
-                  @click="selectMonument(item['cod_lmi'])"
+                  @click="selectMonument(item)"
                   class="row items-start no-padding"
-                  v-bind:class="{active: (selectedItem ? item.cod_lmi === selectedItem.cod_lmi : false)}"
+                  v-bind:class="{active: (selectedItem ? item.properties.cod_lmi === selectedItem.cod_lmi : false)}"
 
               >
                 <q-item-section class="q-pa-xs no-border no-margin" style="max-width: 40px">
-                  <q-item-label class="q-pa-xs" style="min-height: 20px"> {{ item.nr }}. </q-item-label>
+                  <q-item-label class="q-pa-xs" style="min-height: 20px"> {{ item.properties.nr }}. </q-item-label>
                 </q-item-section>
                 <q-item-section class="column q-pt-xs">
                   <q-item-label class="q-pa-xs" style="min-height: 20px">
-                    {{ item["denumire"] }}
+                    {{ item.properties["denumire"] }}
                   </q-item-label>
                   <q-item-label class="text-caption text-grey-7 q-pa-xs no-border no-margin" style="min-height: 20px">
-                    {{ item["adresa"] }}
+                    {{ item.properties["adresa"] }}
                   </q-item-label>
                 </q-item-section>
                 <q-item-section class="q-pa-xs no-border no-margin" style="max-width: 32px">
-                  <q-icon class="" name="fiber_manual_record" size="24px" :color="colorCodes[item['icon_code']]"/>
+                  <q-icon class="" name="fiber_manual_record" size="24px" :color="colorCodes[item.properties['icon_code']]"/>
                 </q-item-section>
               </q-item>
             </q-list>
@@ -278,9 +278,10 @@ export default {
     toggleLeftPanel() {
       this.$store.dispatch('lmi2015/toggleLeftPanel');
     },
-    selectMonument(codLmi) {
-      this.$store.dispatch("lmi2015/selectItem", codLmi);
-      if (this.$q.platform.is.mobile) this.$store.dispatch('lmi2015/updateLeftPanel', false);
+    selectMonument(monument) {
+      // console.log('@searchPanel > selectedItem: ', monument);
+      const desktopFlag = this.$q.platform.is.desktop;
+      this.$store.dispatch("lmi2015/selectItem", {monument, desktopFlag});
     }
   },
 

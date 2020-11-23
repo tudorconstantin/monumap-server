@@ -7,10 +7,10 @@
 
 <script>
 // import Map from "@/components/Map_leaflet";
-import Map from "@/components/lie_2020_1/map";
+import Map from "@/components/lie_2020_1/Map_mapbox.vue";
 
 export default {
-  name: "mapview",
+  name: "LIE2020_1",
   components: {
     Map,
   },

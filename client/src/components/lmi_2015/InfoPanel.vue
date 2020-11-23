@@ -10,7 +10,7 @@
         v-model="monumentInfoShown"
         side="right"
         bordered
-        :width="400"
+        :width="$q.platform.is.desktop ? 400 : ($q.screen.width < 640 ? $q.screen.width : 400)"
         :content-style="{ backgroundColor: '#bdbdbd' }"
     >
       <q-list class="q-pa-xs q-gutter-xs">
@@ -197,24 +197,6 @@
       </q-list>
     </q-drawer>
 
-    <!-- MOBILE -->
-    <q-drawer
-        v-if="rightPanel"
-        v-model="monumentInfoShown"
-        side="right"
-        bordered
-        :width="$q.screen.width < 640 ? $q.screen.width : 400"
-        :content-style="{ backgroundColor: '#bdbdbd' }"
-    >
-      <!-- drawer content -->
-      <q-page-sticky
-          v-if="$q.platform.is.mobile && this.$store.state.lmi2015.selectedItem"
-          position="bottom-right"
-          :offset="[50, 50]"
-      >
-        <q-btn fab color="blue-8" icon="o_visibility_off" type="button" @click="toggleRightPanel"/>
-      </q-page-sticky>
-    </q-drawer>
   </div>
 </template>
 

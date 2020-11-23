@@ -4,8 +4,8 @@
 // STATE
 
 const state = {
-  leftPanel: true,
-  rightPanel: true,
+  leftPanel: false,
+  rightPanel: false,
   itemSelected: false,
 };
 

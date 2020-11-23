@@ -7,7 +7,6 @@
         class="aller-font"
         v-if="$q.platform.is.desktop"
     >
-
       <!-- app header -->
       <q-header
           elevated
@@ -19,20 +18,21 @@
         <q-toolbar>
           <!-- left panel toggle icon -->
           <q-btn dense flat round icon="menu" @click="toggleLeftPanel"/>
-
-          <q-toolbar-title class="row">
+          <!-- title -->
+          <q-toolbar-title class="row items-center">
+            <!-- logo_1 -->
             <img
-                class="q-pr-xs"
+                class="q-pr-xs img-desktop"
                 src="./assets/logo_bucuresti_2050.svg"
                 style="max-width: 600px; max-height: 40px;"
             />
+            <!-- logo_2 -->
             <img
-                class="q-pl-xs"
+                class="q-pl-xs img-desktop"
                 src="./assets/logo_bucuresti_2050_text_fara-subtitlu_bicrom_linie.svg"
                 style="max-width: 600px; max-height: 40px;"
             />
           </q-toolbar-title>
-
           <!-- right panel toggle icon -->
           <q-btn
               v-if="this.$store.state.app.itemSelected && $q.platform.is.desktop"
@@ -43,22 +43,142 @@
               @click="toggleRightPanel"
           />
         </q-toolbar>
-
-        <!-- tabs -->
-        <q-tabs align="left">
+        <!-- navigation tabs -->
+        <q-tabs align="left" active-color="deep-orange-10">
           <q-route-tab to="/lmi-2015" label="LMI 2015"/>
+          <q-route-tab to="/lie-2020-1" label="LIE 2020.1"/>
           <q-route-tab to="/spatii-publice" label="Spatii Publice"/>
           <q-route-tab to="/infrastructura-sanatate" label="Infrastructura Sanatate"/>
           <q-route-tab to="/toalete-publice" label="Toalete Publice"/>
-          <!-- <q-route-tab to="/lie-2020-1" label="LIE 2020.1" /> -->
+          <q-route-tab to="/reabilitare-termica" label="Reabilitare termica"/>
         </q-tabs>
       </q-header>
 
+      <!-- left panel -->
+      <!--      <q-drawer-->
+      <!--          v-if="!isHomeRoute"-->
+      <!--          :overlay="true"-->
+      <!--          v-model="leftPanel"-->
+      <!--          side="left"-->
+      <!--          bordered-->
+      <!--          :content-style="{ backgroundColor: '#bdbdbd' }"-->
+      <!--      >-->
+      <!--        &lt;!&ndash; drawer content &ndash;&gt;-->
+      <!--        <search-panel></search-panel>-->
+      <!--      </q-drawer>-->
 
+      <!-- right panel -->
+      <!--      <q-drawer-->
+      <!--          v-if="!isHomeRoute"-->
+      <!--          v-model="rightPanel"-->
+      <!--          side="right"-->
+      <!--          bordered-->
+      <!--          :width="400"-->
+      <!--          :content-style="{ backgroundColor: '#bdbdbd' }"-->
+      <!--      >-->
+      <!--        &lt;!&ndash; drawer content &ndash;&gt;-->
+      <!--        <info-panel></info-panel>-->
+      <!--      </q-drawer>-->
 
       <!-- page container / map container -->
       <q-page-container id="map-enclosure">
         <router-view/>
+      </q-page-container>
+    </q-layout>
+
+
+    <!-- MOBILE -->
+    <q-layout
+        view="hHh lpR fFf"
+        class="aller-font"
+        v-if="$q.platform.is.mobile"
+    >
+      <!-- app header for portrait -->
+      <div
+          elevated
+          id="header-mobile-portrait"
+          class="orientation-portrait bg-primary text-blue-grey-10"
+          height-hint="90"
+          v-if="!isHomeRoute"
+      >
+        <div>
+          <div class="row q-ma-xs items-center">
+            <!-- left panel toggle icon -->
+            <q-btn dense flat round icon="menu" @click="toggleLeftPanel" style="margin-left: 4px"/>
+            <!-- logo_1 -->
+            <img
+                class="img-mobile"
+                src="./assets/logo_bucuresti_2050.svg"
+                style="max-width: 150px; max-height: 25px;"
+            />
+            <!-- logo_2 -->
+            <img
+                class="img-mobile"
+                src="./assets/logo_bucuresti_2050_text_fara-subtitlu_bicrom_linie.svg"
+                style="max-width: 200px; max-height: 25px;"
+            />
+          </div>
+        </div>
+        <!-- navigation tabs -->
+        <q-tabs align="left" active-color="deep-orange-10">
+          <q-route-tab to="/lmi-2015" label="LMI 2015"/>
+          <q-route-tab to="/lie-2020-1" label="LIE 2020.1"/>
+          <q-route-tab to="/spatii-publice" label="Spatii Publice"/>
+          <q-route-tab to="/infrastructura-sanatate" label="Infrastructura Sanatate"/>
+          <q-route-tab to="/toalete-publice" label="Toalete Publice"/>
+          <q-route-tab to="/reabilitare-termica" label="Reabilitare termica"/>
+        </q-tabs>
+      </div>
+
+      <!-- app header for landscape -->
+      <q-header
+          elevated
+          id="header-mobile-landscape"
+          class="orientation-landscape bg-primary text-blue-grey-10"
+          height-hint="48"
+          v-if="!isHomeRoute"
+      >
+        <div class="row items-center no-wrap">
+          <!-- left panel toggle icon -->
+          <q-btn
+              dense
+              flat
+              round
+              icon="menu"
+              @click="toggleLeftPanel"
+              style="margin-left: 8px"
+          />
+          <!-- logo_1 -->
+          <img
+              class="img-mobile"
+              src="./assets/logo_bucuresti_2050.svg"
+              style="max-width: 70px; max-height: 40px;"
+          />
+          <!-- logo_2 -->
+          <img
+              class="img-mobile"
+              src="./assets/logo_bucuresti_2050_text_fara-subtitlu_bicrom_linie.svg"
+              style="max-width: 130px; max-height: 40px;"
+          />
+          <!-- navigation tabs -->
+          <q-tabs class="row" style="overflow: auto" active-color="deep-orange-10">
+            <q-route-tab to="/lmi-2015" label="LMI 2015"/>
+            <q-route-tab to="/lie-2020-1" label="LIE 2020.1"/>
+            <q-route-tab to="/spatii-publice" label="Spatii Publice"/>
+            <q-route-tab to="/infrastructura-sanatate" label="Infrastructura Sanatate"/>
+            <q-route-tab to="/toalete-publice" label="Toalete Publice"/>
+            <q-route-tab to="/reabilitare-termica" label="Reabilitare termica"/>
+          </q-tabs>
+        </div>
+      </q-header>
+
+      <!-- page container / map container -->
+      <q-page-container id="map-enclosure-mobile">
+        <router-view/>
+        <!-- fab button to toggle infoPanel -->
+        <q-page-sticky position="bottom-right" :offset="[50, 50]" v-if="this.$store.state.app.itemSelected">
+          <q-btn fab color="blue-8" icon="o_visibility" type="button" @click="toggleRightPanel"/>
+        </q-page-sticky>
       </q-page-container>
     </q-layout>
 
@@ -67,7 +187,13 @@
 
 
 <script>
+
 export default {
+  name: "App",
+
+  data() {
+    return {};
+  },
 
   computed: {
     // if home route, hide all bars and panels
@@ -108,11 +234,13 @@ export default {
 
   created: async function () {
 
-    // get lmi2015 monuments list
-    await this.$store.dispatch('lmi2015/getAllMonuments');
+    // get 'lmi2015' monuments list
+    await this.$store.dispatch('lmi2015/loadAllData');
 
-    // get lmi2015 monuments photos
+    // get 'lmi2015' monuments photos
     this.$store.dispatch('photos/getMonumentImages', this.$store.state.photos.monumentShown.nr);
+
+    // load 'lie2020-1' data into store
 
     // load 'spatii publice' data into store
     await this.$store.dispatch(('spatiiPublice/loadAllData'));
@@ -123,14 +251,17 @@ export default {
     // load 'toalete publice' data into store
     this.$store.dispatch(('toaletePublice/loadAllData'));
 
-    // if client platform is desktop, show the left panel
-    // if (this.$q.platform.is.desktop) this.leftPanel = true;
+    // load 'reabilitare termica' data into store
+
   },
 };
 </script>
 
 
 <style lang="sass" scoped>
-img
+.img-desktop
   padding: 0 60px
+
+.img-mobile
+  padding: 0 10px
 </style>
