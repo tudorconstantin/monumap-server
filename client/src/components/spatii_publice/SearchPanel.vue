@@ -239,7 +239,7 @@ export default {
       item.layer = {};
       item.layer.id = layerId;
       item.layer.source = sourceId;
-      console.log('@selectItem > item: ', item);
+      // console.log('@selectItem > item: ', item);
 
       // load map object
       const mapObj = this.$store.state.spatiiPublice.myMap;

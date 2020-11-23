@@ -320,7 +320,7 @@ const actions = {
   // },
 
   async selectItem({commit}, value) {
-    console.log('@store > actions >> selectItem', value);
+    // console.log('@store > actions >> selectItem', value);
     // console.log('@store > currentSelectedItem: ', this.state.selectedItem);
     // if null value
     if (!value) {
