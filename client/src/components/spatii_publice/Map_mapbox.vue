@@ -360,7 +360,7 @@ export default {
         // console.log('@click array: ', mapObj.queryRenderedFeatures(e.point) || []);
         // select the second item from the array of items stack clicked, first item is on hover layer
         const clickedItem = (mapObj.queryRenderedFeatures(e.point) || [])[1];
-        console.log('clickedItem: ', clickedItem);
+        // console.log('clickedItem: ', clickedItem);
 
         // load previous selected item
         // const previousSelectedItem = this.selectedItem;
