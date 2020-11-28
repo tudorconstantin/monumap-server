@@ -7,7 +7,7 @@
 
 <script>
 // import Map from "@/components/Map_leaflet";
-import Map from "@/components/infrastructura_sanatate/Map_mapbox";
+import Map from "@/components/reabilitare_termica/Map_mapbox";
 
 export default {
   name: "ReabilitareTermicaView",

@@ -47,7 +47,7 @@
               :key="index"
               @click="selectItem(item, {layerId: 'SPATII_ABANDONATE', sourceId: 'SPATII_ABANDONATE'})"
               class="row items-start no-padding"
-              v-bind:class="{active: (selectedItem ? item.properties.id === selectedItem.properties.id : false)}"
+              v-bind:class="{active: (selectedItem && selectedItem.layer && selectedItem.layer.id === 'SPATII_ABANDONATE' ? item.properties.id === selectedItem.properties.id : false)}"
 
           >
             <q-item-section class="q-pa-xs no-border no-margin" style="max-width: 40px">
@@ -87,7 +87,7 @@
               :key="index"
               @click="selectItem(item, {layerId: 'SPATII_PUNCTUALE', sourceId: 'SPATII_PUNCTUALE'})"
               class="row items-start no-padding"
-              v-bind:class="{active: (selectedItem ? item.properties.id === selectedItem.properties.id : false)}"
+              v-bind:class="{active: (selectedItem && selectedItem.layer && selectedItem.layer.id === 'SPATII_PUNCTUALE' ? item.properties.id === selectedItem.properties.id : false)}"
 
           >
             <q-item-section class="q-pa-xs no-border no-margin" style="max-width: 40px">
@@ -127,7 +127,7 @@
               :key="index"
               @click="selectItem(item, {layerId: 'SPATII_LINIARE', sourceId: 'SPATII_LINIARE'})"
               class="row items-start no-padding"
-              v-bind:class="{active: (selectedItem ? item.properties.id === selectedItem.properties.id : false)}"
+              v-bind:class="{active: (selectedItem && selectedItem.layer && selectedItem.layer.id === 'SPATII_LINIARE' ? item.properties.id === selectedItem.properties.id : false)}"
 
           >
             <q-item-section class="q-pa-xs no-border no-margin" style="max-width: 40px">
@@ -143,7 +143,7 @@
             </q-item-section>
             <q-item-section class="q-pa-xs no-border no-margin" style="max-width: 32px">
               <q-icon class="" name="fiber_manual_record" size="24px"
-                      color="amber"/>
+                      color="orange-9"/>
             </q-item-section>
           </q-item>
         </q-list>
@@ -167,7 +167,8 @@
               :key="index"
               @click="selectItem(item, {layerId: 'SPATII_SUPRAFATA', sourceId: 'SPATII_SUPRAFATA'})"
               class="row items-start no-padding"
-              v-bind:class="{active: (selectedItem ? item.properties.id === selectedItem.properties.id : false)}"
+              v-bind:class="{active: (selectedItem && selectedItem.layer && selectedItem.layer.id === 'SPATII_SUPRAFATA' ?
+              item.properties.id === selectedItem.properties.id : false)}"
 
           >
             <q-item-section class="q-pa-xs no-border no-margin" style="max-width: 40px">
@@ -228,7 +229,7 @@ export default {
           this.$store.getters['spatiiPublice/getSpatiiSuprafata'].features : [];
     },
     selectedItem() {
-      return this.$store.state.toaletePublice.selectedItem;
+      return this.$store.state.spatiiPublice.selectedItem;
     },
   },
 

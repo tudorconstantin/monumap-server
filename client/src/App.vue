@@ -252,6 +252,7 @@ export default {
     this.$store.dispatch(('toaletePublice/loadAllData'));
 
     // load 'reabilitare termica' data into store
+    this.$store.dispatch(('reabilitareTermica/loadAllData'));
 
   },
 };

@@ -1,4 +1,4 @@
-<!-- infrastructura-sanatate :: Map_mapbox -->
+<!-- reabilitare-termica :: Map_mapbox -->
 
 <template>
   <div id="mapContainer" :style="cssVars()">
@@ -54,8 +54,6 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import {MglMap, MglNavigationControl, MglGeolocateControl} from 'vue-mapbox';
 import Mapbox from 'mapbox-gl';
 
-import {mapGetters} from 'vuex';
-
 export default {
   components: {
     MglMap,
@@ -81,31 +79,31 @@ export default {
     leftPanel: {
       get() {
         // console.log('app: getLeftPanel');
-        return this.$store.state.infrastructuraSanatate.leftPanel;
+        return this.$store.state.reabilitareTermica.leftPanel;
       },
       set: function (value) {
         // console.log('app: setLeftPanel: ', value);
-        this.$store.dispatch('infrastructuraSanatate/updateLeftPanel', value);
+        this.$store.dispatch('reabilitareTermica/updateLeftPanel', value);
       },
     },
 
     rightPanel: {
       get() {
-        return this.$store.state.infrastructuraSanatate.rightPanel;
+        return this.$store.state.reabilitareTermica.rightPanel;
       },
       set: function (value) {
-        this.$store.dispatch('infrastructuraSanatate/updateRightPanel', value);
+        this.$store.dispatch('reabilitareTermica/updateRightPanel', value);
       },
     },
 
     currentItem: {
       get() {
         // console.log('app: getLeftPanel');
-        return this.$store.state.infrastructuraSanatate.selectedItem;
+        return this.$store.state.reabilitareTermica.selectedItem;
       },
       set: function (value) {
         // console.log('app: setLeftPanel: ', value);
-        this.$store.dispatch('infrastructuraSanatate/selectItem', value);
+        this.$store.dispatch('reabilitareTermica/selectItem', value);
       },
     },
 
@@ -115,7 +113,7 @@ export default {
       },
       set: function (newValue) {
         // load map object
-        const map = this.$store.state.infrastructuraSanatate.map;
+        const map = this.$store.state.reabilitareTermica.map;
         if (newValue) {
           let coordinates;
           if (newValue.geometry.type === 'MultiPolygon') {
@@ -153,17 +151,13 @@ export default {
         this.currentItem = {};
       },
     },
-
-    ...mapGetters({
-      polygons: 'polygons/filteredArray',
-    }),
   },
 
   methods: {
     // add map source
     addMapSource(sourceId, data) {
       // load map object
-      const map = this.$store.state.infrastructuraSanatate.map;
+      const map = this.$store.state.reabilitareTermica.map;
       // add source
       map.addSource(sourceId, {
         type: 'geojson',
@@ -178,7 +172,7 @@ export default {
     // add map layer
     addMapLayer: function (layer) {
       // load map object
-      const map = this.$store.state.infrastructuraSanatate.map;
+      const map = this.$store.state.reabilitareTermica.map;
       // add map layer
       map.addLayer({
         id: layer.id,
@@ -189,7 +183,8 @@ export default {
           'visibility': 'visible',
         },
         paint: layer.render.paint,
-        filter: layer.sourceId === 'UNITATI' ? ['==', ['get', 'tip_unit'], layer.name] : ['==', ['get', 'tip_serv'], layer.name],
+        // filter: layer.sourceId ===
+        //     ['==', ['get', 'stadiu_normalizat'], layer.name.toLowerCase()],
       });
 
       // Change the cursor to a pointer when the it enters a feature in the 'symbols' layer.
@@ -264,19 +259,19 @@ export default {
     // add map click event handler
     addMapClickHandler() {
       // load map object
-      const map = this.$store.state.infrastructuraSanatate.map;
+      const map = this.$store.state.reabilitareTermica.map;
       // load store
       const store = this.$store;
       // load array of layers ids
-      const layersIdsArr = this.$store.getters["infrastructuraSanatate/getAllLayersIds"];
+      const layersIdsArr = this.$store.getters["reabilitareTermica/getAllLayersIds"];
       // on click action
       map.on('click', function (e) {
         // console.log('@click e: ', e);
         // find clicked item
         const clickedItem = (map.queryRenderedFeatures(e.point, {layers: layersIdsArr}) || [])[0];
-        // console.log('clickedItem: ', clickedItem);
+        console.log('@map > clickedItem: ', clickedItem);
         // deselect previous selection
-        const previousSelectedItem = store.state.infrastructuraSanatate.selectedItem;
+        const previousSelectedItem = store.state.reabilitareTermica.selectedItem;
         // console.log('previousSelectedItem: ', previousSelectedItem);
         if (previousSelectedItem) map.setFilter(`${previousSelectedItem.layer.id}_HIGHLIGHT`, ['==', ['get', 'id'], '']);
         // if clicked on item
@@ -285,7 +280,7 @@ export default {
           map.setFilter(`${clickedItem.layer.id}_HIGHLIGHT`, ['==', ['get', 'id'], clickedItem.properties.id]);
 
           // save selected item to store
-          store.dispatch('infrastructuraSanatate/selectItem', clickedItem);
+          store.dispatch('reabilitareTermica/selectItem', clickedItem);
           // set app right panel flag to true
           store.dispatch('app/updateRightPanel', true);
           // set app item selected flag to true
@@ -333,9 +328,9 @@ export default {
           }
         } else {
           // set selected item to null
-          store.dispatch('infrastructuraSanatate/selectItem', null);
+          store.dispatch('reabilitareTermica/selectItem', null);
           // set item selected flag to false
-          store.dispatch('infrastructuraSanatate/updateItemSelected', false);
+          store.dispatch('reabilitareTermica/updateItemSelected', false);
           // set app related flags to false
           store.dispatch('app/updateRightPanel', false);
           store.dispatch('app/updateItemSelected', false)
@@ -348,22 +343,23 @@ export default {
     async onMapLoaded(event) {
       const map = event.map;
       // save map reference to store
-      this.$store.dispatch('infrastructuraSanatate/saveMap', map);
+      this.$store.dispatch('reabilitareTermica/saveMap', map);
       // add map data sources
-      const unitsArr = await this.$store.state.infrastructuraSanatate.unitsArr;
-      // console.log('unitsArr: ', unitsArr);
-      await this.addMapSource('UNITATI', unitsArr);
-      const servicesArr = await this.$store.state.infrastructuraSanatate.servicesArr;
-      await this.addMapSource('SERVICII', servicesArr);
+      // const itemsArr = await this.$store.state.reabilitareTermica.items;
+      // console.log('itemsArr: ', itemsArr);
+      // await this.addMapSource('IMOBILE', itemsArr);
       // add map layers
-      // add layers for 'UNITATI'
-      const unitatiLayers = this.$store.state.infrastructuraSanatate.itemGroups[0].layers;
-      // console.log('unitatiLayers: ', unitatiLayers.layers);
-      unitatiLayers.forEach((layer) => { this.addMapLayer(layer) });
-      // add layers for 'SERVICII'
-      const serviciiLayers = this.$store.state.infrastructuraSanatate.itemGroups[1].layers;
-      // console.log('serviciiLayers: ', serviciiLayers.layers);
-      serviciiLayers.forEach((layer) => { this.addMapLayer(layer) });
+      // add layers for 'ETAPE'
+      this.$store.state.reabilitareTermica.itemGroups[0].layers
+        .forEach((layer) => {
+          this.addMapSource(layer.sourceId, {
+            "type": "FeatureCollection",
+            "name": layer.id,
+            "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+            features: layer.data,
+          });
+          this.addMapLayer(layer);
+        });
       // add click handler
       this.addMapClickHandler();
 

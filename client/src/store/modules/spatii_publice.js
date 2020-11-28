@@ -15,6 +15,10 @@ const state = {
       geometry: 'Point',
       render: {
         shape: 'circle',
+        layout: {
+          // make layer visible by default
+          'visibility': 'visible',
+        },
         paint: {
           'circle-radius': 10,
           'circle-color': '#ad0450',
@@ -33,7 +37,7 @@ const state = {
         paint: {
           'circle-radius': 10,
           'circle-color': '#ad0450',
-          'circle-stroke-color': 'yellow',
+          'circle-stroke-color': '#ffffff',
           'circle-stroke-width': 5,
           'circle-opacity': [
             'case',
@@ -59,7 +63,7 @@ const state = {
         paint: {
           'circle-radius': 10,
           'circle-color': '#ad0450',
-          'circle-stroke-color': 'red',
+          'circle-stroke-color': '#ffde02',
           'circle-stroke-width': 5,
         },
         filter: ['==', ['get', 'id'], ''],
@@ -72,6 +76,10 @@ const state = {
       geometry: 'Point',
       render: {
         shape: 'circle',
+        layout: {
+          // make layer visible by default
+          'visibility': 'visible',
+        },
         paint: {
           'circle-radius': 10,
           'circle-color': '#0247f3',
@@ -90,7 +98,7 @@ const state = {
         paint: {
           'circle-radius': 10,
           'circle-color': '#0247f3',
-          'circle-stroke-color': 'yellow',
+          'circle-stroke-color': '#ffffff',
           'circle-stroke-width': 5,
           'circle-opacity': [
             'case',
@@ -116,7 +124,7 @@ const state = {
         paint: {
           'circle-radius': 10,
           'circle-color': '#0247f3',
-          'circle-stroke-color': 'red',
+          'circle-stroke-color': '#ffde02',
           'circle-stroke-width': 5,
         },
         filter: ['==', ['get', 'id'], ''],
@@ -129,11 +137,16 @@ const state = {
       geometry: 'MultiLineString',
       render: {
         shape: 'line',
-        paint: {
-          'line-color': '#ffde02',
-          'line-width': 5,
-          'line-opacity': 0.6,
+        'layout': {
+          // make layer visible by default
+          'visibility': 'visible',
+          'line-join': 'round',
+          'line-cap': 'round',
         },
+        'paint': {
+          'line-color': '#888',
+          'line-width': 8
+        }
       },
       sourceId: 'SPATII_LINIARE',
       layerId: 'SPATII_LINIARE',
@@ -143,7 +156,7 @@ const state = {
       render: {
         shape: 'line',
         paint: {
-          'line-color': 'yellow',
+          'line-color': '#ffffff',
           'line-width': 5,
           'line-opacity': [
             'case',
@@ -161,7 +174,7 @@ const state = {
       render: {
         shape: 'line',
         paint: {
-          'line-color': 'red',
+          'line-color': '#ffde02',
           'line-width': 5,
         },
         filter: ['==', ['get', 'id'], ''],
@@ -174,6 +187,10 @@ const state = {
       geometry: 'MultiPolygon',
       render: {
         shape: 'fill',
+        layout: {
+          // make layer visible by default
+          'visibility': 'visible',
+        },
         paint: {
           'fill-color': '#16e802',
           'fill-opacity': 0.3,
@@ -187,7 +204,7 @@ const state = {
       render: {
         shape: 'line',
         paint: {
-          'line-color': 'yellow',
+          'line-color': '#ffffff',
           'line-width': 5,
           'line-opacity': [
             'case',
@@ -205,7 +222,7 @@ const state = {
       render: {
         shape: 'line',
         paint: {
-          'line-color': 'red',
+          'line-color': '#ffde02',
           'line-width': 5,
         },
         filter: ['==', ['get', 'id'], ''],

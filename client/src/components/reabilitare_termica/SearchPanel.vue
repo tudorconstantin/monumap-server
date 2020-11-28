@@ -1,4 +1,4 @@
-<!-- infrastructura-sanatate :: searchPanel -->
+<!-- reabilitare-termica :: searchPanel -->
 
 <template>
   <div style="overflow-x: hidden">
@@ -13,155 +13,100 @@
     >
       <q-card>
         <q-card-section class="column bg-grey-4">
-          <q-btn flat no-caps label="Date CNAS [SHP @561KB]" align="between" type="a"
-                 href="/downloads/infrastructura_sanatate/infrastructura_sanatate.zip" target="_blank"/>
+          <q-btn flat no-caps label="Date [SHP @905KB]" align="between" type="a"
+                 href="/downloads/reabilitare_termica/b_reabilitare-termica_l.zip" target="_blank"/>
         </q-card-section>
       </q-card>
     </q-expansion-item>
 
-    <!-- units filter -->
+    <!-- items filter -->
     <q-expansion-item
         dense
         dense-toggle
         expand-separator
         icon="done"
-        label="Filtrare Unitati"
+        label="Filtrare Etape"
         default-opened
     >
       <q-list>
         <q-card-section class="column bg-grey-4">
-          <q-checkbox keep-color v-model="filtruUnitatiToate" label="Toate tipurile"
-                      :color="unitsColors['TOATE']"/>
-          <q-checkbox v-model="filtruUnitati" val="SPITAL" label="Spital"
-                      :color="unitsColors['SPITAL']"/>
-          <q-checkbox keep-color v-model="filtruUnitati" val="DISPOZITIVE_MEDICALE" label="Dispozitive medicale"
-                      :color="unitsColors['DISPOZITIVE_MEDICALE']"/>
-          <q-checkbox keep-color v-model="filtruUnitati" val="MEDIC_FAMILIE" label="Medic de familie"
-                      :color="unitsColors['MEDIC_FAMILIE']"/>
-          <q-checkbox keep-color v-model="filtruUnitati" val="MEDICINA_DENTARA" label="Medicina dentara "
-                      :color="unitsColors['MEDICINA_DENTARA']"/>
-          <q-checkbox keep-color v-model="filtruUnitati" val="FARMACIE" label="Farmacie"
-                      :color="unitsColors['FARMACIE']"/>
+          <q-checkbox keep-color v-model="filtruEtapeToate"
+                      :label="`Toate etapele [${
+                        itemGroups[0].data && itemGroups[0].data.features ?
+                        itemGroups[0].data.features.length : 0}]`"
+                      :color="itemsColors['TOATE']"/>
+          <q-checkbox v-model="filtruEtape" val="URMEAZA"
+                      :label="`Urmeaza [${
+                        itemGroups[0].layers && itemGroups[0].layers[0].data ?
+                        itemGroups[0].layers[0].data.length : 0}]`"
+                      :color="itemsColors['URMEAZA']"/>
+          <q-checkbox keep-color v-model="filtruEtape" val="IN_PROIECTARE"
+                      :label="`In Proiectare [${
+                        itemGroups[0].layers && itemGroups[0].layers[0].data ?
+                        itemGroups[0].layers[1].data.length : 0}]`"
+                      :color="itemsColors['IN_PROIECTARE']"/>
+          <q-checkbox keep-color v-model="filtruEtape" val="IN_EXECUTIE"
+                      :label="`In Executie [${
+                        itemGroups[0].layers && itemGroups[0].layers[0].data ?
+                        itemGroups[0].layers[2].data.length : 0}]`"
+                      :color="itemsColors['IN_EXECUTIE']"/>
+          <q-checkbox keep-color v-model="filtruEtape" val="FINALIZAT"
+                      :label="`Finalizat [${
+                        itemGroups[0].layers && itemGroups[0].layers[0].data ?
+                        itemGroups[0].layers[3].data.length : 0}]`"
+                      :color="itemsColors['FINALIZAT']"/>
+          <q-checkbox keep-color v-model="filtruEtape" val="REZILIAT"
+                      :label="`Reziliat [${
+                        itemGroups[0].layers && itemGroups[0].layers[0].data ?
+                        itemGroups[0].layers[4].data.length : 0}]`"
+                      :color="itemsColors['REZILIAT']"/>
+          <q-checkbox keep-color v-model="filtruEtape" val="AVIZ_NEGATIV_ISC"
+                      :label="`Aviz Negativ ISC [${
+                        itemGroups[0].layers && itemGroups[0].layers[0].data ?
+                        itemGroups[0].layers[5].data.length : 0}]`"
+                      :color="itemsColors['AVIZ_NEGATIV_ISC']"/>
         </q-card-section>
       </q-list>
     </q-expansion-item>
 
-    <!-- units list -->
+    <!-- items list -->
     <q-expansion-item
         dense
         dense-toggle
         expand-separator
         icon="scatter_plot"
-        :label="filteredUnits.label"
+        v-for="(layer, lIndex) in itemGroups[0].layers"
+        :key="lIndex"
+        :label="`${layer.name} [${layer && layer.data ? layer.data.length : 0}]`"
+        default-closed
     >
-      <q-list
-          separator
-          class="bg-grey-4"
-          v-for="(layer, lIndex) in filteredUnits.layers"
-          :key="lIndex"
+      <q-item
+          dense
+          clickable
+          v-ripple
+          v-for="(item, index) in layer.data"
+          :key="index"
+          @click="selectItem(item)"
+          class="row items-start no-padding bg-grey-4"
+          v-bind:class="{active: (selectedItem ? item.properties.id === selectedItem.properties.id : false)}"
       >
-        <q-item
-            dense
-            clickable
-            v-ripple
-            v-for="(item, index) in layer.data"
-            :key="index"
-            @click="selectItem(item)"
-            class="row items-start no-padding"
-            v-bind:class="{active: (selectedItem ? item.properties.id === selectedItem.properties.id : false)}"
-        >
-          <q-item-section class="q-pa-xs no-border no-margin" style="max-width: 40px">
-            <q-item-label class="q-pa-xs" style="min-height: 20px">{{ index + 1 }}.</q-item-label>
-          </q-item-section>
-          <q-item-section class="column q-pt-xs">
-            <q-item-label class="q-pa-xs" style="min-height: 20px">
-              {{ item['properties']['denumire'].toUpperCase() }}
-            </q-item-label>
-            <q-item-label class="text-caption text-grey-7 q-pa-xs no-border no-margin" style="min-height: 20px">
-              {{ item['properties']["adresa_pl"] }}
-            </q-item-label>
-          </q-item-section>
-          <q-item-section class="q-pa-xs no-border no-margin" style="max-width: 32px">
-            <q-icon class="" name="fiber_manual_record" size="24px"
-                    :color="unitsColors[layer.id]"/>
-          </q-item-section>
-        </q-item>
-      </q-list>
+        <q-item-section class="q-pa-xs no-border no-margin" style="max-width: 40px">
+          <q-item-label class="q-pa-xs" style="min-height: 20px">{{ index + 1 }}.</q-item-label>
+        </q-item-section>
+        <q-item-section class="column q-pt-xs">
+          <q-item-label class="q-pa-xs" style="min-height: 20px">
+            {{ item['properties']['adresa'] }}
+          </q-item-label>
+          <q-item-label class="text-caption text-grey-7 q-pa-xs no-border no-margin" style="min-height: 20px">
+            {{ item['properties']["sector"] }}
+          </q-item-label>
+        </q-item-section>
+        <q-item-section class="q-pa-xs no-border no-margin" style="max-width: 32px">
+          <q-icon class="" name="fiber_manual_record" size="24px"
+                  :color="itemsColors[layer.id]"/>
+        </q-item-section>
+      </q-item>
     </q-expansion-item>
-
-    <!-- services filter -->
-    <q-expansion-item
-        dense
-        dense-toggle
-        expand-separator
-        icon="done"
-        label="Filtrare Servicii"
-        default-opened
-    >
-      <q-card>
-        <q-card-section class="column bg-grey-4">
-          <q-checkbox keep-color v-model="filtruServiciiToate" label="Toate tipurile"
-                      :color="servicesColors['TOATE']"/>
-          <q-checkbox keep-color v-model="filtruServicii" val="IMAGISTICA_MEDICALA" label="Imagistica medicala"
-                      :color="servicesColors['IMAGISTICA_MEDICALA']"/>
-          <q-checkbox keep-color v-model="filtruServicii" val="AMBULANTA" label="Ambulanta"
-                      :color="servicesColors['AMBULANTA']"/>
-          <q-checkbox keep-color v-model="filtruServicii" val="REABILITARE_RECUPERARE" label="Reabilitare si recuperare"
-                      :color="servicesColors['REABILITARE_RECUPERARE']"/>
-          <q-checkbox keep-color v-model="filtruServicii" val="AMBULATORIU_SPECIALITATE"
-                      label="Ambulatoriu de specialitate "
-                      :color="servicesColors['AMBULATORIU_SPECIALITATE']"/>
-          <q-checkbox keep-color v-model="filtruServicii" val="INGRIJIRI_DOMICILIU" label="Ingrijiri la domiciliu"
-                      :color="servicesColors['INGRIJIRI_DOMICILIU']"/>
-          <q-checkbox keep-color v-model="filtruServicii" val="LABORATOR" label="Laborator"
-                      :color="servicesColors['LABORATOR']"/>
-        </q-card-section>
-      </q-card>
-    </q-expansion-item>
-
-    <!-- services list -->
-    <q-expansion-item
-        dense
-        dense-toggle
-        expand-separator
-        icon="scatter_plot"
-        :label="filteredServices.label"
-    >
-      <q-list
-          separator
-          class="bg-grey-4"
-          v-for="(layer, lIndex) in filteredServices.layers"
-          :key="lIndex"
-      >
-        <q-item
-            dense
-            clickable
-            v-ripple
-            v-for="(item, index) in layer.data"
-            :key="index"
-            @click="selectItem(item)"
-            class="row items-start no-padding"
-            v-bind:class="{active: (selectedItem ? item.properties.id === selectedItem.properties.id : false)}"
-        >
-          <q-item-section class="q-pa-xs no-border no-margin" style="max-width: 40px">
-            <q-item-label class="q-pa-xs" style="min-height: 20px">{{ index + 1 }}.</q-item-label>
-          </q-item-section>
-          <q-item-section class="column q-pt-xs">
-            <q-item-label class="q-pa-xs" style="min-height: 20px">
-              {{ item['properties']['denumire'].toUpperCase() }}
-            </q-item-label>
-            <q-item-label class="text-caption text-grey-7 q-pa-xs no-border no-margin" style="min-height: 20px">
-              {{ item['properties']["adresa_pl"] }}
-            </q-item-label>
-          </q-item-section>
-          <q-item-section class="q-pa-xs no-border no-margin" style="max-width: 32px">
-            <q-icon class="" name="fiber_manual_record" size="24px"
-                    :color="servicesColors[layer.id]"/>
-          </q-item-section>
-        </q-item>
-      </q-list>
-    </q-expansion-item>
-
   </div>
 </template>
 
@@ -170,82 +115,44 @@
 export default {
   computed: {
     itemGroups() {
-      return this.$store.state.infrastructuraSanatate.itemGroups;
+      return this.$store.state.reabilitareTermica.itemGroups;
     },
 
-    filteredUnits() {
-      return this.$store.getters["infrastructuraSanatate/filteredUnits"];
-    },
-
-    filteredServices() {
-      return this.$store.getters["infrastructuraSanatate/filteredServices"];
-    },
-
-    unitsColors() {
-      return this.$store.state.infrastructuraSanatate.unitsInfoPanelColors;
-    },
-
-    servicesColors() {
-      return this.$store.state.infrastructuraSanatate.servicesInfoPanelColors;
-    },
-
-    countFilteredList() {
-      return this?.filteredItems?.length;
+    itemsColors() {
+      return this.$store.state.reabilitareTermica.itemsInfoPanelColors;
     },
 
     selectedItem() {
-      return this.$store.state.infrastructuraSanatate.selectedItem;
+      return this.$store.state.reabilitareTermica.selectedItem;
     },
 
     unitSelected: async (item) => {
-      const selectedItem = await this.$store.state.infrastructuraSanatate.selectedItem;
+      const selectedItem = await this.$store.state.reabilitareTermica.selectedItem;
       // console.log('listItem: ', item);
       return {
         active: selectedItem ? selectedItem.id === item.id : false,
       };
     },
 
-    filtruUnitatiToate: {
+    filtruEtapeToate: {
       get() {
         // console.log('app: getLeftPanel');
-        return this.$store.state.infrastructuraSanatate.filtruUnitatiToate;
+        return this.$store.state.reabilitareTermica.filtruEtapeToate;
       },
       set: function (value) {
         // console.log('@leftPanel > updateUnitatiFilterToate: ', value);
-        this.$store.dispatch('infrastructuraSanatate/updateUnitsFilterToate', value);
+        this.$store.dispatch('reabilitareTermica/updateItemsFilterToate', value);
       },
     },
 
-    filtruUnitati: {
+    filtruEtape: {
       get() {
         // console.log('app: getLeftPanel');
-        return this.$store.state.infrastructuraSanatate.filtruUnitati;
+        return this.$store.state.reabilitareTermica.filtruEtape;
       },
       set: function (value) {
-        // console.log('@leftPanel > updateUnitsFilter: ', value);
-        this.$store.dispatch('infrastructuraSanatate/updateUnitsFilter', value);
-      },
-    },
-
-    filtruServiciiToate: {
-      get() {
-        // console.log('app: getLeftPanel');
-        return this.$store.state.infrastructuraSanatate.filtruServiciiToate;
-      },
-      set: function (value) {
-        // console.log('@leftPanel > updateServiciiFilterToate: ', value);
-        this.$store.dispatch('infrastructuraSanatate/updateServicesFilterToate', value);
-      },
-    },
-
-    filtruServicii: {
-      get() {
-        // console.log('app: getLeftPanel');
-        return this.$store.state.infrastructuraSanatate.filtruServicii;
-      },
-      set: function (value) {
-        // console.log('@leftPanel > updateServicesFilter: ', value);
-        this.$store.dispatch('infrastructuraSanatate/updateServicesFilter', value);
+        // console.log('@leftPanel > updateItemsFilter: ', value);
+        this.$store.dispatch('reabilitareTermica/updateItemsFilter', value);
       },
     },
   },
@@ -254,19 +161,20 @@ export default {
     // @list select item
     async selectItem(item) {
       // load map object
-      const map = this.$store.state.infrastructuraSanatate.map;
-      // console.log('@list > selectItem >> item: ', item);
+      const map = this.$store.state.reabilitareTermica.map;
+      console.log('@list > selectItem >> item: ', item);
       // deselect previous selection
-      const previousSelectedItem = this.$store.state.infrastructuraSanatate.selectedItem;
+      const previousSelectedItem = this.$store.state.reabilitareTermica.selectedItem;
       // console.log('previousSelectedItem: ', previousSelectedItem);
-      if (previousSelectedItem && item != previousSelectedItem) map.setFilter(`${previousSelectedItem.layer.id}_HIGHLIGHT`, ['==', ['get', 'id'], '']);
+      if (previousSelectedItem && item != previousSelectedItem)
+        map.setFilter(`${previousSelectedItem.layer.id}_HIGHLIGHT`, ['==', ['get', 'id'], '']);
       // if nothing is selected
       if (!item) {
         // clear selection data
         this.$store.dispatch('app/updateItemSelected', false);
         this.$store.dispatch('app/updateRightPanel', false);
-        this.$store.dispatch('infrastructuraSanatate/updateItemSelected', false);
-        this.$store.dispatch('infrastructuraSanatate/selectItem', null);
+        this.$store.dispatch('reabilitareTermica/updateItemSelected', false);
+        this.$store.dispatch('reabilitareTermica/selectItem', null);
 
         // if selected
       } else {
@@ -280,7 +188,7 @@ export default {
           zoom: 15,
         });
 
-        this.$store.dispatch('infrastructuraSanatate/selectItem', item);
+        this.$store.dispatch('reabilitareTermica/selectItem', item);
       }
     },
   },

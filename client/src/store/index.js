@@ -10,6 +10,7 @@ import polygons from "./modules/polygons";
 import spatiiPublice from "./modules/spatii_publice";
 import infrastructuraSanatate from "./modules/infrastructura_sanatate";
 import toaletePublice from "./modules/toalete_publice";
+import reabilitareTermica from "./modules/reabilitare_termica";
 
 Vue.use(Vuex);
 
@@ -27,5 +28,6 @@ export default new Vuex.Store({
     spatiiPublice,
     infrastructuraSanatate,
     toaletePublice,
+    reabilitareTermica,
   }
 });

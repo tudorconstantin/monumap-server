@@ -327,10 +327,10 @@ export default {
         id: layer.layerId,
         type: layer.render.shape,
         source: layer.sourceId,
-        layout: {
-          // make layer visible by default
-          'visibility': 'visible',
-        },
+        // layout: {
+        //   // make layer visible by default
+        //   'visibility': 'visible',
+        // },
         paint: layer.render.paint,
       });
 
@@ -360,16 +360,21 @@ export default {
         // console.log('@click array: ', mapObj.queryRenderedFeatures(e.point) || []);
         // select the second item from the array of items stack clicked, first item is on hover layer
         const clickedItem = (mapObj.queryRenderedFeatures(e.point) || [])[1];
-        // console.log('clickedItem: ', clickedItem);
+        console.log('clickedItem: ', clickedItem);
 
         // load previous selected item
-        const previousSelectedItem = this.selectedItem;
+        // const previousSelectedItem = this.selectedItem;
 
         // de-highlight previous selection
-        if(previousSelectedItem && previousSelectedItem.layer) {
-          // console.log('previousSelectedItem: ', previousSelectedItem);
-          mapObj.setFilter(`${previousSelectedItem.layer.id}_HIGHLIGHT`, ['==', ['get', 'id'], '']);
-        }
+        // if(previousSelectedItem && previousSelectedItem.layer) {
+        //   // console.log('previousSelectedItem: ', previousSelectedItem);
+        //   mapObj.setFilter(`${previousSelectedItem.layer.id}_HIGHLIGHT`, ['==', ['get', 'id'], '']);
+        // }
+        // de-highlight all layers
+        ['SPATII_ABANDONATE', 'SPATII_PUNCTUALE', 'SPATII_LINIARE', 'SPATII_SUPRAFATA']
+            .forEach((item) => {
+              mapObj.setFilter(`${item}_HIGHLIGHT`, ['==', ['get', 'id'], '']);
+            });
 
         // if map item clicked
         if (clickedItem) {
