@@ -269,11 +269,12 @@ export default {
         // console.log('@click e: ', e);
         // find clicked item
         const clickedItem = (map.queryRenderedFeatures(e.point, {layers: layersIdsArr}) || [])[0];
-        console.log('@map > clickedItem: ', clickedItem);
+        // console.log('@map > clickedItem: ', clickedItem);
         // deselect previous selection
         const previousSelectedItem = store.state.reabilitareTermica.selectedItem;
         // console.log('previousSelectedItem: ', previousSelectedItem);
-        if (previousSelectedItem) map.setFilter(`${previousSelectedItem.layer.id}_HIGHLIGHT`, ['==', ['get', 'id'], '']);
+        if (previousSelectedItem)
+          map.setFilter(`${previousSelectedItem.layer.id}_HIGHLIGHT`, ['==', ['get', 'id'], '']);
         // if clicked on item
         if (clickedItem) {
           // highlight selected item
@@ -360,6 +361,16 @@ export default {
           });
           this.addMapLayer(layer);
         });
+      // move hover layer to the top
+      this.$store.state.reabilitareTermica.itemGroups[0].layers
+          .forEach((layer) => {
+            map.moveLayer(`${layer.id}_HOVER`);
+          });
+      // move highlight layer to the top
+      this.$store.state.reabilitareTermica.itemGroups[0].layers
+          .forEach((layer) => {
+            map.moveLayer(`${layer.id}_HIGHLIGHT`);
+          });
       // add click handler
       this.addMapClickHandler();
 

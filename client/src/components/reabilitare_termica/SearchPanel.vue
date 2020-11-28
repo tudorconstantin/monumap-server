@@ -160,9 +160,10 @@ export default {
   methods: {
     // @list select item
     async selectItem(item) {
+      // console.log('current selectedItem: ', this.selectedItem);
       // load map object
       const map = this.$store.state.reabilitareTermica.map;
-      console.log('@list > selectItem >> item: ', item);
+      // console.log('@list > selectItem >> item: ', item);
       // deselect previous selection
       const previousSelectedItem = this.$store.state.reabilitareTermica.selectedItem;
       // console.log('previousSelectedItem: ', previousSelectedItem);
@@ -201,8 +202,5 @@ p
 
 .active
   background-color: #F2C037
-
-.text-brand
-  color: #a2aa33
 
 </style>

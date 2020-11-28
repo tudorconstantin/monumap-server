@@ -269,7 +269,8 @@ export default {
         // deselect previous selection
         const previousSelectedItem = store.state.toaletePublice.selectedItem;
         // console.log('previousSelectedItem: ', previousSelectedItem);
-        if (previousSelectedItem) map.setFilter(`${previousSelectedItem.layer.id}_HIGHLIGHT`, ['==', ['get', 'id'], '']);
+        if (previousSelectedItem)
+          map.setFilter(`${previousSelectedItem.layer.id}_HIGHLIGHT`, ['==', ['get', 'id'], '']);
         // if clicked on item
         if (clickedItem) {
           // highlight selected item

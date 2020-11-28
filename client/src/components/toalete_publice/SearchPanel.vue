@@ -106,7 +106,8 @@ export default {
       // deselect previous selection
       const previousSelectedItem = this.$store.state.toaletePublice.selectedItem;
       // console.log('previousSelectedItem: ', previousSelectedItem);
-      if (previousSelectedItem && item != previousSelectedItem) map.setFilter(`${previousSelectedItem.layer.id}_HIGHLIGHT`, ['==', ['get', 'id'], '']);
+      if (previousSelectedItem && item != previousSelectedItem)
+        map.setFilter(`${previousSelectedItem.layer.id}_HIGHLIGHT`, ['==', ['get', 'id'], '']);
       // if nothing is selected
       if (!item) {
         // clear selection data

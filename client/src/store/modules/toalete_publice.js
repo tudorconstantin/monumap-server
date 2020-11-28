@@ -131,6 +131,7 @@ const actions = {
   },
 
   async selectItem({commit}, value) {
+    // console.log('@store > selectedItem: ', value);
     // if null value
     if (!value) {
       commit("setSelectedItem", undefined);
@@ -179,7 +180,8 @@ const mutations = {
       newFeature.layer = {id: 'TOALETE_PUBLICE'};
 
       // if both types of toilets ane 'null' set 'ecologice' value to 1
-      if(feature.properties.ecologice === null && feature.properties.automat === null) newFeature.properties.ecologice = 1;
+      if(feature.properties.ecologice === null && feature.properties.automat === null)
+        newFeature.properties.ecologice = 1;
       // calculate total value
       newFeature.properties.totalToalete = newFeature.properties.ecologice + newFeature.properties.automat;
       // return new feature
