@@ -246,7 +246,7 @@ const actions = {
   // },
 
   updateLoading({commit}, value) {
-    console.log('@store > loading: ', value);
+    // console.log('@store > loading: ', value);
     commit('setLoading', value);
   },
 
@@ -259,7 +259,7 @@ const actions = {
   },
 
   async selectItem({commit}, value) {
-    console.log('@store > selectItem: ', value);
+    // console.log('@store > selectItem: ', value);
     // if null value
     if (!value) {
       commit("setSelectedItem", undefined);

@@ -178,35 +178,35 @@ export default {
   methods: {
     // @list select item
     async selectItem(layer, item) {
-      const groupItemFind = this.itemGroups[0].layers
-        .filter(l => l.id === layer.id)[0].data
-        .filter(i => i.properties.id === item.properties.id);
-      console.log('itemGroups: ', groupItemFind);
-      console.log('items: ', this.items.features.filter(i => i.properties.id === item.properties.id))
-      console.log('current selectedItem: ', item.properties, layer.id);
+      // const groupItemFind = this.itemGroups[0].layers
+      //   .filter(l => l.id === layer.id)[0].data
+      //   .filter(i => i.properties.id === item.properties.id);
+      // console.log('itemGroups: ', groupItemFind);
+      // console.log('items: ', this.items.features.filter(i => i.properties.id === item.properties.id))
+      // console.log('current selectedItem: ', item.properties, layer.id);
       // load map object
       const map = this.map;
       // console.log('@list > selectItem >> item: ', item);
       // deselect previous selection
       const previousSelectedItem = this.$store.state.reabilitareTermica.selectedItem;
-      console.log('previousSelectedItem: ', previousSelectedItem);
+      // console.log('previousSelectedItem: ', previousSelectedItem);
       if (previousSelectedItem && item != previousSelectedItem)
         map.setFilter(`${previousSelectedItem.layer.id}_HIGHLIGHT`, ['==', ['get', 'id'], '']);
       // load selected item
-      console.log('layer, item: ', layer.id, item.properties.id);
-      const testArr = map.querySourceFeatures(layer.id, {
-        sourceLayer: layer.id,
-        // filter: ['==', ['get', 'id'], item.properties.id]
-      });
-      console.log('map >> arr: ', testArr.filter(i => i.properties.id === item.properties.id));
+      // console.log('layer, item: ', layer.id, item.properties.id);
+      // const testArr = map.querySourceFeatures(layer.id, {
+      //   sourceLayer: layer.id,
+      //   // filter: ['==', ['get', 'id'], item.properties.id]
+      // });
+      // console.log('map >> arr: ', testArr.filter(i => i.properties.id === item.properties.id));
       const clickedItem = map.querySourceFeatures(layer.id, {
         sourceLayer: layer.id,
         filter: ['==', ['get', 'id'], item.properties.id]
       })[0];
-      console.log('clickedItem 1: ', clickedItem);
+      // console.log('clickedItem 1: ', clickedItem);
       clickedItem.layer = { id: layer.id};
       // clickedItem.layer.id = layer.id;
-      console.log('clickedItem 2: ', clickedItem);
+      // console.log('clickedItem 2: ', clickedItem);
       // if nothing is selected
       if (!clickedItem) {
         // clear selection data
