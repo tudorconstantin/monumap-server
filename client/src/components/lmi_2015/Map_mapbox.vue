@@ -24,6 +24,14 @@
         <img slot="marker" src="../../assets/marker_selected.png"/>
       </MglMarker>
     </MglMap>
+
+    <q-spinner
+        color="blue"
+        size="3em"
+        :thickness="10"
+        class="absolute-center vertical-middle"
+        v-if="loading"
+    />
   </div>
 </template>
 
@@ -51,6 +59,8 @@ export default {
     MglMarker,
   },
 
+  map: {},
+
   data() {
     return {
       accessToken:
@@ -64,7 +74,7 @@ export default {
   },
 
   created() {
-    this.map = null;
+    // this.map = null;
     this.matRoom = matRoom;
     this.constants = constants;
   },
@@ -74,6 +84,15 @@ export default {
       monuments: 'lmi2015/filteredArray',
       geoJSON: 'lmi2015/filteredGeoJSON',
     }),
+
+    loading: {
+      get() {
+        return this.$store.state.lmi2015.loading;
+      },
+      set: function (value) {
+        this.$store.dispatch('lmi2015/updateLoading', value);
+      },
+    },
   },
   watch: {
     /* eslint-disable-next-line no-unused-vars */
@@ -83,13 +102,13 @@ export default {
     /* eslint-disable-next-line no-unused-vars */
     selectedItem(newValue, oldValue) {
       // re-center map view
-      if (newValue && newValue.longitudine_x)
-        this.$store.state.lmi2015.map.flyTo({center: [newValue.longitudine_x, newValue.latitudine_y], zoom: 18});
+      if (newValue && newValue.longitudine_x && this.map)
+        this.map.flyTo({center: [newValue.longitudine_x, newValue.latitudine_y], zoom: 18});
     },
   },
   methods: {
-    customizeMap() {
-      const map = this.$store.state.lmi2015.map;
+    customizeMap(map) {
+      // const map = this.$store.state.lmi2015.map;
       for (const mt in constants.monumentTypes) {
         const img = constants.monumentTypes[mt];
         // add map data source
@@ -158,7 +177,7 @@ export default {
 
       map
           .on('click', (e) => {
-            const clickedMonument = (this.$store.state.lmi2015.map.queryRenderedFeatures(
+            const clickedMonument = (map.queryRenderedFeatures(
                 e.point
             ) || [])[0];
             this.onMonumentClicked(clickedMonument);
@@ -170,12 +189,16 @@ export default {
       //   this.$store.dispatch('lmi2015/mapViewChanged');
       // });
     },
+
     onMapLoaded(event) {
-      const map = event.map;
+      this.loading = false;
+      // save map
+      this.map = event.map;
       // save map reference to store
-      this.$store.dispatch('lmi2015/saveMap', map);
-      this.customizeMap();
+      // this.$store.dispatch('lmi2015/saveMap', this.map);
+      this.customizeMap(this.map);
     },
+
     // calculate map height, required by mapbox
     cssVars() {
       //https://www.telerik.com/blogs/passing-variables-to-css-on-a-vue-component
@@ -199,8 +222,8 @@ export default {
       this.$store.dispatch('lmi2015/selectItem', {monument, desktopFlag});
     },
 
-    filterMap() {
-      if (!this.$store.state.lmi2015.map) return;
+    filterMap(map) {
+      if (!map) return;
       const filteredGeoJSON = this.$store.getters['lmi2015/filteredGeoJSON'];
 
       for (const mt in constants.monumentTypes) {
@@ -211,7 +234,7 @@ export default {
           ),
         };
 
-        if (!this.$store.state.lmi2015.map) this.$store.state.lmi2015.map.getSource(mt).setData(geoJSONByMonumentType);
+        if (!map) map.getSource(mt).setData(geoJSONByMonumentType);
       }
     },
   },

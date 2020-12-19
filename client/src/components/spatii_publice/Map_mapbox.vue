@@ -21,7 +21,7 @@
 
 // import {matRoom} from '@quasar/extras/material-icons';
 import Mapbox from 'mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
+// import 'mapbox-gl/dist/mapbox-gl.css';
 
 import {
   MglMap,

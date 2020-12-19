@@ -27,7 +27,7 @@
             <q-btn flat no-caps label="Date [CSV SHP @380KB]" align="between" type="a"
                    href="/downloads/lmi2015/lmi-2015_bucuresti.zip" target="_blank"/>
             <q-btn flat no-caps label="Arhiva poze [JPG @3.1GB]" align="between" type="a"
-                   href="https://www.myqnapcloud.com/smartshare/6h8f83m54l6p709vu494x222_6iGOWN0" target="_blank"/>
+                   href="https://www.myqnapcloud.com/smartshare/6h8f83m54l6p709vu494x222_6QlhQu6" target="_blank"/>
           </q-card-section>
         </q-card>
       </q-expansion-item>

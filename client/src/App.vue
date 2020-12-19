@@ -241,18 +241,19 @@ export default {
     this.$store.dispatch('photos/getMonumentImages', this.$store.state.photos.monumentShown.nr);
 
     // load 'lie2020-1' data into store
+    this.$store.dispatch('lie2020_1/loadAllData');
 
     // load 'spatii publice' data into store
-    await this.$store.dispatch(('spatiiPublice/loadAllData'));
+    await this.$store.dispatch('spatiiPublice/loadAllData');
 
     // load 'infrastructura sanatate' data into store
-    this.$store.dispatch(('infrastructuraSanatate/loadAllData'));
+    this.$store.dispatch('infrastructuraSanatate/loadAllData');
 
     // load 'toalete publice' data into store
-    this.$store.dispatch(('toaletePublice/loadAllData'));
+    this.$store.dispatch('toaletePublice/loadAllData');
 
     // load 'reabilitare termica' data into store
-    this.$store.dispatch(('reabilitareTermica/loadAllData'));
+    this.$store.dispatch('reabilitareTermica/loadAllData');
 
   },
 };

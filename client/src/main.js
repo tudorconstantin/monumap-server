@@ -6,9 +6,9 @@ import store from './store';
 import './quasar';
 
 // vue layers
-import VueLayers from 'vuelayers';
-import 'vuelayers/lib/style.css';
-Vue.use(VueLayers);
+// import VueLayers from 'vuelayers';
+// import 'vuelayers/lib/style.css';
+// Vue.use(VueLayers);
 
 
 // vue leaflet

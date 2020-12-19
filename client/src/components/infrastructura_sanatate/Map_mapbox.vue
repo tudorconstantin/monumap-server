@@ -49,7 +49,7 @@
 <script>
 import SearchPanel from './SearchPanel';
 import InfoPanel from './InfoPanel';
-import 'mapbox-gl/dist/mapbox-gl.css';
+// import 'mapbox-gl/dist/mapbox-gl.css';
 
 import {MglMap, MglNavigationControl, MglGeolocateControl} from 'vue-mapbox';
 import Mapbox from 'mapbox-gl';

@@ -32,38 +32,38 @@
         <q-card-section class="column bg-grey-4">
           <q-checkbox keep-color v-model="filtruEtapeToate"
                       :label="`Toate etapele [${
-                        itemGroups[0].data && itemGroups[0].data.features ?
-                        itemGroups[0].data.features.length : 0}]`"
+                        items && items.features ?
+                        items.features.length : 0}]`"
                       :color="itemsColors['TOATE']"/>
           <q-checkbox v-model="filtruEtape" val="URMEAZA"
                       :label="`Urmeaza [${
-                        itemGroups[0].layers && itemGroups[0].layers[0].data ?
-                        itemGroups[0].layers[0].data.length : 0}]`"
+                        itemGroups[0].layers ?
+                        itemGroups[0].layers[0].itemsCount : 0}]`"
                       :color="itemsColors['URMEAZA']"/>
           <q-checkbox keep-color v-model="filtruEtape" val="IN_PROIECTARE"
                       :label="`In Proiectare [${
-                        itemGroups[0].layers && itemGroups[0].layers[0].data ?
-                        itemGroups[0].layers[1].data.length : 0}]`"
+                        itemGroups[0].layers ?
+                        itemGroups[0].layers[1].itemsCount : 0}]`"
                       :color="itemsColors['IN_PROIECTARE']"/>
           <q-checkbox keep-color v-model="filtruEtape" val="IN_EXECUTIE"
                       :label="`In Executie [${
-                        itemGroups[0].layers && itemGroups[0].layers[0].data ?
-                        itemGroups[0].layers[2].data.length : 0}]`"
+                        itemGroups[0].layers ?
+                        itemGroups[0].layers[2].itemsCount : 0}]`"
                       :color="itemsColors['IN_EXECUTIE']"/>
           <q-checkbox keep-color v-model="filtruEtape" val="FINALIZAT"
                       :label="`Finalizat [${
-                        itemGroups[0].layers && itemGroups[0].layers[0].data ?
-                        itemGroups[0].layers[3].data.length : 0}]`"
+                        itemGroups[0].layers ?
+                        itemGroups[0].layers[3].itemsCount : 0}]`"
                       :color="itemsColors['FINALIZAT']"/>
           <q-checkbox keep-color v-model="filtruEtape" val="REZILIAT"
                       :label="`Reziliat [${
-                        itemGroups[0].layers && itemGroups[0].layers[0].data ?
-                        itemGroups[0].layers[4].data.length : 0}]`"
+                        itemGroups[0].layers ?
+                        itemGroups[0].layers[4].itemsCount : 0}]`"
                       :color="itemsColors['REZILIAT']"/>
           <q-checkbox keep-color v-model="filtruEtape" val="AVIZ_NEGATIV_ISC"
                       :label="`Aviz Negativ ISC [${
-                        itemGroups[0].layers && itemGroups[0].layers[0].data ?
-                        itemGroups[0].layers[5].data.length : 0}]`"
+                        itemGroups[0].layers ?
+                        itemGroups[0].layers[5].itemsCount : 0}]`"
                       :color="itemsColors['AVIZ_NEGATIV_ISC']"/>
         </q-card-section>
       </q-list>
@@ -86,7 +86,7 @@
           v-ripple
           v-for="(item, index) in layer.data"
           :key="index"
-          @click="selectItem(item)"
+          @click="selectItem(layer, item)"
           class="row items-start no-padding bg-grey-4"
           v-bind:class="{active: (selectedItem ? item.properties.id === selectedItem.properties.id : false)}"
       >
@@ -113,7 +113,25 @@
 
 <script>
 export default {
+  props: [
+    'map',
+  ],
+
   computed: {
+    // items: (filter) => {
+    //   if(filter === 'TOATE') return this.storeItems;
+    //   else if(filter === 'URMEAZA') return this.storeItems;
+    //   else if(filter === 'IN_PROIECTARE') return this.storeItems;
+    //   else if(filter === 'IN_EXECUTIE') return this.storeItems;
+    //   else if(filter === 'FINALIZAT') return this.storeItems;
+    //   else if(filter === 'REZILIAT') return this.storeItems;
+    //   return this.storeItems;
+    // },
+
+    items() {
+      return this.$store.state.reabilitareTermica.items;
+    },
+
     itemGroups() {
       return this.$store.state.reabilitareTermica.itemGroups;
     },
@@ -141,7 +159,7 @@ export default {
       },
       set: function (value) {
         // console.log('@leftPanel > updateUnitatiFilterToate: ', value);
-        this.$store.dispatch('reabilitareTermica/updateItemsFilterToate', value);
+        this.$store.dispatch('reabilitareTermica/updateItemsFilterToate', {value, map: this.map});
       },
     },
 
@@ -152,25 +170,45 @@ export default {
       },
       set: function (value) {
         // console.log('@leftPanel > updateItemsFilter: ', value);
-        this.$store.dispatch('reabilitareTermica/updateItemsFilter', value);
+        this.$store.dispatch('reabilitareTermica/updateItemsFilter', {value, map: this.map});
       },
     },
   },
 
   methods: {
     // @list select item
-    async selectItem(item) {
-      // console.log('current selectedItem: ', this.selectedItem);
+    async selectItem(layer, item) {
+      const groupItemFind = this.itemGroups[0].layers
+        .filter(l => l.id === layer.id)[0].data
+        .filter(i => i.properties.id === item.properties.id);
+      console.log('itemGroups: ', groupItemFind);
+      console.log('items: ', this.items.features.filter(i => i.properties.id === item.properties.id))
+      console.log('current selectedItem: ', item.properties, layer.id);
       // load map object
-      const map = this.$store.state.reabilitareTermica.map;
+      const map = this.map;
       // console.log('@list > selectItem >> item: ', item);
       // deselect previous selection
       const previousSelectedItem = this.$store.state.reabilitareTermica.selectedItem;
-      // console.log('previousSelectedItem: ', previousSelectedItem);
+      console.log('previousSelectedItem: ', previousSelectedItem);
       if (previousSelectedItem && item != previousSelectedItem)
         map.setFilter(`${previousSelectedItem.layer.id}_HIGHLIGHT`, ['==', ['get', 'id'], '']);
+      // load selected item
+      console.log('layer, item: ', layer.id, item.properties.id);
+      const testArr = map.querySourceFeatures(layer.id, {
+        sourceLayer: layer.id,
+        // filter: ['==', ['get', 'id'], item.properties.id]
+      });
+      console.log('map >> arr: ', testArr.filter(i => i.properties.id === item.properties.id));
+      const clickedItem = map.querySourceFeatures(layer.id, {
+        sourceLayer: layer.id,
+        filter: ['==', ['get', 'id'], item.properties.id]
+      })[0];
+      console.log('clickedItem 1: ', clickedItem);
+      clickedItem.layer = { id: layer.id};
+      // clickedItem.layer.id = layer.id;
+      console.log('clickedItem 2: ', clickedItem);
       // if nothing is selected
-      if (!item) {
+      if (!clickedItem) {
         // clear selection data
         this.$store.dispatch('app/updateItemSelected', false);
         this.$store.dispatch('app/updateRightPanel', false);
@@ -179,17 +217,17 @@ export default {
 
         // if selected
       } else {
-        // highlight clicked item
-        map.setFilter(`${item.layer.id}_HIGHLIGHT`, ['==', ['get', 'id'], item.properties.id]);
+        // highlight clicked clickedItem
+        map.setFilter(`${clickedItem.layer.id}_HIGHLIGHT`, ['==', ['get', 'id'], clickedItem.properties.id]);
         this.$store.dispatch('app/updateRightPanel', true);
         this.$store.dispatch('app/updateItemSelected', true);
 
         map.flyTo({
-          center: item.geometry.coordinates,
+          center: clickedItem.geometry.coordinates,
           zoom: 15,
         });
 
-        this.$store.dispatch('reabilitareTermica/selectItem', item);
+        this.$store.dispatch('reabilitareTermica/selectItem', clickedItem);
       }
     },
   },

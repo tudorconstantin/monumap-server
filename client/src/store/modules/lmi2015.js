@@ -6,6 +6,7 @@ import constants from '../../util/constants.js';
 // STATE
 
 const state = {
+  loading: true,
   items: [],
   geoJSON: {},
   filtruTipPatrimoniu: '',
@@ -167,6 +168,11 @@ const actions = {
     commit('setMap', value);
   },
 
+  updateLoading({commit}, value) {
+    // console.log('@store > loading: ', value);
+    commit('setLoading', value);
+  },
+
   async selectItem({commit, dispatch}, {monument, desktopFlag}) {
     // console.log('@store > monument: ', monument);
     // if null value
@@ -325,6 +331,10 @@ const mutations = {
 
   setMonuments(state, monuments) {
     state.items = monuments;
+  },
+
+  setLoading(state, value) {
+    state.loading = value;
   },
 
   setGeoJSON(state, monuments) {

@@ -1,7 +1,7 @@
 // store >> reabilitare_termica.js
 
 const circleRadius = 6;
-const circleOpacity = 0.9;
+const circleOpacity = 1;
 
 const itemsCircleStrokeColor = '#494949';
 const itemsCircleStrokeWidth = 2;
@@ -54,7 +54,8 @@ const highlightStyle = {
 // STATE
 
 const state = {
-  map: null,
+  loading: true,
+  // map: null,
   leftPanel: true,
   rightPanel: false,
   itemSelected: false,
@@ -240,19 +241,25 @@ const actions = {
     commit("setAllData", items);
   },
 
-  saveMap({commit}, value) {
-    commit('setMap', value);
+  // saveMap({commit}, value) {
+  //   commit('setMap', value);
+  // },
+
+  updateLoading({commit}, value) {
+    console.log('@store > loading: ', value);
+    commit('setLoading', value);
   },
 
-  updateItemsFilterToate({commit}, value) {
-    commit('setItemsFilterToate', value);
+  updateItemsFilterToate({commit}, {value, map}) {
+    commit('setItemsFilterToate', {value, map});
   },
 
-  updateItemsFilter({commit}, value) {
-    commit('setItemsFilter', value);
+  updateItemsFilter({commit}, {value, map}) {
+    commit('setItemsFilter', {value, map});
   },
 
   async selectItem({commit}, value) {
+    console.log('@store > selectItem: ', value);
     // if null value
     if (!value) {
       commit("setSelectedItem", undefined);
@@ -263,6 +270,8 @@ const actions = {
       commit('setItemSelected', true);
       commit('setRightPanel', true);
     }
+    // stop loading spinner
+    // state.loading = false;
   },
 
   updateLeftPanel({commit}, value) {
@@ -297,22 +306,38 @@ const mutations = {
     // set units
     state.items = items;
     // console.log('@store > setAllData >> items: ', items);
-    state.itemGroups[0].data = items;
+    // state.itemGroups[0].data = items;
     state.itemGroups[0].layers.forEach((layer) => {
-      const features = items.features.filter((i) => i.properties.stadiu_normalizat.toUpperCase() === layer.name.toUpperCase());
+      const features = items.features
+          .slice(0, 100)
+          .filter((i) =>
+              i.properties.stadiu_normalizat.toUpperCase() === layer.name.toUpperCase()
+          );
+      layer.itemsCount = features.length;
       layer.data = features.map((feature) => {
-        const newFeature = feature;
+        const newFeature = { properties: {} };
+        newFeature.id = feature.id;
+        newFeature.properties.id = feature.properties.id;
+        newFeature.properties.sector = feature.properties.sector;
+        newFeature.properties.adresa = feature.properties.adresa;
+        // newFeature.properties.lat = feature.properties.lat;
+        // newFeature.properties.lng = feature.properties.lng;
+        // newFeature.properties.stadiu_normalizat = feature.properties.stadiu_normalizat;
         newFeature.layer = {id: layer.id};
         return newFeature;
       });
     });
   },
 
-  setMap(state, value) {
-    state.map = value;
+  // setMap(state, value) {
+  //   state.map = value;
+  // },
+
+  setLoading(state, value) {
+    state.loading = value;
   },
 
-  setItemsFilterToate(state, value) {
+  setItemsFilterToate(state, {value, map}) {
     // set checkbox 'TOATE'
     state.filtruEtapeToate = value;
 
@@ -320,9 +345,9 @@ const mutations = {
     if (value) {
       // show all map layers
       state.filtruEtapeReset.forEach((layerId) => {
-        state.map.setLayoutProperty(layerId, 'visibility', 'visible');
-        state.map.setLayoutProperty(`${layerId}_HOVER`, 'visibility', 'visible');
-        state.map.setLayoutProperty(`${layerId}_HIGHLIGHT`, 'visibility', 'visible');
+        map.setLayoutProperty(layerId, 'visibility', 'visible');
+        map.setLayoutProperty(`${layerId}_HOVER`, 'visibility', 'visible');
+        map.setLayoutProperty(`${layerId}_HIGHLIGHT`, 'visibility', 'visible');
       });
       // reset checkboxes values
       state.filtruEtape = state.filtruEtapeReset.slice();
@@ -331,16 +356,16 @@ const mutations = {
     } else {
       // hide all map layers
       state.filtruEtapeReset.forEach((layerId) => {
-        state.map.setLayoutProperty(layerId, 'visibility', 'none');
-        state.map.setLayoutProperty(`${layerId}_HOVER`, 'visibility', 'none');
-        state.map.setLayoutProperty(`${layerId}_HIGHLIGHT`, 'visibility', 'none');
+        map.setLayoutProperty(layerId, 'visibility', 'none');
+        map.setLayoutProperty(`${layerId}_HOVER`, 'visibility', 'none');
+        map.setLayoutProperty(`${layerId}_HIGHLIGHT`, 'visibility', 'none');
       });
       // set all checkboxes to false
       state.filtruEtape = [];
     }
   },
 
-  setItemsFilter(state, value) {
+  setItemsFilter(state, {value, map}) {
     // update checkboxes value
     state.filtruEtape = value;
 
@@ -350,9 +375,9 @@ const mutations = {
       state.filtruEtapeToate = true;
       // show all map layers
       state.filtruEtapeReset.forEach((layerId) => {
-        state.map.setLayoutProperty(layerId, 'visibility', 'visible');
-        state.map.setLayoutProperty(`${layerId}_HOVER`, 'visibility', 'visible');
-        state.map.setLayoutProperty(`${layerId}_HIGHLIGHT`, 'visibility', 'visible');
+        map.setLayoutProperty(layerId, 'visibility', 'visible');
+        map.setLayoutProperty(`${layerId}_HOVER`, 'visibility', 'visible');
+        map.setLayoutProperty(`${layerId}_HIGHLIGHT`, 'visibility', 'visible');
       });
 
       // if some checkboxes are de-selected
@@ -363,14 +388,14 @@ const mutations = {
       state.filtruEtapeReset.forEach((layerId) => {
         // if checkbox list includes layerId, show layer
         if (state.filtruEtape.includes(layerId)) {
-          state.map.setLayoutProperty(layerId, 'visibility', 'visible');
-          state.map.setLayoutProperty(`${layerId}_HOVER`, 'visibility', 'visible');
-          state.map.setLayoutProperty(`${layerId}_HIGHLIGHT`, 'visibility', 'visible');
+          map.setLayoutProperty(layerId, 'visibility', 'visible');
+          map.setLayoutProperty(`${layerId}_HOVER`, 'visibility', 'visible');
+          map.setLayoutProperty(`${layerId}_HIGHLIGHT`, 'visibility', 'visible');
           // else, if checkbox does not include layerId, hide layer
         } else {
-          state.map.setLayoutProperty(layerId, 'visibility', 'none');
-          state.map.setLayoutProperty(`${layerId}_HOVER`, 'visibility', 'none');
-          state.map.setLayoutProperty(`${layerId}_HIGHLIGHT`, 'visibility', 'none');
+          map.setLayoutProperty(layerId, 'visibility', 'none');
+          map.setLayoutProperty(`${layerId}_HOVER`, 'visibility', 'none');
+          map.setLayoutProperty(`${layerId}_HIGHLIGHT`, 'visibility', 'none');
         }
       });
     }

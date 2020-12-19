@@ -13,7 +13,7 @@
         class="bg-grey-5"
     >
       <!-- drawer content -->
-      <search-panel></search-panel>
+      <search-panel :map="map"></search-panel>
     </q-drawer>
 
     <!-- right panel -->
@@ -43,10 +43,26 @@
       <MglNavigationControl position="top-left"/>
       <MglGeolocateControl position="top-left"/>
     </MglMap>
+
+    <q-spinner
+        color="blue"
+        size="3em"
+        :thickness="10"
+        class="absolute-center vertical-middle"
+        v-if="loading"
+    />
   </div>
 </template>
 
 <script>
+// import {
+//   Loading,
+//
+//   // optional!, for example below
+//   // with custom spinner
+//   QSpinnerGears
+// } from 'quasar';
+
 import SearchPanel from './SearchPanel';
 import InfoPanel from './InfoPanel';
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -62,12 +78,13 @@ export default {
     SearchPanel,
     InfoPanel,
   },
+  map: {},
   data() {
     return {
       hoverItemId: null,
       accessToken:
-          'pk.eyJ1IjoidHVkb3Jjb25zdGFudGluIiwiYSI6ImNrM29yN2t3cjBiMDkzaG80cTdiczhzMmIifQ.fqelSp0srqiSV3qkfbE2qQ',
-      mapStyle: 'mapbox://styles/tudorconstantin/ck6e0nrah6h571ipdkgakat2u',
+          'pk.eyJ1IjoiYWxpbmNoaXMiLCJhIjoiY2toNHQ3eGdzMGVmaTJyczVyanN0dWY0YiJ9.cmyaXMKo-Q055Iu2y5V7fQ',
+      mapStyle: 'mapbox://styles/alinchis/cki2v5tdt3x9y19omjfldf1pd',
       container: 'mapContainer',
       center: [26.0986, 44.4365],
       zoom: 12.5,
@@ -76,6 +93,15 @@ export default {
   },
 
   computed: {
+    loading: {
+      get() {
+        return this.$store.state.reabilitareTermica.loading;
+      },
+      set: function (value) {
+        this.$store.dispatch('reabilitareTermica/updateLoading', value);
+      },
+    },
+
     leftPanel: {
       get() {
         // console.log('app: getLeftPanel');
@@ -155,9 +181,9 @@ export default {
 
   methods: {
     // add map source
-    addMapSource(sourceId, data) {
+    addMapSource(map, sourceId, data) {
       // load map object
-      const map = this.$store.state.reabilitareTermica.map;
+      // const map = this.$store.state.reabilitareTermica.map;
       // add source
       map.addSource(sourceId, {
         type: 'geojson',
@@ -170,9 +196,9 @@ export default {
     },
 
     // add map layer
-    addMapLayer: function (layer) {
+    addMapLayer: function (map, layer) {
       // load map object
-      const map = this.$store.state.reabilitareTermica.map;
+      // const map = this.$store.state.reabilitareTermica.map;
       // add map layer
       map.addLayer({
         id: layer.id,
@@ -257,15 +283,19 @@ export default {
     },
 
     // add map click event handler
-    addMapClickHandler() {
+    addMapClickHandler(map) {
+      // let self = this;
       // load map object
-      const map = this.$store.state.reabilitareTermica.map;
+      // const map = this.$store.state.reabilitareTermica.map;
       // load store
       const store = this.$store;
       // load array of layers ids
       const layersIdsArr = this.$store.getters["reabilitareTermica/getAllLayersIds"];
       // on click action
-      map.on('click', function (e) {
+      map.on('click', async function (e) {
+        // start loading spinner
+        // self.loading = true;
+        // console.log('@map > loading: ', self.$store.state.reabilitareTermica.loading);
         // console.log('@click e: ', e);
         // find clicked item
         const clickedItem = (map.queryRenderedFeatures(e.point, {layers: layersIdsArr}) || [])[0];
@@ -336,45 +366,47 @@ export default {
           store.dispatch('app/updateRightPanel', false);
           store.dispatch('app/updateItemSelected', false)
         }
-
       });
     },
 
 
     async onMapLoaded(event) {
+      this.loading = false;
+
       const map = event.map;
+      // console.log('map: ', map);
+      this.map = map;
       // save map reference to store
-      this.$store.dispatch('reabilitareTermica/saveMap', map);
+      // this.$store.dispatch('reabilitareTermica/saveMap', map);
       // add map data sources
       // const itemsArr = await this.$store.state.reabilitareTermica.items;
       // console.log('itemsArr: ', itemsArr);
-      // await this.addMapSource('IMOBILE', itemsArr);
+      // await this.addMapSource(map,'IMOBILE', itemsArr);
       // add map layers
       // add layers for 'ETAPE'
       this.$store.state.reabilitareTermica.itemGroups[0].layers
-        .forEach((layer) => {
-          this.addMapSource(layer.sourceId, {
-            "type": "FeatureCollection",
-            "name": layer.id,
-            "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
-            features: layer.data,
+          .forEach((layer) => {
+            this.addMapSource(map, layer.sourceId, {
+              "type": "FeatureCollection",
+              "name": layer.id,
+              "crs": {"type": "name", "properties": {"name": "urn:ogc:def:crs:OGC:1.3:CRS84"}},
+              features: this.$store.state.reabilitareTermica.items.features
+                .filter(item => item.properties.stadiu_normalizat.toUpperCase() === layer.name.toUpperCase()),
+            });
+            this.addMapLayer(map, layer);
           });
-          this.addMapLayer(layer);
-        });
       // move hover layer to the top
-      this.$store.state.reabilitareTermica.itemGroups[0].layers
-          .forEach((layer) => {
-            map.moveLayer(`${layer.id}_HOVER`);
-          });
+      // this.$store.state.reabilitareTermica.itemGroups[0].layers
+      //     .forEach((layer) => {
+      //       map.moveLayer(`${layer.id}_HOVER`);
+      //     });
       // move highlight layer to the top
-      this.$store.state.reabilitareTermica.itemGroups[0].layers
-          .forEach((layer) => {
-            map.moveLayer(`${layer.id}_HIGHLIGHT`);
-          });
+      // this.$store.state.reabilitareTermica.itemGroups[0].layers
+      //     .forEach((layer) => {
+      //       map.moveLayer(`${layer.id}_HIGHLIGHT`);
+      //     });
       // add click handler
-      this.addMapClickHandler();
-
-
+      this.addMapClickHandler(map);
     },
 
     cssVars() {
@@ -388,6 +420,19 @@ export default {
       };
     },
   },
+
+  mounted: function () {
+    // console.log('mounted');
+    // Loading.show({
+    //   spinner: QSpinnerGears,
+    //   // other props
+    // });
+    // this.loading = false;
+  },
+
+  beforeDestroy() {
+    // this.map.destroy();
+  }
 };
 </script>
 
