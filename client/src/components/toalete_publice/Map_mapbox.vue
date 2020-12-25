@@ -193,9 +193,9 @@ export default {
       });
 
       // add hover layer
-      let hoveredItemId = this.hoveredItemId;
+      let hoveredItem = this.hoveredItem;
+      const hoverLayerId = `${layer.layerId}_HOVER`
       // console.log('@hoveredItemId: ', hoveredItemId);
-      const hoverLayerId = `${layer.id}_HOVER`
       map.addLayer({
         'id': hoverLayerId,
         'type': layer.hover.shape,
@@ -206,19 +206,23 @@ export default {
         },
         'paint': layer.hover.paint,
       });
-      // When the user moves their mouse over the state-fill layer, we'll update the
+      // When the user moves their mouse over the layer, we'll update the
       // feature state for the feature under the mouse.
-      map.on('mousemove', hoverLayerId, function (e) {
+      map.on('mousemove', layer.id, function (e) {
         if (e.features.length > 0) {
-          if (hoveredItemId) {
+          if (hoveredItem && hoveredItem.itemId) {
             map.setFeatureState(
-                {source: layer.sourceId, id: hoveredItemId},
+                {source: layer.sourceId, id: hoveredItem.itemId},
                 {hover: false}
             );
           }
-          hoveredItemId = e.features[0].id;
+          // select first item in the list of hovered items
+          hoveredItem = {
+            itemId: e.features[0].id,
+            sourceId: e.features[0].layer.source,
+          };
           map.setFeatureState(
-              {source: layer.sourceId, id: hoveredItemId},
+              {source: layer.sourceId, id: hoveredItem.itemId},
               {hover: true}
           );
         }
@@ -226,14 +230,14 @@ export default {
 
       // When the mouse leaves the state-fill layer, update the feature state of the
       // previously hovered feature.
-      map.on('mouseleave', hoverLayerId, function () {
-        if (hoveredItemId) {
+      map.on('mouseleave', layer.id, function () {
+        if (hoveredItem) {
           map.setFeatureState(
-              {source: layer.sourceId, id: hoveredItemId},
+              {source: layer.sourceId, id: hoveredItem.itemId},
               {hover: false}
           );
         }
-        hoveredItemId = null;
+        hoveredItem = null;
       });
 
       // add highlight layer
@@ -371,10 +375,25 @@ export default {
         "--width": window.innerWidth + "px",
       };
     },
+
+    // on window resize
+    myEventHandler() {
+      // force redraw
+      this.$mount();
+    },
   },
 
   created() {
-  }
+    // create non-dynamic map object
+    this.map = {};
+    // add event listener for window resize
+    window.addEventListener("resize", this.myEventHandler);
+  },
+
+  destroyed() {
+    // remove custom window resize event listener
+    window.removeEventListener("resize", this.myEventHandler);
+  },
 };
 </script>
 

@@ -13,7 +13,7 @@
         class="bg-grey-5"
     >
       <!-- drawer content -->
-      <search-panel></search-panel>
+      <search-panel :map="map" ></search-panel>
     </q-drawer>
 
     <!-- right panel -->
@@ -161,9 +161,7 @@ export default {
 
   methods: {
     // add map source
-    addMapSource(sourceId, data) {
-      // load map object
-      const map = this.$store.state.infrastructuraSanatate.map;
+    addMapSource(map, sourceId, data) {
       // add source
       map.addSource(sourceId, {
         type: 'geojson',
@@ -176,9 +174,7 @@ export default {
     },
 
     // add map layer
-    addMapLayer: function (layer) {
-      // load map object
-      const map = this.$store.state.infrastructuraSanatate.map;
+    addMapLayer: function (map, layer) {
       // add map layer
       map.addLayer({
         id: layer.id,
@@ -262,9 +258,7 @@ export default {
     },
 
     // add map click event handler
-    addMapClickHandler() {
-      // load map object
-      const map = this.$store.state.infrastructuraSanatate.map;
+    addMapClickHandler(map) {
       // load store
       const store = this.$store;
       // load array of layers ids
@@ -346,28 +340,27 @@ export default {
 
 
     async onMapLoaded(event) {
-      const map = event.map;
-      // save map reference to store
-      this.$store.dispatch('infrastructuraSanatate/saveMap', map);
+      // save map
+      this.map = event.map;
+      const map = this.map
+
       // add map data sources
       const unitsArr = await this.$store.state.infrastructuraSanatate.unitsArr;
       // console.log('unitsArr: ', unitsArr);
-      await this.addMapSource('UNITATI', unitsArr);
+      await this.addMapSource(map,'UNITATI', unitsArr);
       const servicesArr = await this.$store.state.infrastructuraSanatate.servicesArr;
-      await this.addMapSource('SERVICII', servicesArr);
+      await this.addMapSource(map,'SERVICII', servicesArr);
       // add map layers
       // add layers for 'UNITATI'
       const unitatiLayers = this.$store.state.infrastructuraSanatate.itemGroups[0].layers;
       // console.log('unitatiLayers: ', unitatiLayers.layers);
-      unitatiLayers.forEach((layer) => { this.addMapLayer(layer) });
+      unitatiLayers.forEach((layer) => { this.addMapLayer(map, layer) });
       // add layers for 'SERVICII'
       const serviciiLayers = this.$store.state.infrastructuraSanatate.itemGroups[1].layers;
       // console.log('serviciiLayers: ', serviciiLayers.layers);
-      serviciiLayers.forEach((layer) => { this.addMapLayer(layer) });
+      serviciiLayers.forEach((layer) => { this.addMapLayer(map, layer) });
       // add click handler
-      this.addMapClickHandler();
-
-
+      this.addMapClickHandler(map);
     },
 
     // calculate map height, required by mapbox
@@ -386,6 +379,24 @@ export default {
         "--width": window.innerWidth + "px",
       };
     },
+
+    // on window resize
+    myEventHandler() {
+      // force redraw
+      this.$mount();
+    },
+  },
+
+  created() {
+    // create non-dynamic map object
+    this.map = {};
+    // add event listener for window resize
+    window.addEventListener("resize", this.myEventHandler);
+  },
+
+  destroyed() {
+    // remove custom window resize event listener
+    window.removeEventListener("resize", this.myEventHandler);
   },
 };
 </script>

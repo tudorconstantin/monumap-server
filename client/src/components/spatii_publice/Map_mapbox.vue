@@ -2,6 +2,14 @@
 
 <template>
   <div id="mapContainer" :style="cssVars()">
+
+    <!-- left panel -->
+    <search-panel :map="map" :mapLoadedFlag="mapLoadedFlag"></search-panel>
+
+    <!-- right panel -->
+    <info-panel v-bind:current-item="currentItem"></info-panel>
+
+    <!-- map -->
     <MglMap
         :accessToken="accessToken"
         :mapStyle.sync="mapStyle"
@@ -14,12 +22,21 @@
       <MglNavigationControl position="top-left"/>
       <MglGeolocateControl position="top-left"/>
     </MglMap>
+
+    <!-- loading indicator -->
+    <q-spinner
+        color="blue"
+        size="3em"
+        :thickness="10"
+        class="absolute-center vertical-middle"
+        v-if="loading"/>
   </div>
 </template>
 
 <script>
+import SearchPanel from './SearchPanel';
+import InfoPanel from './InfoPanel';
 
-// import {matRoom} from '@quasar/extras/material-icons';
 import Mapbox from 'mapbox-gl';
 // import 'mapbox-gl/dist/mapbox-gl.css';
 
@@ -39,7 +56,8 @@ export default {
     MglMap,
     MglNavigationControl,
     MglGeolocateControl,
-    // MglMarker,
+    SearchPanel,
+    InfoPanel,
   },
 
   data() {
@@ -50,213 +68,6 @@ export default {
       currentItem: {},
       hoveredItem: {},
       highlightedItemId: null,
-      // layers: {
-      //   spatiiAbandonate: {
-      //     geometry: 'Point',
-      //     render: {
-      //       shape: 'circle',
-      //       paint: {
-      //         'circle-radius': 10,
-      //         'circle-color': '#ad0450',
-      //         'circle-stroke-color': '#906e7d',
-      //         'circle-stroke-width': 3,
-      //         'circle-opacity': 0.7
-      //       },
-      //     },
-      //     sourceId: 'SPATII_ABANDONATE',
-      //     layerId: 'SPATII_ABANDONATE',
-      //   },
-      //   spatiiAbandonateHover: {
-      //     geometry: 'Point',
-      //     render: {
-      //       shape: 'circle',
-      //       paint: {
-      //         'circle-radius': 10,
-      //         'circle-color': '#ad0450',
-      //         'circle-stroke-color': '#fcf127',
-      //         'circle-stroke-width': 5,
-      //         'circle-opacity': [
-      //           'case',
-      //           ['boolean', ['feature-state', 'hover'], false],
-      //           1,
-      //           0
-      //         ],
-      //         'circle-stroke-opacity': [
-      //           'case',
-      //           ['boolean', ['feature-state', 'hover'], false],
-      //           1,
-      //           0
-      //         ]
-      //       },
-      //     },
-      //     sourceId: 'SPATII_ABANDONATE',
-      //     layerId: 'SPATII_ABANDONATE_HOVER',
-      //   },
-      //   spatiiAbandonateHighlight: {
-      //     geometry: 'Point',
-      //     render: {
-      //       shape: 'circle',
-      //       paint: {
-      //         'circle-radius': 10,
-      //         'circle-color': '#ad0450',
-      //         'circle-stroke-color': '#FF0220',
-      //         'circle-stroke-width': 5,
-      //       },
-      //       filter: ['==', ['get', 'id'], ''],
-      //     },
-      //     sourceId: 'SPATII_ABANDONATE',
-      //     layerId: 'SPATII_ABANDONATE_HIGHLIGHT',
-      //   },
-      //
-      //   spatiiPunctuale: {
-      //     geometry: 'Point',
-      //     render: {
-      //       shape: 'circle',
-      //       paint: {
-      //         'circle-radius': 10,
-      //         'circle-color': '#0247f3',
-      //         'circle-stroke-color': '#79849c',
-      //         'circle-stroke-width': 3,
-      //         'circle-opacity': 0.8,
-      //       },
-      //     },
-      //     sourceId: 'SPATII_PUNCTUALE',
-      //     layerId: 'SPATII_PUNCTUALE',
-      //   },
-      //   spatiiPunctualeHover: {
-      //     geometry: 'Point',
-      //     render: {
-      //       shape: 'circle',
-      //       paint: {
-      //         'circle-radius': 10,
-      //         'circle-color': '#0247f3',
-      //         'circle-stroke-color': '#fcf127',
-      //         'circle-stroke-width': 5,
-      //         'circle-opacity': [
-      //           'case',
-      //           ['boolean', ['feature-state', 'hover'], false],
-      //           1,
-      //           0
-      //         ],
-      //         'circle-stroke-opacity': [
-      //           'case',
-      //           ['boolean', ['feature-state', 'hover'], false],
-      //           1,
-      //           0
-      //         ]
-      //       },
-      //     },
-      //     sourceId: 'SPATII_PUNCTUALE',
-      //     layerId: 'SPATII_PUNCTUALE_HOVER',
-      //   },
-      //   spatiiPunctualeHighlight: {
-      //     geometry: 'Point',
-      //     render: {
-      //       shape: 'circle',
-      //       paint: {
-      //         'circle-radius': 10,
-      //         'circle-color': '#0247f3',
-      //         'circle-stroke-color': '#FF0220',
-      //         'circle-stroke-width': 5,
-      //       },
-      //       filter: ['==', ['get', 'id'], ''],
-      //     },
-      //     sourceId: 'SPATII_PUNCTUALE',
-      //     layerId: 'SPATII_PUNCTUALE_HIGHLIGHT',
-      //   },
-      //
-      //   spatiiLiniare: {
-      //     geometry: 'MultiLineString',
-      //     render: {
-      //       shape: 'line',
-      //       paint: {
-      //         'line-color': '#ffde02',
-      //         'line-width': 5,
-      //         'line-opacity': 0.6,
-      //         'line-dasharray': [10, 5],
-      //       },
-      //     },
-      //     sourceId: 'SPATII_LINIARE',
-      //     layerId: 'SPATII_LINIARE',
-      //   },
-      //   spatiiLiniareHover: {
-      //     geometry: 'MultiLineString',
-      //     render: {
-      //       shape: 'line',
-      //       paint: {
-      //         'line-color': '#fcf127',
-      //         'line-width': 5,
-      //         'line-opacity': [
-      //           'case',
-      //           ['boolean', ['feature-state', 'hover'], false],
-      //           1,
-      //           0.1
-      //         ]
-      //       },
-      //     },
-      //     sourceId: 'SPATII_LINIARE',
-      //     layerId: 'SPATII_LINIARE_HOVER',
-      //   },
-      //   spatiiLiniareHighlight: {
-      //     geometry: 'MultiLineString',
-      //     render: {
-      //       shape: 'line',
-      //       paint: {
-      //         'line-color': '#ff0220',
-      //         'line-width': 5,
-      //       },
-      //       filter: ['==', ['get', 'id'], ''],
-      //     },
-      //     sourceId: 'SPATII_LINIARE',
-      //     layerId: 'SPATII_LINIARE_HIGHLIGHT',
-      //   },
-      //
-      //   spatiiSuprafata: {
-      //     geometry: 'MultiPolygon',
-      //     render: {
-      //       shape: 'fill',
-      //       paint: {
-      //         'fill-color': '#16e802',
-      //         'fill-opacity': 0.3,
-      //       },
-      //     },
-      //     sourceId: 'SPATII_SUPRAFATA',
-      //     layerId: 'SPATII_SUPRAFATA',
-      //   },
-      //   spatiiSuprafataHover: {
-      //     geometry: 'MultiPolygon',
-      //     render: {
-      //       shape: 'line',
-      //       paint: {
-      //         'line-color': '#fcf127',
-      //         'line-width': 5,
-      //         'line-dasharray': [10, 4],
-      //         'line-opacity': [
-      //           'case',
-      //           ['boolean', ['feature-state', 'hover'], false],
-      //           1,
-      //           0.1
-      //         ]
-      //       },
-      //     },
-      //     sourceId: 'SPATII_SUPRAFATA',
-      //     layerId: 'SPATII_SUPRAFATA_HOVER',
-      //   },
-      //   spatiiSuprafataHighlight: {
-      //     geometry: 'MultiPolygon',
-      //     render: {
-      //       shape: 'line',
-      //       paint: {
-      //         'line-color': '#FF0220',
-      //         'line-width': 5,
-      //       },
-      //       filter: ['==', ['get', 'id'], ''],
-      //     },
-      //     sourceId: 'SPATII_SUPRAFATA',
-      //     layerId: 'SPATII_SUPRAFATA_HIGHLIGHT',
-      //   },
-      // },
-
       accessToken:
           'pk.eyJ1IjoiYWxpbmNoaXMiLCJhIjoiY2toNHQ3eGdzMGVmaTJyczVyanN0dWY0YiJ9.cmyaXMKo-Q055Iu2y5V7fQ',
       mapStyle: 'mapbox://styles/alinchis/ckh4tdtog05ii19ocdg2rywt0',
@@ -264,25 +75,40 @@ export default {
       center: [26.0986, 44.4365],
       zoom: 12.5,
       constants: null,
+      mapLoadedFlag: false,
     };
   },
 
-  async created() {
-    this.map = null;
-    // this.matRoom = matRoom;
-  },
-
   computed: {
-    myMap: {
-      // getter
-      get: function () {
-        return this.$store.state.spatiiPublice.myMap;
+    loading: {
+      get() {
+        return this.$store.state.spatiiPublice.loading;
       },
-      // setter
-      set: function (newMap) {
-        this.$store.commit('spatiiPublice/saveMap', newMap);
-      }
+      set: function (value) {
+        this.$store.dispatch('spatiiPublice/updateLoading', value);
+      },
     },
+
+    leftPanel: {
+      get() {
+        // console.log('app: getLeftPanel');
+        return this.$store.state.spatiiPublice.leftPanel;
+      },
+      set: function (value) {
+        // console.log('app: setLeftPanel: ', value);
+        this.$store.dispatch('spatiiPublice/updateLeftPanel', value);
+      },
+    },
+
+    rightPanel: {
+      get() {
+        return this.$store.state.spatiiPublice.rightPanel;
+      },
+      set: function (value) {
+        this.$store.dispatch('spatiiPublice/updateRightPanel', value);
+      },
+    },
+
     selectedItem: {
       // getter
       get: function () {
@@ -359,17 +185,9 @@ export default {
         // console.log('@click e: ', e);
         // console.log('@click array: ', mapObj.queryRenderedFeatures(e.point) || []);
         // select the second item from the array of items stack clicked, first item is on hover layer
-        const clickedItem = (mapObj.queryRenderedFeatures(e.point) || [])[1];
+        const clickedItem = (mapObj.queryRenderedFeatures(e.point) || [])[0];
         // console.log('clickedItem: ', clickedItem);
 
-        // load previous selected item
-        // const previousSelectedItem = this.selectedItem;
-
-        // de-highlight previous selection
-        // if(previousSelectedItem && previousSelectedItem.layer) {
-        //   // console.log('previousSelectedItem: ', previousSelectedItem);
-        //   mapObj.setFilter(`${previousSelectedItem.layer.id}_HIGHLIGHT`, ['==', ['get', 'id'], '']);
-        // }
         // de-highlight all layers
         ['SPATII_ABANDONATE', 'SPATII_PUNCTUALE', 'SPATII_LINIARE', 'SPATII_SUPRAFATA']
             .forEach((item) => {
@@ -451,13 +269,11 @@ export default {
         }
 
       });
-      // return new map obj
-      // return mapObj;
     },
 
     // add hover layer
     addHoverLayer(mapObj, layer, hoverLayer) {
-      this.hoveredItem;
+      let hoveredItem = this.hoveredItem;
       // console.log('@hoveredItemId: ', hoveredItemId);
       mapObj.addLayer({
         'id': hoverLayer.layerId,
@@ -466,27 +282,28 @@ export default {
         'layout': {},
         'paint': hoverLayer.render.paint,
       });
-      // When the user moves their mouse over the state-fill layer, we'll update the
+      // When the user moves their mouse over the layer, we'll update the
       // feature state for the feature under the mouse.
       mapObj.on('mousemove', layer.layerId, function (e) {
         // if mouse passes over at least 1 item
         if (e.features.length > 0) {
           // console.log('@hover > e: ', e.features);
           // deselect previous hover item, if exists
-          if (this.hoveredItem) {
+          if (hoveredItem && hoveredItem.itemId) {
+            // console.log('hoveredItem: ', hoveredItem);
             mapObj.setFeatureState(
-                {source: this.hoveredItem.sourceId, id: this.hoveredItem.itemId},
+                {source: hoveredItem.sourceId, id: hoveredItem.itemId},
                 {hover: false}
             );
           }
           // select first item in the list of hovered items
-          this.hoveredItem = {
+          hoveredItem = {
             itemId: e.features[0].id,
             sourceId: e.features[0].layer.source,
           };
           // set hover layer to visible, for the current hovered item
           mapObj.setFeatureState(
-              {source: this.hoveredItem.sourceId, id: this.hoveredItem.itemId},
+              {source: hoveredItem.sourceId, id: hoveredItem.itemId},
               {hover: true}
           );
         }
@@ -495,14 +312,14 @@ export default {
       // When the mouse leaves the state-fill layer, update the feature state of the
       // previously hovered feature.
       mapObj.on('mouseleave', layer.layerId, function () {
-        // console.log('mouseleave > this.hoveredItemId: ', this.hoveredItem);
-        if (this.hoveredItem) {
+        // console.log('mouseleave > hoveredItemId: ', hoveredItem);
+        if (hoveredItem) {
           mapObj.setFeatureState(
-              {source: this.hoveredItem.sourceId, id: this.hoveredItem.itemId},
+              {source: hoveredItem.sourceId, id: hoveredItem.itemId},
               {hover: false}
           );
         }
-        this.hoveredItem = null;
+        hoveredItem = null;
       });
     },
 
@@ -524,9 +341,12 @@ export default {
     },
 
     onMapLoaded(event) {
-      let map = event.map;
-      // this.$store.spatiiPublice.myMap = map;
-      this.$store.dispatch('spatiiPublice/saveMap', map);
+      this.loading = false;
+
+      const map = event.map;
+      // save map
+      this.map = map;
+
       // add map layers
       // add layer for 'spatii-suprafata'
       this.addMapLayer(map, this.layers.spatiiSuprafata, this.spatiiSuprafata);
@@ -559,6 +379,8 @@ export default {
       // add click event handler
       this.addMapClickHandler(map);
 
+      // update mapLoadedFlag
+      this.mapLoadedFlag = true;
     },
 
     // calculate map height, required by mapbox
@@ -578,18 +400,23 @@ export default {
       };
     },
 
-    selectItem(item) {
-      if (!item) {
-        this.$store.dispatch('spatiiPublice/selectItem', undefined);
-        // this.$store.dispatch('app/updateRightPanel', false);
-        this.$store.dispatch('app/updateItemSelected', false);
-      } else {
-        this.$store.dispatch('spatiiPublice/selectItem', item);
-        this.$store.dispatch('app/updateRightPanel', true);
-        this.$store.dispatch('app/updateItemSelected', true);
-      }
-
+    // on window resize
+    myEventHandler() {
+      // force redraw
+      this.$mount();
     },
+  },
+
+  created() {
+    // create non-dynamic map object
+    this.map = {};
+    // add event listener for window resize
+    window.addEventListener("resize", this.myEventHandler);
+  },
+
+  destroyed() {
+    // remove custom window resize event listener
+    window.removeEventListener("resize", this.myEventHandler);
   },
 };
 </script>

@@ -73,11 +73,6 @@ export default {
     };
   },
 
-  created() {
-    // this.map = null;
-    this.matRoom = matRoom;
-    this.constants = constants;
-  },
   computed: {
     ...mapGetters({
       selectedItem: 'lmi2015/getSelectedItem',
@@ -237,6 +232,26 @@ export default {
         if (!map) map.getSource(mt).setData(geoJSONByMonumentType);
       }
     },
+
+    // on window resize
+    myEventHandler() {
+      // force redraw
+      this.$mount();
+    },
+  },
+
+  created() {
+    // create non-dynamic map object
+    this.map = {};
+    this.matRoom = matRoom;
+    this.constants = constants;
+    // add event listener for window resize
+    window.addEventListener("resize", this.myEventHandler);
+  },
+
+  destroyed() {
+    // remove custom window resize event listener
+    window.removeEventListener("resize", this.myEventHandler);
   },
 };
 </script>

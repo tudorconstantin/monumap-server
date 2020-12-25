@@ -5,6 +5,7 @@
 
     <!-- download data -->
     <q-expansion-item
+        id="rt-sp-descarcare-date"
         dense
         dense-toggle
         expand-separator
@@ -21,6 +22,7 @@
 
     <!-- items filter -->
     <q-expansion-item
+        id="rt-sp-lista-filtre"
         dense
         dense-toggle
         expand-separator
@@ -75,61 +77,77 @@
         dense-toggle
         expand-separator
         icon="scatter_plot"
-        v-for="(layer, lIndex) in itemGroups[0].layers"
-        :key="lIndex"
-        :label="`${layer.name} [${layer && layer.data ? layer.data.length : 0}]`"
-        default-closed
+        :label="`Imobile [${filteredItems.length}]`"
+        default-opened
     >
-      <q-item
-          dense
-          clickable
-          v-ripple
-          v-for="(item, index) in layer.data"
-          :key="index"
-          @click="selectItem(layer, item)"
-          class="row items-start no-padding bg-grey-4"
-          v-bind:class="{active: (selectedItem ? item.properties.id === selectedItem.properties.id : false)}"
+      <q-virtual-scroll
+          id="rt-sp-vscroll"
+          :items="filteredItems"
+          :items-size="filteredItems.length"
+          separator
+          class="bg-grey-4"
+          style="max-height: 100px;"
       >
-        <q-item-section class="q-pa-xs no-border no-margin" style="max-width: 40px">
-          <q-item-label class="q-pa-xs" style="min-height: 20px">{{ index + 1 }}.</q-item-label>
-        </q-item-section>
-        <q-item-section class="column q-pt-xs">
-          <q-item-label class="q-pa-xs" style="min-height: 20px">
-            {{ item['properties']['adresa'] }}
-          </q-item-label>
-          <q-item-label class="text-caption text-grey-7 q-pa-xs no-border no-margin" style="min-height: 20px">
-            {{ item['properties']["sector"] }}
-          </q-item-label>
-        </q-item-section>
-        <q-item-section class="q-pa-xs no-border no-margin" style="max-width: 32px">
-          <q-icon class="" name="fiber_manual_record" size="24px"
-                  :color="itemsColors[layer.id]"/>
-        </q-item-section>
-      </q-item>
+        <template v-slot="{ item, index }">
+          <q-item
+              dense
+              clickable
+              v-ripple
+              :key="index"
+              @click="selectItem(item)"
+              class="row items-start no-padding"
+              v-bind:class="{active: (selectedItem ? item.properties.id === selectedItem.properties.id : false)}"
+          >
+            <q-item-section class="q-pa-xs no-border no-margin" style="max-width: 40px">
+              <q-item-label class="q-pa-xs" style="min-height: 20px">{{ index + 1 }}.</q-item-label>
+            </q-item-section>
+            <q-item-section class="column q-pt-xs">
+              <q-item-label class="q-pa-xs" style="min-height: 20px">
+                {{ item['properties']['adresa'] }}
+              </q-item-label>
+              <q-item-label class="text-caption text-grey-7 q-pa-xs no-border no-margin" style="min-height: 20px">
+                {{ item['properties']["sector"] }}
+              </q-item-label>
+            </q-item-section>
+            <q-item-section class="q-pa-xs no-border no-margin" style="max-width: 32px">
+              <q-icon class="" name="fiber_manual_record" size="24px"
+                      :color="itemsColors[item.layer.id]"/>
+            </q-item-section>
+          </q-item>
+        </template>
+      </q-virtual-scroll>
     </q-expansion-item>
   </div>
 </template>
 
 
 <script>
+// import Mapbox from "mapbox-gl";
+
 export default {
   props: [
     'map',
+    'mapLoadedFlag',
   ],
 
   computed: {
-    // items: (filter) => {
-    //   if(filter === 'TOATE') return this.storeItems;
-    //   else if(filter === 'URMEAZA') return this.storeItems;
-    //   else if(filter === 'IN_PROIECTARE') return this.storeItems;
-    //   else if(filter === 'IN_EXECUTIE') return this.storeItems;
-    //   else if(filter === 'FINALIZAT') return this.storeItems;
-    //   else if(filter === 'REZILIAT') return this.storeItems;
-    //   return this.storeItems;
-    // },
+    loading: {
+      get() {
+        return this.$store.state.spatiiPublice.loading;
+      },
+      set: function (value) {
+        this.$store.dispatch('reabilitareTermica/updateLoading', value);
+      },
+    },
 
     items() {
       return this.$store.state.reabilitareTermica.items;
+    },
+
+    filteredItems() {
+      return this.$store.state.reabilitareTermica.items && this.$store.state.reabilitareTermica.items.features ?
+          this.$store.state.reabilitareTermica.items.features.filter(i => this.filtruEtape.includes(i.layer.id)) :
+          [];
     },
 
     itemGroups() {
@@ -173,40 +191,37 @@ export default {
         this.$store.dispatch('reabilitareTermica/updateItemsFilter', {value, map: this.map});
       },
     },
+
   },
 
   methods: {
     // @list select item
-    async selectItem(layer, item) {
-      // const groupItemFind = this.itemGroups[0].layers
-      //   .filter(l => l.id === layer.id)[0].data
-      //   .filter(i => i.properties.id === item.properties.id);
-      // console.log('itemGroups: ', groupItemFind);
-      // console.log('items: ', this.items.features.filter(i => i.properties.id === item.properties.id))
-      // console.log('current selectedItem: ', item.properties, layer.id);
+    async selectItem(clickedItem) {
+      // console.log('@searchPanel > clickedItem: ', clickedItem);
       // load map object
       const map = this.map;
-      // console.log('@list > selectItem >> item: ', item);
-      // deselect previous selection
-      const previousSelectedItem = this.$store.state.reabilitareTermica.selectedItem;
-      // console.log('previousSelectedItem: ', previousSelectedItem);
-      if (previousSelectedItem && item != previousSelectedItem)
-        map.setFilter(`${previousSelectedItem.layer.id}_HIGHLIGHT`, ['==', ['get', 'id'], '']);
-      // load selected item
-      // console.log('layer, item: ', layer.id, item.properties.id);
-      // const testArr = map.querySourceFeatures(layer.id, {
-      //   sourceLayer: layer.id,
-      //   // filter: ['==', ['get', 'id'], item.properties.id]
-      // });
-      // console.log('map >> arr: ', testArr.filter(i => i.properties.id === item.properties.id));
-      const clickedItem = map.querySourceFeatures(layer.id, {
-        sourceLayer: layer.id,
-        filter: ['==', ['get', 'id'], item.properties.id]
-      })[0];
-      // console.log('clickedItem 1: ', clickedItem);
-      clickedItem.layer = { id: layer.id};
-      // clickedItem.layer.id = layer.id;
-      // console.log('clickedItem 2: ', clickedItem);
+
+      // select corresponding item from map
+      // const item = await map.querySourceFeatures(layerId, {
+      //   sourceLayer: sourceId,
+      //   filter: ['==', ['get', 'id'], clickedItem.properties.id]
+      // })[0];
+      // console.log('@searchPanel > mapItem: ', item);
+      // item.layer = clickedItem.layer;
+      // item.layer = {};
+      // item.layer.id = layerId;
+      // item.layer.source = sourceId;
+      // console.log('@searchPanel > mapItem: ', item);
+
+      // de-highlight all layers
+      this.$store.state.reabilitareTermica.filtruEtape
+          .forEach((lItem) => {
+            map.setFilter(`${lItem}_HIGHLIGHT`, ['==', ['get', 'id'], '']);
+          });
+
+      // highlight clicked item
+      if (clickedItem) map.setFilter(`${clickedItem.layer.id}_HIGHLIGHT`, ['==', ['get', 'id'], clickedItem.properties.id]);
+
       // if nothing is selected
       if (!clickedItem) {
         // clear selection data
@@ -231,6 +246,16 @@ export default {
       }
     },
   },
+
+  // created() {
+  //   const spBox = document.getElementById('mapContainer').offsetHeight;
+  //   const spDD = document.getElementById('rt-sp-descarcare-date').offsetHeight;
+  //   const spFL = document.getElementById('rt-sp-lista-filtre').offsetHeight;
+  //   const spVSmaxHeight = spBox - spDD - spFL;
+  //   console.log('searchPanel VB height: ', spVSmaxHeight);
+  //   const spVSelement = document.getElementById('rt-sp-vscroll');
+  //   spVSelement.style.maxHeight = `${spVSmaxHeight} px`;
+  // },
 };
 </script>
 

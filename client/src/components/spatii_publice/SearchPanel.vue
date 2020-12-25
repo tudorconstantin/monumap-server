@@ -63,7 +63,7 @@
             </q-item-section>
             <q-item-section class="q-pa-xs no-border no-margin" style="max-width: 32px">
               <q-icon class="" name="fiber_manual_record" size="24px"
-                      color="pink-7"/>
+                      :color="itemsColors['SPATII_ABANDONATE']"/>
             </q-item-section>
           </q-item>
         </q-list>
@@ -103,7 +103,7 @@
             </q-item-section>
             <q-item-section class="q-pa-xs no-border no-margin" style="max-width: 32px">
               <q-icon class="" name="fiber_manual_record" size="24px"
-                      color="blue-13"/>
+                      :color="itemsColors['SPATII_PUNCTUALE']"/>
             </q-item-section>
           </q-item>
         </q-list>
@@ -143,7 +143,7 @@
             </q-item-section>
             <q-item-section class="q-pa-xs no-border no-margin" style="max-width: 32px">
               <q-icon class="" name="fiber_manual_record" size="24px"
-                      color="orange-9"/>
+                      :color="itemsColors['SPATII_LINIARE']"/>
             </q-item-section>
           </q-item>
         </q-list>
@@ -184,7 +184,7 @@
             </q-item-section>
             <q-item-section class="q-pa-xs no-border no-margin" style="max-width: 32px">
               <q-icon class="" name="fiber_manual_record" size="24px"
-                      color="green-7"/>
+                      :color="itemsColors['SPATII_SUPRAFATA']"/>
             </q-item-section>
           </q-item>
         </q-list>
@@ -200,18 +200,56 @@ import Mapbox from 'mapbox-gl';
 export default {
   name: 'SpatiiPubliceSearchPanel',
 
+  props: [
+    'map',
+    'mapLoadedFlag',
+  ],
+
   computed: {
+    loading: {
+      get() {
+        return this.$store.state.spatiiPublice.loading;
+      },
+      set: function (value) {
+        this.$store.dispatch('spatiiPublice/updateLoading', value);
+      },
+    },
+
     leftPanel: {
       get() {
         // console.log('app: getLeftPanel');
         return this.$store.state.spatiiPublice.leftPanel;
-      }
-      ,
+      },
       set: function (value) {
         // console.log('app: setLeftPanel: ', value);
         this.$store.dispatch('spatiiPublice/updateLeftPanel', value);
       },
     },
+
+    rightPanel: {
+      get() {
+        return this.$store.state.spatiiPublice.rightPanel;
+      },
+      set: function (value) {
+        this.$store.dispatch('spatiiPublice/updateRightPanel', value);
+      },
+    },
+
+    currentItem: {
+      get() {
+        // console.log('app: getLeftPanel');
+        return this.$store.state.spatiiPublice.selectedItem;
+      },
+      set: function (value) {
+        // console.log('app: setLeftPanel: ', value);
+        this.$store.dispatch('spatiiPublice/selectItem', value);
+      },
+    },
+
+    itemsColors() {
+      return this.$store.state.spatiiPublice.itemsInfoPanelColors;
+    },
+
     spatiiAbandonate() {
       return this.$store.getters['spatiiPublice/getSpatiiAbandonate'] ?
           this.$store.getters['spatiiPublice/getSpatiiAbandonate'].features : [];
@@ -243,7 +281,7 @@ export default {
       // console.log('@selectItem > item: ', item);
 
       // load map object
-      const mapObj = this.$store.state.spatiiPublice.myMap;
+      const mapObj = this.map;
 
       // de-highlight all layers
       ['SPATII_ABANDONATE', 'SPATII_PUNCTUALE', 'SPATII_LINIARE', 'SPATII_SUPRAFATA']

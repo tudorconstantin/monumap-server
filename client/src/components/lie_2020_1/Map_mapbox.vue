@@ -44,6 +44,7 @@
       <MglGeolocateControl position="top-left"/>
     </MglMap>
 
+    <!-- loading indicator -->
     <q-spinner
         color="blue"
         size="3em"
@@ -413,11 +414,26 @@ export default {
         "--width": window.innerWidth + "px",
       };
     },
+
+    // on window resize
+    myEventHandler() {
+      // force redraw
+      this.$mount();
+    },
   },
 
   created() {
+    // create non-dynamic map object
     this.map = {};
-  }
+    // add event listener for window resize
+    window.addEventListener("resize", this.myEventHandler);
+  },
+
+  destroyed() {
+    // remove custom window resize event listener
+    window.removeEventListener("resize", this.myEventHandler);
+  },
+
 };
 </script>
 

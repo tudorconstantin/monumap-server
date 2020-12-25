@@ -55,7 +55,6 @@ const highlightStyle = {
 
 const state = {
   loading: true,
-  // map: null,
   leftPanel: true,
   rightPanel: false,
   itemSelected: false,
@@ -241,10 +240,6 @@ const actions = {
     commit("setAllData", items);
   },
 
-  // saveMap({commit}, value) {
-  //   commit('setMap', value);
-  // },
-
   updateLoading({commit}, value) {
     // console.log('@store > loading: ', value);
     commit('setLoading', value);
@@ -302,36 +297,64 @@ const actions = {
 
 const mutations = {
 
+  // setAllData(state, items) {
+  //   // set units
+  //   state.items = items;
+  //   // console.log('@store > setAllData >> items: ', items);
+  //   // state.itemGroups[0].data = items;
+  //   state.itemGroups[0].layers.forEach((layer) => {
+  //     const features = items.features
+  //         .slice(0, 100)
+  //         .filter((i) =>
+  //             i.properties.stadiu_normalizat.toUpperCase() === layer.name.toUpperCase()
+  //         );
+  //     layer.itemsCount = features.length;
+  //     layer.data = features.map((feature) => {
+  //       const newFeature = { properties: {} };
+  //       newFeature.properties.id = feature.properties.id;
+  //       newFeature.properties.sector = feature.properties.sector;
+  //       newFeature.properties.adresa = feature.properties.adresa;
+  //       // newFeature.properties.lat = feature.properties.lat;
+  //       // newFeature.properties.lng = feature.properties.lng;
+  //       // newFeature.properties.stadiu_normalizat = feature.properties.stadiu_normalizat;
+  //       newFeature.layer = {id: layer.id, source: layer.sourceId};
+  //       return newFeature;
+  //     });
+  //   });
+  // },
+
   setAllData(state, items) {
+    // console.log('@store: save data to store');
     // set units
     state.items = items;
     // console.log('@store > setAllData >> items: ', items);
     // state.itemGroups[0].data = items;
+    // console.log('@store: calculate items count');
+    state.items.totalCount = items.features.length;
+    // console.log('@store: prepare layers');
     state.itemGroups[0].layers.forEach((layer) => {
+      // git features for current layer
       const features = items.features
-          .slice(0, 100)
-          .filter((i) =>
-              i.properties.stadiu_normalizat.toUpperCase() === layer.name.toUpperCase()
-          );
+        .filter((i, index) => {
+            // if 'risc_seismic' is not 'Urgenta' (U1, U2, U3, U4)
+            const response = i.properties.stadiu_normalizat.toLowerCase() === layer.name.toLowerCase();
+            if (response) items.features[index].layer = {id: layer.id, source: layer.sourceId};
+            return response;
+          }
+        );
+
       layer.itemsCount = features.length;
       layer.data = features.map((feature) => {
-        const newFeature = { properties: {} };
-        newFeature.id = feature.id;
-        newFeature.properties.id = feature.properties.id;
-        newFeature.properties.sector = feature.properties.sector;
-        newFeature.properties.adresa = feature.properties.adresa;
-        // newFeature.properties.lat = feature.properties.lat;
-        // newFeature.properties.lng = feature.properties.lng;
-        // newFeature.properties.stadiu_normalizat = feature.properties.stadiu_normalizat;
-        newFeature.layer = {id: layer.id};
-        return newFeature;
+        // const newFeature = {properties: {}};
+        // newFeature.properties.id = feature.properties.id;
+        // newFeature.properties.sector = feature.properties.sector;
+        // newFeature.properties.adresa = feature.properties.adresa;
+        feature.layer = {id: layer.id};
+        return feature;
       });
     });
+    // console.log('@store: data preparation DONE!');
   },
-
-  // setMap(state, value) {
-  //   state.map = value;
-  // },
 
   setLoading(state, value) {
     state.loading = value;

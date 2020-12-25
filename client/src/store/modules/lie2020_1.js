@@ -2,11 +2,11 @@
 
 // import constants from "@/util/constants";
 
-const circleRadius = 6;
-const circleOpacity = 1;
+const circleRadius = 8;
+const circleOpacity = 0.7;
 
 const itemsCircleStrokeColor = '#494949';
-const itemsCircleStrokeWidth = 2;
+const itemsCircleStrokeWidth = 3;
 
 const itemsColors = {
   'CLASA_I': '#d50000',
@@ -41,11 +41,11 @@ const itemsInfoPanelColors = {
 const hoverStyle = {
   shape: 'circle',
   paint: {
-    'circle-radius': 9,
+    'circle-radius': 11,
     'circle-color': '#000000',
     'circle-opacity': ['case', ['boolean', ['feature-state', 'hover'], false], 0.01, 0],
     'circle-stroke-color': '#fafafa',
-    'circle-stroke-width': 2,
+    'circle-stroke-width': 3,
     'circle-stroke-opacity': ['case', ['boolean', ['feature-state', 'hover'], false], 1, 0],
   },
 };
@@ -53,7 +53,7 @@ const hoverStyle = {
 const highlightStyle = {
   shape: 'circle',
   paint: {
-    'circle-radius': 9,
+    'circle-radius': 11,
     'circle-color': '#000000',
     'circle-opacity': 0.01,
     'circle-stroke-color': '#faec01',

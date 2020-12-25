@@ -5,6 +5,7 @@
 
     <!-- left panel -->
     <q-drawer
+        id="search-panel-container"
         :overlay="true"
         v-model="leftPanel"
         side="left"
@@ -13,7 +14,10 @@
         class="bg-grey-5"
     >
       <!-- drawer content -->
-      <search-panel :map="map"></search-panel>
+      <search-panel
+          id="search-panel-component"
+          :map="map"
+      ></search-panel>
     </q-drawer>
 
     <!-- right panel -->
@@ -55,14 +59,6 @@
 </template>
 
 <script>
-// import {
-//   Loading,
-//
-//   // optional!, for example below
-//   // with custom spinner
-//   QSpinnerGears
-// } from 'quasar';
-
 import SearchPanel from './SearchPanel';
 import InfoPanel from './InfoPanel';
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -78,17 +74,17 @@ export default {
     SearchPanel,
     InfoPanel,
   },
-  map: {},
   data() {
     return {
       hoverItemId: null,
       accessToken:
           'pk.eyJ1IjoiYWxpbmNoaXMiLCJhIjoiY2toNHQ3eGdzMGVmaTJyczVyanN0dWY0YiJ9.cmyaXMKo-Q055Iu2y5V7fQ',
-      mapStyle: 'mapbox://styles/alinchis/cki2v5tdt3x9y19omjfldf1pd',
+      mapStyle: 'mapbox://styles/alinchis/ckh4tdtog05ii19ocdg2rywt0',
       container: 'mapContainer',
       center: [26.0986, 44.4365],
       zoom: 12.5,
       constants: null,
+      specialComponentKey: 0,
     };
   },
 
@@ -182,8 +178,6 @@ export default {
   methods: {
     // add map source
     addMapSource(map, sourceId, data) {
-      // load map object
-      // const map = this.$store.state.reabilitareTermica.map;
       // add source
       map.addSource(sourceId, {
         type: 'geojson',
@@ -197,8 +191,6 @@ export default {
 
     // add map layer
     addMapLayer: function (map, layer) {
-      // load map object
-      // const map = this.$store.state.reabilitareTermica.map;
       // add map layer
       map.addLayer({
         id: layer.id,
@@ -376,12 +368,7 @@ export default {
       const map = event.map;
       // console.log('map: ', map);
       this.map = map;
-      // save map reference to store
-      // this.$store.dispatch('reabilitareTermica/saveMap', map);
-      // add map data sources
-      // const itemsArr = await this.$store.state.reabilitareTermica.items;
-      // console.log('itemsArr: ', itemsArr);
-      // await this.addMapSource(map,'IMOBILE', itemsArr);
+
       // add map layers
       // add layers for 'ETAPE'
       this.$store.state.reabilitareTermica.itemGroups[0].layers
@@ -391,7 +378,7 @@ export default {
               "name": layer.id,
               "crs": {"type": "name", "properties": {"name": "urn:ogc:def:crs:OGC:1.3:CRS84"}},
               features: this.$store.state.reabilitareTermica.items.features
-                .filter(item => item.properties.stadiu_normalizat.toUpperCase() === layer.name.toUpperCase()),
+                  .filter(item => item.properties.stadiu_normalizat.toUpperCase() === layer.name.toUpperCase()),
             });
             this.addMapLayer(map, layer);
           });
@@ -419,20 +406,52 @@ export default {
         '--width': window.innerWidth + 'px',
       };
     },
+
+    // on window resize
+    myEventHandler() {
+      // console.log('event: ', e);
+      // this.map.resize();
+      const spBox = document.getElementById('mapContainer').offsetHeight;
+      const spDD = document.getElementById('rt-sp-descarcare-date').offsetHeight;
+      const spFL = document.getElementById('rt-sp-lista-filtre').offsetHeight;
+      const spVSmaxHeight = spBox - spDD - spFL - 32;
+      // console.log('searchPanel VB height: ', spVSmaxHeight);
+      const spVSelement = document.getElementById('rt-sp-vscroll');
+      // console.log('vscroll.maxHeight: ', spVSelement.style.maxHeight);
+      spVSelement.style.maxHeight = `${spVSmaxHeight}px`;
+      // console.log('vscroll.maxHeight: ', spVSelement.style.maxHeight);
+      spVSelement.style.display = 'block';
+      // force redraw
+      this.$mount();
+    },
   },
 
-  mounted: function () {
-    // console.log('mounted');
-    // Loading.show({
-    //   spinner: QSpinnerGears,
-    //   // other props
-    // });
-    // this.loading = false;
+  created() {
+    // create non-dynamic map object
+    this.map = {};
+    // add event listener for window resize
+    window.addEventListener("resize", this.myEventHandler);
   },
 
-  beforeDestroy() {
-    // this.map.destroy();
-  }
+  destroyed() {
+    // remove custom window resize event listener
+    window.removeEventListener("resize", this.myEventHandler);
+  },
+
+  mounted() {
+    const spBox = document.getElementById('mapContainer').offsetHeight;
+    const spDD = document.getElementById('rt-sp-descarcare-date').offsetHeight;
+    const spFL = document.getElementById('rt-sp-lista-filtre').offsetHeight;
+    const spVSmaxHeight = spBox - spDD - spFL - 32;
+    // console.log('searchPanel VB height: ', spVSmaxHeight);
+    const spVSelement = document.getElementById('rt-sp-vscroll');
+    // console.log('vscroll.maxHeight: ', spVSelement.style.maxHeight);
+    spVSelement.style.maxHeight = `${spVSmaxHeight}px`;
+    // console.log('vscroll.maxHeight: ', spVSelement.style.maxHeight);
+    spVSelement.style.display = 'block';
+    this.$mount();
+  },
+
 };
 </script>
 

@@ -168,7 +168,21 @@
 
 <script>
 export default {
+  props: [
+    'map',
+    'mapLoadedFlag',
+  ],
+
   computed: {
+    loading: {
+      get() {
+        return this.$store.state.spatiiPublice.loading;
+      },
+      set: function (value) {
+        this.$store.dispatch('infrastructuraSanatate/updateLoading', value);
+      },
+    },
+
     itemGroups() {
       return this.$store.state.infrastructuraSanatate.itemGroups;
     },
@@ -212,7 +226,7 @@ export default {
       },
       set: function (value) {
         // console.log('@leftPanel > updateUnitatiFilterToate: ', value);
-        this.$store.dispatch('infrastructuraSanatate/updateUnitsFilterToate', value);
+        this.$store.dispatch('infrastructuraSanatate/updateUnitsFilterToate', {map: this.map, value});
       },
     },
 
@@ -223,7 +237,7 @@ export default {
       },
       set: function (value) {
         // console.log('@leftPanel > updateUnitsFilter: ', value);
-        this.$store.dispatch('infrastructuraSanatate/updateUnitsFilter', value);
+        this.$store.dispatch('infrastructuraSanatate/updateUnitsFilter', {map: this.map, value});
       },
     },
 
@@ -234,7 +248,7 @@ export default {
       },
       set: function (value) {
         // console.log('@leftPanel > updateServiciiFilterToate: ', value);
-        this.$store.dispatch('infrastructuraSanatate/updateServicesFilterToate', value);
+        this.$store.dispatch('infrastructuraSanatate/updateServicesFilterToate', {map: this.map, value});
       },
     },
 
@@ -245,7 +259,7 @@ export default {
       },
       set: function (value) {
         // console.log('@leftPanel > updateServicesFilter: ', value);
-        this.$store.dispatch('infrastructuraSanatate/updateServicesFilter', value);
+        this.$store.dispatch('infrastructuraSanatate/updateServicesFilter', {map: this.map, value});
       },
     },
   },
@@ -254,7 +268,7 @@ export default {
     // @list select item
     async selectItem(item) {
       // load map object
-      const map = this.$store.state.infrastructuraSanatate.map;
+      const map = this.map;
       // console.log('@list > selectItem >> item: ', item);
       // deselect previous selection
       const previousSelectedItem = this.$store.state.infrastructuraSanatate.selectedItem;

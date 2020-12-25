@@ -74,7 +74,7 @@ const highlightStyle = {
 // STATE
 
 const state = {
-  map: null,
+  loading: true,
   leftPanel: true,
   rightPanel: false,
   itemSelected: false,
@@ -406,24 +406,25 @@ const actions = {
     commit("setAllData", {units, services});
   },
 
-  saveMap({commit}, value) {
-    commit('setMap', value);
+  updateLoading({commit}, value) {
+    // console.log('@store > loading: ', value);
+    commit('setLoading', value);
   },
 
-  updateUnitsFilterToate({commit}, value) {
-    commit('setUnitsFilterToate', value);
+  updateUnitsFilterToate({commit}, {map, value}) {
+    commit('setUnitsFilterToate', {map, value});
   },
 
-  updateUnitsFilter({commit}, value) {
-    commit('setUnitsFilter', value);
+  updateUnitsFilter({commit}, {map, value}) {
+    commit('setUnitsFilter', {map, value});
   },
 
-  updateServicesFilterToate({commit}, value) {
-    commit('setServicesFilterToate', value);
+  updateServicesFilterToate({commit}, {map, value}) {
+    commit('setServicesFilterToate', {map, value});
   },
 
-  updateServicesFilter({commit}, value) {
-    commit('setServicesFilter', value);
+  updateServicesFilter({commit}, {map, value}) {
+    commit('setServicesFilter', {map, value});
   },
 
   async selectItem({commit}, value) {
@@ -494,11 +495,11 @@ const mutations = {
     });
   },
 
-  setMap(state, value) {
-    state.map = value;
+  setLoading(state, value) {
+    state.loading = value;
   },
 
-  setUnitsFilterToate(state, value) {
+  setUnitsFilterToate(state, {map, value}) {
     // set checkbox 'TOATE'
     state.filtruUnitatiToate = value;
 
@@ -506,9 +507,9 @@ const mutations = {
     if(value) {
       // show all map layers
       state.filtruUnitatiReset.forEach((layerId) => {
-        state.map.setLayoutProperty(layerId, 'visibility', 'visible');
-        state.map.setLayoutProperty(`${layerId}_HOVER`, 'visibility', 'visible');
-        state.map.setLayoutProperty(`${layerId}_HIGHLIGHT`, 'visibility', 'visible');
+        map.setLayoutProperty(layerId, 'visibility', 'visible');
+        map.setLayoutProperty(`${layerId}_HOVER`, 'visibility', 'visible');
+        map.setLayoutProperty(`${layerId}_HIGHLIGHT`, 'visibility', 'visible');
       });
       // reset checkboxes values
       state.filtruUnitati = state.filtruUnitatiReset.slice();
@@ -517,16 +518,16 @@ const mutations = {
     } else {
       // hide all map layers
       state.filtruUnitatiReset.forEach((layerId) => {
-        state.map.setLayoutProperty(layerId, 'visibility', 'none');
-        state.map.setLayoutProperty(`${layerId}_HOVER`, 'visibility', 'none');
-        state.map.setLayoutProperty(`${layerId}_HIGHLIGHT`, 'visibility', 'none');
+        map.setLayoutProperty(layerId, 'visibility', 'none');
+        map.setLayoutProperty(`${layerId}_HOVER`, 'visibility', 'none');
+        map.setLayoutProperty(`${layerId}_HIGHLIGHT`, 'visibility', 'none');
       });
       // set all checkboxes to false
       state.filtruUnitati = [];
     }
   },
 
-  setUnitsFilter(state, value) {
+  setUnitsFilter(state, {map, value}) {
     // update checkboxes value
     state.filtruUnitati = value;
 
@@ -536,9 +537,9 @@ const mutations = {
       state.filtruUnitatiToate = true;
       // show all map layers
       state.filtruUnitatiReset.forEach((layerId) => {
-        state.map.setLayoutProperty(layerId, 'visibility', 'visible');
-        state.map.setLayoutProperty(`${layerId}_HOVER`, 'visibility', 'visible');
-        state.map.setLayoutProperty(`${layerId}_HIGHLIGHT`, 'visibility', 'visible');
+        map.setLayoutProperty(layerId, 'visibility', 'visible');
+        map.setLayoutProperty(`${layerId}_HOVER`, 'visibility', 'visible');
+        map.setLayoutProperty(`${layerId}_HIGHLIGHT`, 'visibility', 'visible');
       });
 
       // if some checkboxes are de-selected
@@ -549,20 +550,20 @@ const mutations = {
       state.filtruUnitatiReset.forEach((layerId) => {
         // if checkbox list includes layerId, show layer
         if(state.filtruUnitati.includes(layerId)) {
-          state.map.setLayoutProperty(layerId, 'visibility', 'visible');
-          state.map.setLayoutProperty(`${layerId}_HOVER`, 'visibility', 'visible');
-          state.map.setLayoutProperty(`${layerId}_HIGHLIGHT`, 'visibility', 'visible');
+          map.setLayoutProperty(layerId, 'visibility', 'visible');
+          map.setLayoutProperty(`${layerId}_HOVER`, 'visibility', 'visible');
+          map.setLayoutProperty(`${layerId}_HIGHLIGHT`, 'visibility', 'visible');
           // else, if checkbox does not include layerId, hide layer
         } else {
-          state.map.setLayoutProperty(layerId, 'visibility', 'none');
-          state.map.setLayoutProperty(`${layerId}_HOVER`, 'visibility', 'none');
-          state.map.setLayoutProperty(`${layerId}_HIGHLIGHT`, 'visibility', 'none');
+          map.setLayoutProperty(layerId, 'visibility', 'none');
+          map.setLayoutProperty(`${layerId}_HOVER`, 'visibility', 'none');
+          map.setLayoutProperty(`${layerId}_HIGHLIGHT`, 'visibility', 'none');
         }
       });
     }
   },
 
-  setServicesFilterToate(state, value) {
+  setServicesFilterToate(state, {map, value}) {
     // set checkbox 'TOATE'
     state.filtruServiciiToate = value;
 
@@ -570,9 +571,9 @@ const mutations = {
     if(value) {
       // show all map layers
       state.filtruServiciiReset.forEach((layerId) => {
-        state.map.setLayoutProperty(layerId, 'visibility', 'visible');
-        state.map.setLayoutProperty(`${layerId}_HOVER`, 'visibility', 'visible');
-        state.map.setLayoutProperty(`${layerId}_HIGHLIGHT`, 'visibility', 'visible');
+        map.setLayoutProperty(layerId, 'visibility', 'visible');
+        map.setLayoutProperty(`${layerId}_HOVER`, 'visibility', 'visible');
+        map.setLayoutProperty(`${layerId}_HIGHLIGHT`, 'visibility', 'visible');
       });
       // reset checkboxes values
       state.filtruServicii = state.filtruServiciiReset.slice();
@@ -581,16 +582,16 @@ const mutations = {
     } else {
       // hide all map layers
       state.filtruServiciiReset.forEach((layerId) => {
-        state.map.setLayoutProperty(layerId, 'visibility', 'none');
-        state.map.setLayoutProperty(`${layerId}_HOVER`, 'visibility', 'none');
-        state.map.setLayoutProperty(`${layerId}_HIGHLIGHT`, 'visibility', 'none');
+        map.setLayoutProperty(layerId, 'visibility', 'none');
+        map.setLayoutProperty(`${layerId}_HOVER`, 'visibility', 'none');
+        map.setLayoutProperty(`${layerId}_HIGHLIGHT`, 'visibility', 'none');
       });
       // set all checkboxes to false
       state.filtruServicii = [];
     }
   },
 
-  setServicesFilter(state, value) {
+  setServicesFilter(state, {map, value}) {
     // update checkboxes value
     state.filtruServicii = value;
 
@@ -600,9 +601,9 @@ const mutations = {
       state.filtruServiciiToate = true;
       // show all map layers
       state.filtruServiciiReset.forEach((layerId) => {
-        state.map.setLayoutProperty(layerId, 'visibility', 'visible');
-        state.map.setLayoutProperty(`${layerId}_HOVER`, 'visibility', 'visible');
-        state.map.setLayoutProperty(`${layerId}_HIGHLIGHT`, 'visibility', 'visible');
+        map.setLayoutProperty(layerId, 'visibility', 'visible');
+        map.setLayoutProperty(`${layerId}_HOVER`, 'visibility', 'visible');
+        map.setLayoutProperty(`${layerId}_HIGHLIGHT`, 'visibility', 'visible');
       });
 
       // if some checkboxes are de-selected
@@ -613,14 +614,14 @@ const mutations = {
       state.filtruServiciiReset.forEach((layerId) => {
         // if checkbox list includes layerId, show layer
         if(state.filtruServicii.includes(layerId)) {
-          state.map.setLayoutProperty(layerId, 'visibility', 'visible');
-          state.map.setLayoutProperty(`${layerId}_HOVER`, 'visibility', 'visible');
-          state.map.setLayoutProperty(`${layerId}_HIGHLIGHT`, 'visibility', 'visible');
+          map.setLayoutProperty(layerId, 'visibility', 'visible');
+          map.setLayoutProperty(`${layerId}_HOVER`, 'visibility', 'visible');
+          map.setLayoutProperty(`${layerId}_HIGHLIGHT`, 'visibility', 'visible');
           // else, if checkbox does not include layerId, hide layer
         } else {
-          state.map.setLayoutProperty(layerId, 'visibility', 'none');
-          state.map.setLayoutProperty(`${layerId}_HOVER`, 'visibility', 'none');
-          state.map.setLayoutProperty(`${layerId}_HIGHLIGHT`, 'visibility', 'none');
+          map.setLayoutProperty(layerId, 'visibility', 'none');
+          map.setLayoutProperty(`${layerId}_HOVER`, 'visibility', 'none');
+          map.setLayoutProperty(`${layerId}_HIGHLIGHT`, 'visibility', 'none');
         }
       });
     }

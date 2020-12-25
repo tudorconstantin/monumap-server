@@ -1,11 +1,18 @@
 // store >> spatii_publice.js
 
-import Mapbox from 'mapbox-gl';
+// import Mapbox from 'mapbox-gl';
 // const fs = require('fs-extra');
 // const spS = fetch('/geojson/spatii_publice/spatii-suprafata.geojson').then((r) => r.json());
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // STATE
+
+const itemsInfoPanelColors = {
+  'SPATII_ABANDONATE': 'cyan-11',
+  'SPATII_PUNCTUALE': 'blue-14',
+  'SPATII_LINIARE': 'amber-10',
+  'SPATII_SUPRAFATA': 'light-green-14',
+};
 
 const state = {
   myMap: null,
@@ -20,9 +27,9 @@ const state = {
           'visibility': 'visible',
         },
         paint: {
-          'circle-radius': 10,
-          'circle-color': '#ad0450',
-          'circle-stroke-color': 'gray',
+          'circle-radius': 8,
+          'circle-color': '#00f5ee',
+          'circle-stroke-color': '#3b3a3a',
           'circle-stroke-width': 3,
           'circle-opacity': 0.7
         },
@@ -35,8 +42,8 @@ const state = {
       render: {
         shape: 'circle',
         paint: {
-          'circle-radius': 10,
-          'circle-color': '#ad0450',
+          'circle-radius': 8,
+          'circle-color': '#00f5ee',
           'circle-stroke-color': '#ffffff',
           'circle-stroke-width': 5,
           'circle-opacity': [
@@ -61,8 +68,8 @@ const state = {
       render: {
         shape: 'circle',
         paint: {
-          'circle-radius': 10,
-          'circle-color': '#ad0450',
+          'circle-radius': 8,
+          'circle-color': '#00f5ee',
           'circle-stroke-color': '#ffde02',
           'circle-stroke-width': 5,
         },
@@ -81,9 +88,9 @@ const state = {
           'visibility': 'visible',
         },
         paint: {
-          'circle-radius': 10,
-          'circle-color': '#0247f3',
-          'circle-stroke-color': 'gray',
+          'circle-radius': 8,
+          'circle-color': '#1255f6',
+          'circle-stroke-color': '#3b3a3a',
           'circle-stroke-width': 3,
           'circle-opacity': 0.8,
         },
@@ -96,8 +103,8 @@ const state = {
       render: {
         shape: 'circle',
         paint: {
-          'circle-radius': 10,
-          'circle-color': '#0247f3',
+          'circle-radius': 8,
+          'circle-color': '#1255f6',
           'circle-stroke-color': '#ffffff',
           'circle-stroke-width': 5,
           'circle-opacity': [
@@ -122,8 +129,8 @@ const state = {
       render: {
         shape: 'circle',
         paint: {
-          'circle-radius': 10,
-          'circle-color': '#0247f3',
+          'circle-radius': 8,
+          'circle-color': '#1255f6',
           'circle-stroke-color': '#ffde02',
           'circle-stroke-width': 5,
         },
@@ -144,8 +151,9 @@ const state = {
           'line-cap': 'round',
         },
         'paint': {
-          'line-color': '#888',
-          'line-width': 8
+          'line-dasharray': [1, 0.5],
+          'line-color': '#ff4d1f',
+          'line-width': 6,
         }
       },
       sourceId: 'SPATII_LINIARE',
@@ -155,9 +163,16 @@ const state = {
       geometry: 'MultiLineString',
       render: {
         shape: 'line',
+        'layout': {
+          // make layer visible by default
+          'visibility': 'visible',
+          'line-join': 'round',
+          'line-cap': 'round',
+        },
         paint: {
+          'line-dasharray': [1, 0.5],
           'line-color': '#ffffff',
-          'line-width': 5,
+          'line-width': 6,
           'line-opacity': [
             'case',
             ['boolean', ['feature-state', 'hover'], false],
@@ -173,9 +188,16 @@ const state = {
       geometry: 'MultiLineString',
       render: {
         shape: 'line',
+        'layout': {
+          // make layer visible by default
+          'visibility': 'visible',
+          'line-join': 'round',
+          'line-cap': 'round',
+        },
         paint: {
+          'line-dasharray': [1, 0.5],
           'line-color': '#ffde02',
-          'line-width': 5,
+          'line-width': 6,
         },
         filter: ['==', ['get', 'id'], ''],
       },
@@ -193,6 +215,8 @@ const state = {
         },
         paint: {
           'fill-color': '#16e802',
+          'fill-antialias': true,
+          'fill-outline-color': '#3b3a3a',
           'fill-opacity': 0.3,
         },
       },
@@ -245,6 +269,7 @@ const state = {
   spatiiLiniare: null,
   spatiiSuprafata: null,
   spatiiPunctuale: null,
+  itemsInfoPanelColors,
 };
 
 
@@ -291,64 +316,26 @@ const actions = {
     await commit("setAllData", {metodologie, spAbandonate, spPunctuale, spLiniare, spSuprafata});
   },
 
-  loadMap({commit}) {
-    Mapbox.accessToken = state.accessToken;
-    const myMap = new Mapbox.Map({
-      container: state.container,
-      style: state.mapStyle,
-      hash: true,
-      center: state.center,
-      zoom: state.zoom,
-      constants: state.constants,
-    });
-    commit('loadMap', myMap);
-  },
-
-  saveMap({commit}, value) {
-    commit('saveMap', value);
-  },
-
-  // // add map data source
-  // async addSource({commit}, sourceId) {
-  //   // console.log('store > actions >> addSource: ', sourceId);
-  //   const data = await state.spatiiSuprafata;
-  //   commit('addSource', { sourceId, data });
-  // },
-  //
-  // // add map layer
-  // async addLayer({commit}, layer) {
-  //   await commit('addLayer', layer);
-  // },
-  //
-  // // add map click event handler
-  // addClickHandler({dispatch, commit}) {
-  //   commit('addClickHandler', dispatch);
-  // },
-  //
-  // // add hover layer
-  // addHoverLayer({commit}, { layer, hoverLayer }) {
-  //   // console.log('store > @addHoverLayer >> hoverLayer: ', hoverLayer);
-  //   commit('addHoverLayer', { layer, hoverLayer });
-  // },
-  //
-  // // add highlight layer
-  // addHighlightLayer({commit}, highlightLayer) {
-  //   commit('addHighlightLayer', highlightLayer);
-  // },
-
   async selectItem({commit}, value) {
     // console.log('@store > actions >> selectItem', value);
     // console.log('@store > currentSelectedItem: ', this.state.selectedItem);
     // if null value
     if (!value) {
-      commit("setSelectedItem", undefined);
-      // commit("setMonumentDisplay", false);
+      // console.log('@store > actions >> !value');
       commit("setRightPanel", false);
+      commit('setItemSelected', false);
+      commit("setSelectedItem", undefined);
     } else {
+      // console.log('@store > actions >> value');
       commit('setSelectedItem', value);
       commit('setItemSelected', true);
       commit('setRightPanel', true);
     }
+  },
+
+  updateLoading({commit}, value) {
+    // console.log('@store > loading: ', value);
+    commit('setLoading', value);
   },
 
   updateLeftPanel({commit}, value) {
@@ -386,17 +373,13 @@ const mutations = {
     state.spatiiSuprafata = spSuprafata;
   },
 
-  loadMap (state, value) {
-    state.myMap = value;
-  },
-
-  saveMap (state, value) {
-    state.myMap = value;
+  setLoading(state, value) {
+    state.loading = value;
   },
 
   setSelectedItem(state, value) {
     // console.log('@store > setSelectedItem >> item: ', value);
-    state.selectedItem = {...value};
+    state.selectedItem = value ? {...value} : null;
     // console.log('@store > mutations >> currentSelectedItem: ', this.state.selectedItem);
 
     if(value) {

@@ -173,7 +173,7 @@
           </tr>
           <tr>
             <td class="text-left">
-              Imobilele cu aceeasi adresa, sau aceasi adresa rezultata din geo-localizare, vor fi reprezentate suprapuse
+              Imobilele cu aceeasi adresa, sau aceeasi adresa rezultata din geo-localizare, vor fi reprezentate suprapuse
               pe harta.
             </td>
           </tr>
