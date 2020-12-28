@@ -170,7 +170,6 @@
 export default {
   props: [
     'map',
-    'mapLoadedFlag',
   ],
 
   computed: {
@@ -268,12 +267,12 @@ export default {
     // @list select item
     async selectItem(item) {
       // load map object
-      const map = this.map;
-      // console.log('@list > selectItem >> item: ', item);
+      const mapObj = this.map;
+      // console.log('@list > selectItem >> map: ', mapObj);
       // deselect previous selection
       const previousSelectedItem = this.$store.state.infrastructuraSanatate.selectedItem;
       // console.log('previousSelectedItem: ', previousSelectedItem);
-      if (previousSelectedItem && item != previousSelectedItem) map.setFilter(`${previousSelectedItem.layer.id}_HIGHLIGHT`, ['==', ['get', 'id'], '']);
+      if (previousSelectedItem && item != previousSelectedItem) mapObj.setFilter(`${previousSelectedItem.layer.id}_HIGHLIGHT`, ['==', ['get', 'id'], '']);
       // if nothing is selected
       if (!item) {
         // clear selection data
@@ -285,11 +284,11 @@ export default {
         // if selected
       } else {
         // highlight clicked item
-        map.setFilter(`${item.layer.id}_HIGHLIGHT`, ['==', ['get', 'id'], item.properties.id]);
+        mapObj.setFilter(`${item.layer.id}_HIGHLIGHT`, ['==', ['get', 'id'], item.properties.id]);
         this.$store.dispatch('app/updateRightPanel', true);
         this.$store.dispatch('app/updateItemSelected', true);
 
-        map.flyTo({
+        mapObj.flyTo({
           center: item.geometry.coordinates,
           zoom: 15,
         });

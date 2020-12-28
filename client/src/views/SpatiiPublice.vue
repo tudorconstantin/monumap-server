@@ -11,7 +11,7 @@
 import Map from "../components/spatii_publice/Map_mapbox";
 
 export default {
-  name: "SpatiiPublice",
+  name: "SpatiiPubliceView",
 
   components: {
     Map,

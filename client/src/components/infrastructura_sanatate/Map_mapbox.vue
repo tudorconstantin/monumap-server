@@ -13,7 +13,7 @@
         class="bg-grey-5"
     >
       <!-- drawer content -->
-      <search-panel :map="map" ></search-panel>
+      <search-panel v-if="!loading" :map="map" :mapLoadedFlag="mapLoadedFlag"></search-panel>
     </q-drawer>
 
     <!-- right panel -->
@@ -43,6 +43,14 @@
       <MglNavigationControl position="top-left"/>
       <MglGeolocateControl position="top-left"/>
     </MglMap>
+
+    <!-- loading indicator -->
+    <q-spinner
+        color="blue"
+        size="3em"
+        :thickness="10"
+        class="absolute-center vertical-middle"
+        v-if="loading"/>
   </div>
 </template>
 
@@ -64,6 +72,7 @@ export default {
     SearchPanel,
     InfoPanel,
   },
+
   data() {
     return {
       hoverItemId: null,
@@ -74,10 +83,20 @@ export default {
       center: [26.0986, 44.4365],
       zoom: 12.5,
       constants: null,
+      mapLoadedFlag: false,
     };
   },
 
   computed: {
+    loading: {
+      get() {
+        return this.$store.state.infrastructuraSanatate.loading;
+      },
+      set: function (value) {
+        this.$store.dispatch('infrastructuraSanatate/updateLoading', value);
+      },
+    },
+
     leftPanel: {
       get() {
         // console.log('app: getLeftPanel');
@@ -115,7 +134,7 @@ export default {
       },
       set: function (newValue) {
         // load map object
-        const map = this.$store.state.infrastructuraSanatate.map;
+        const map = this.map;
         if (newValue) {
           let coordinates;
           if (newValue.geometry.type === 'MultiPolygon') {
@@ -160,6 +179,7 @@ export default {
   },
 
   methods: {
+
     // add map source
     addMapSource(map, sourceId, data) {
       // add source
@@ -340,16 +360,19 @@ export default {
 
 
     async onMapLoaded(event) {
+      this.loading = false;
+
       // save map
-      this.map = event.map;
-      const map = this.map
+      const map = event.map;
+      // console.log('map: ', map);
+      this.map = map;
 
       // add map data sources
-      const unitsArr = await this.$store.state.infrastructuraSanatate.unitsArr;
+      const unitsArr = this.$store.state.infrastructuraSanatate.unitsArr;
       // console.log('unitsArr: ', unitsArr);
-      await this.addMapSource(map,'UNITATI', unitsArr);
-      const servicesArr = await this.$store.state.infrastructuraSanatate.servicesArr;
-      await this.addMapSource(map,'SERVICII', servicesArr);
+      this.addMapSource(map,'UNITATI', unitsArr);
+      const servicesArr = this.$store.state.infrastructuraSanatate.servicesArr;
+      this.addMapSource(map,'SERVICII', servicesArr);
       // add map layers
       // add layers for 'UNITATI'
       const unitatiLayers = this.$store.state.infrastructuraSanatate.itemGroups[0].layers;
@@ -389,7 +412,7 @@ export default {
 
   created() {
     // create non-dynamic map object
-    this.map = {};
+    this.map = null;
     // add event listener for window resize
     window.addEventListener("resize", this.myEventHandler);
   },
