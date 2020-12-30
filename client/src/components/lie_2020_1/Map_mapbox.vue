@@ -5,6 +5,9 @@
 
     <!-- left panel -->
     <q-drawer
+        v-if="isLmiRoute
+        && this.$store.state.app.leftPanel
+        && this.$store.state.lie2020_1.leftPanel"
         :overlay="true"
         v-model="leftPanel"
         side="left"
@@ -18,12 +21,15 @@
 
     <!-- right panel -->
     <q-drawer
+        v-if="isLmiRoute
+        && this.$store.state.app.rightPanel
+        && this.$store.state.lie2020_1.rightPanel"
         v-model="rightPanel"
         :overlay="true"
         class="bg-grey-5"
         side="right"
         bordered
-        :width="400"
+        :width="$q.platform.is.desktop ? 400 : ($q.screen.width < 640 ? $q.screen.width : 400)"
         :content-style="{ backgroundColor: '#bdbdbd' }"
     >
       <!-- drawer content -->
@@ -85,6 +91,10 @@ export default {
   },
 
   computed: {
+    isLmiRoute() {
+      return this.$route.name === 'lie-2020-1';
+    },
+
     loading: {
       get() {
         return this.$store.state.lie2020_1.loading;
@@ -277,8 +287,8 @@ export default {
 
     // add map click event handler
     addMapClickHandler(map) {
-      // load map object
-      // const map = this.$store.state.lie2020_1.map;
+      // get desktop flag
+      const desktopFlag = this.$q.platform.is.desktop;
       // load store
       const store = this.$store;
       // load array of layers ids
@@ -306,8 +316,8 @@ export default {
 
           // save selected item to store
           store.dispatch('lie2020_1/selectItem', clickedItem);
-          // set app right panel flag to true
-          store.dispatch('app/updateRightPanel', true);
+          // set app right panel flag to true, for desktop
+          if (desktopFlag) store.dispatch('app/updateRightPanel', true);
           // set app item selected flag to true
           store.dispatch('app/updateItemSelected', true);
 
@@ -432,6 +442,16 @@ export default {
   destroyed() {
     // remove custom window resize event listener
     window.removeEventListener("resize", this.myEventHandler);
+  },
+
+  watch: {
+    // when leftPanel is closed, on mobile, via swipe
+    /* eslint-disable-next-line no-unused-vars */
+    rightPanel(newValue, oldValue) {
+      // update app rightPanel
+      if (!this.$q.platform.is.desktop && newValue === false)
+        this.$store.dispatch('app/updateRightPanel', false);
+    },
   },
 
 };

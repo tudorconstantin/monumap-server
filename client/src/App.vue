@@ -155,7 +155,8 @@
         <q-page-sticky
             position="bottom-right"
             :offset="[50, 50]"
-            v-if="this.$store.state.app.itemSelected"
+            v-if="this.$store.state.app.itemSelected &&
+              !(this.localLeftPanel && this.$store.state['app/leftPanel'])"
             class="z-top"
         >
           <q-btn
@@ -210,6 +211,21 @@ export default {
         this.$store.dispatch('app/updateRightPanel', value);
       },
     },
+    localLeftPanel() {
+      if (this.$route.name === 'lmi-2015') {
+        return this.$store.state.lmi2015.leftPanel;
+      } else if (this.$route.name === 'lie-2020-1') {
+        return this.$store.state.lie2020_1.leftPanel;
+      } else if (this.$route.name === 'spatii-publice') {
+        return this.$store.state.spatiiPublice.leftPanel;
+      } else if (this.$route.name === 'infrastructura-sanatate') {
+        return this.$store.state.infrastructuraSanatate.leftPanel;
+      } else if (this.$route.name === 'toalete-publice') {
+        return this.$store.state.toaletePublice.leftPanel;
+      } else {
+        return this.$store.state.reabilitareTermica.leftPanel;
+      }
+    },
   },
 
   methods: {
@@ -217,7 +233,7 @@ export default {
       // update current tab leftPanel
       if (this.$route.name === 'lmi-2015') {
         this.$store.dispatch('lmi2015/updateLeftPanel', true);
-      } else if (this.$route.name === 'lie2020_1') {
+      } else if (this.$route.name === 'lie-2020-1') {
         this.$store.dispatch('lie2020_1/updateLeftPanel', true);
       } else if (this.$route.name === 'spatii-publice') {
         this.$store.dispatch('spatiiPublice/updateLeftPanel', true);
@@ -229,11 +245,12 @@ export default {
         this.$store.dispatch('app/updateLeftPanel', true);
       }
     },
+
     toggleRightPanel() {
       // update current tab leftPanel
       if (this.$route.name === 'lmi-2015') {
         this.$store.dispatch('lmi2015/updateRightPanel', true);
-      } else if (this.$route.name === 'lie2020_1') {
+      } else if (this.$route.name === 'lie-2020-1') {
         this.$store.dispatch('lie2020_1/updateRightPanel', true);
       } else if (this.$route.name === 'spatii-publice') {
         this.$store.dispatch('spatiiPublice/updateRightPanel', true);

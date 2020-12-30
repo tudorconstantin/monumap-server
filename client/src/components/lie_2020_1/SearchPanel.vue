@@ -231,6 +231,7 @@ export default {
   methods: {
     // @list select item
     async selectItem(clickedItem) {
+      const desktopFlag = this.$q.platform.is.desktop;
       // console.log('@searchPanel > clickedItem: ', clickedItem);
 
       // deselect previous selection
@@ -251,7 +252,12 @@ export default {
       } else {
         // highlight clicked clickedItem
         this.map.setFilter(`${clickedItem.layer.id}_HIGHLIGHT`, ['==', ['get', 'id'], clickedItem.properties.id]);
-        this.$store.dispatch('app/updateRightPanel', true);
+        if(desktopFlag) {
+          this.$store.dispatch('app/updateRightPanel', true);
+        } else {
+          // this.$store.dispatch('app/updateRightPanel', true);
+          this.$store.dispatch('lie2020_1/updateLeftPanel', false);
+        }
         this.$store.dispatch('app/updateItemSelected', true);
 
         this.map.flyTo({

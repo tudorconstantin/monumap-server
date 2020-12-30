@@ -283,7 +283,7 @@ export default {
       const desktopFlag = this.$q.platform.is.desktop;
       // console.log('@searchPanel > selectedItem >> desktopFlag ', desktopFlag);
       this.$store.dispatch("lmi2015/selectItem", {monument, desktopFlag});
-      if(this.$q.platform.is.mobile) this.$store.dispatch('lmi2015/updateLeftPanel', false);
+      if(!desktopFlag) this.$store.dispatch('lmi2015/updateLeftPanel', false);
     }
   },
 

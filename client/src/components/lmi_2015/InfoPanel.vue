@@ -2,7 +2,6 @@
 
 <template>
   <div>
-    <!-- DESKTOP -->
     <q-drawer
         v-if="!!currentItem && currentItem['cod_lmi']"
         :overlay="true"

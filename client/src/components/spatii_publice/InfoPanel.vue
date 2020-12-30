@@ -10,7 +10,7 @@
         v-model="rightPanel"
         side="right"
         bordered
-        :width="400"
+        :width="$q.platform.is.desktop ? 400 : ($q.screen.width < 640 ? $q.screen.width : 400)"
         :content-style="{ backgroundColor: '#bdbdbd' }"
     >
       <q-list class="q-pa-xs q-gutter-xs">

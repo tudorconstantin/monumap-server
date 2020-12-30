@@ -23,7 +23,7 @@
         class="bg-grey-5"
         side="right"
         bordered
-        :width="400"
+        :width="$q.platform.is.desktop ? 400 : ($q.screen.width < 640 ? $q.screen.width : 400)"
         :content-style="{ backgroundColor: '#bdbdbd' }"
     >
       <!-- drawer content -->
