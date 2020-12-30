@@ -156,7 +156,7 @@
             position="bottom-right"
             :offset="[50, 50]"
             v-if="this.$store.state.app.itemSelected &&
-              !(this.localLeftPanel && this.$store.state['app/leftPanel'])"
+              !(this.localLeftPanel && this.$store.state.app.leftPanel)"
             class="z-top"
         >
           <q-btn
@@ -237,6 +237,12 @@ export default {
         this.$store.dispatch('lie2020_1/updateLeftPanel', true);
       } else if (this.$route.name === 'spatii-publice') {
         this.$store.dispatch('spatiiPublice/updateLeftPanel', true);
+      } else if (this.$route.name === 'infrastructura-sanatate') {
+        this.$store.dispatch('infrastructuraSanatate/updateLeftPanel', true);
+      } else if (this.$route.name === 'toalete-publice') {
+        this.$store.dispatch('toaletePublice/updateLeftPanel', true);
+      } else if (this.$route.name === 'reabilitare-termica') {
+        this.$store.dispatch('reabilitareTermica/updateLeftPanel', true);
       }
       // update app leftPanel
       if (this.$q.platform.is.desktop) {
@@ -254,7 +260,14 @@ export default {
         this.$store.dispatch('lie2020_1/updateRightPanel', true);
       } else if (this.$route.name === 'spatii-publice') {
         this.$store.dispatch('spatiiPublice/updateRightPanel', true);
+      } else if (this.$route.name === 'infrastructura-sanatate') {
+        this.$store.dispatch('infrastructuraSanatate/updateRightPanel', true);
+      } else if (this.$route.name === 'toalete-publice') {
+        this.$store.dispatch('toaletePublice/updateRightPanel', true);
+      } else if (this.$route.name === 'reabilitare-termica') {
+        this.$store.dispatch('reabilitareTermica/updateRightPanel', true);
       }
+      // update app rightPanel
       this.$store.dispatch('app/toggleRightPanel');
     },
   },

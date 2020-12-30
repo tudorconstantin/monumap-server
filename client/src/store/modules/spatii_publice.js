@@ -261,7 +261,7 @@ const state = {
   center: [26.0986, 44.4365],
   zoom: 12.5,
   leftPanel: true,
-  rightPanel: true,
+  rightPanel: false,
   itemSelected: false,
   selectedItem: null,
   metodologie: null,

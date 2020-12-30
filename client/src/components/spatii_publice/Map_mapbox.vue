@@ -38,7 +38,7 @@ import SearchPanel from './SearchPanel';
 import InfoPanel from './InfoPanel';
 
 import Mapbox from 'mapbox-gl';
-// import 'mapbox-gl/dist/mapbox-gl.css';
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 import {
   MglMap,
@@ -69,8 +69,8 @@ export default {
       hoveredItem: {},
       highlightedItemId: null,
       accessToken:
-          'pk.eyJ1IjoiYWxpbmNoaXMiLCJhIjoiY2toNHQ3eGdzMGVmaTJyczVyanN0dWY0YiJ9.cmyaXMKo-Q055Iu2y5V7fQ',
-      mapStyle: 'mapbox://styles/alinchis/ckh4tdtog05ii19ocdg2rywt0',
+          "pk.eyJ1IjoidHVkb3Jjb25zdGFudGluIiwiYSI6ImNrM29yN2t3cjBiMDkzaG80cTdiczhzMmIifQ.fqelSp0srqiSV3qkfbE2qQ",
+      mapStyle: "mapbox://styles/tudorconstantin/ckb6h17g326dr1iuz4vf53dsr",
       container: 'mapContainer',
       center: [26.0986, 44.4365],
       zoom: 12.5,
@@ -177,6 +177,8 @@ export default {
 
     // add map click event handler
     addMapClickHandler(mapObj) {
+      // get desktop flag
+      const desktopFlag = this.$q.platform.is.desktop;
       // load store
       const store = this.$store;
 
@@ -209,9 +211,10 @@ export default {
           // save selected item to store
           store.dispatch('spatiiPublice/selectItem', clickedItem);
           // set app right panel flag to true
-          store.dispatch('app/updateRightPanel', true);
+          if (desktopFlag) store.dispatch('app/updateRightPanel', true);
           // set app item selected flag to true
           store.dispatch('app/updateItemSelected', true);
+
           // move to item or center of bounding box
           if (clickedItem.geometry.type === 'Point') {
             // console.log('Geometry Type: ', e.features[0].geometry.type);
@@ -417,6 +420,16 @@ export default {
   destroyed() {
     // remove custom window resize event listener
     window.removeEventListener("resize", this.myEventHandler);
+  },
+
+  watch: {
+    // when leftPanel is closed, on mobile, via swipe
+    /* eslint-disable-next-line no-unused-vars */
+    rightPanel(newValue, oldValue) {
+      // update app rightPanel
+      if (!this.$q.platform.is.desktop && newValue === false)
+        this.$store.dispatch('app/updateRightPanel', false);
+    },
   },
 };
 </script>

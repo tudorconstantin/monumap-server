@@ -1,10 +1,8 @@
 <!-- spatii-publice :: view -->
 
 <template>
-  <div>
     <Map>
     </Map>
-  </div>
 </template>
 
 <script>

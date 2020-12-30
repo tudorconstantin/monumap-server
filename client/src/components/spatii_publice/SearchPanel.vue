@@ -3,6 +3,9 @@
 <template>
   <!-- drawer container -->
   <q-drawer
+      v-if="isLmiRoute
+        && this.$store.state.app.leftPanel
+        && this.$store.state.spatiiPublice.leftPanel"
       :overlay="true"
       v-model="leftPanel"
       side="left"
@@ -206,6 +209,10 @@ export default {
   ],
 
   computed: {
+    isLmiRoute() {
+      return this.$route.name === 'spatii-publice';
+    },
+
     loading: {
       get() {
         return this.$store.state.spatiiPublice.loading;
@@ -273,6 +280,7 @@ export default {
 
   methods: {
     selectItem(clickedItem, {layerId, sourceId}) {
+      const desktopFlag = this.$q.platform.is.desktop;
       // add layerId and sourceId to item
       const item = clickedItem;
       item.layer = {};
@@ -336,27 +344,16 @@ export default {
       // save new selected item to store
       this.$store.dispatch("spatiiPublice/selectItem", item);
       // update flags
-      if (this.$q.platform.is.mobile) this.$store.dispatch('spatiiPublice/updateLeftPanel', false);
-      this.$store.dispatch('app/updateRightPanel', true);
+      if (desktopFlag) {
+        this.$store.dispatch('app/updateRightPanel', true);
+      } else {
+        this.$store.dispatch('app/updateRightPanel', false);
+        this.$store.dispatch('spatiiPublice/updateLeftPanel', false);
+      }
       this.$store.dispatch('app/updateItemSelected', true);
     },
   },
 
-  watch: {
-    /* eslint-disable-next-line no-unused-vars */
-    // geoJSON(newValue, oldValue) {
-    //   this.filterMap();
-    // },
-    /* eslint-disable-next-line no-unused-vars */
-    // selectedItem(newValue) {
-    //   // re-center map view
-    //   if (newValue)
-    //     this.$store.state.spatiiPublice.myMap.flyTo({
-    //       center: [newValue.geometry.coordinates[0], newValue.geometry.coordinates[1]],
-    //       zoom: 18
-    //     });
-    // },
-  },
 };
 </script>
 

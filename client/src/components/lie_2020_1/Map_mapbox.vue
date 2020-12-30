@@ -63,7 +63,7 @@
 <script>
 import SearchPanel from './SearchPanel';
 import InfoPanel from './InfoPanel';
-// import 'mapbox-gl/dist/mapbox-gl.css';
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 import {MglMap, MglNavigationControl, MglGeolocateControl} from 'vue-mapbox';
 import Mapbox from 'mapbox-gl';
@@ -291,6 +291,7 @@ export default {
       const desktopFlag = this.$q.platform.is.desktop;
       // load store
       const store = this.$store;
+
       // load array of layers ids
       const layersIdsArr = this.$store.getters["lie2020_1/getAllLayersIds"];
       // console.log('layersIdsArr: ', layersIdsArr);

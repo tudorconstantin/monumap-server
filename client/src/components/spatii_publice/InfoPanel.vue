@@ -4,7 +4,9 @@
   <div>
     <!-- DESKTOP -->
     <q-drawer
-        v-if="!!currentItem"
+        v-if="isLmiRoute
+        && this.$store.state.app.rightPanel
+        && this.$store.state.spatiiPublice.rightPanel"
         :overlay="true"
         class="bg-grey-5"
         v-model="rightPanel"
@@ -161,25 +163,6 @@
         </q-card>
       </q-list>
     </q-drawer>
-
-    <!-- MOBILE -->
-    <q-drawer
-        v-if="!!currentItem"
-        v-model="rightPanel"
-        side="right"
-        bordered
-        :width="$q.screen.width < 640 ? $q.screen.width : 400"
-        :content-style="{ backgroundColor: '#bdbdbd' }"
-    >
-      <!-- drawer content -->
-      <q-page-sticky
-          v-if="$q.platform.is.mobile && this.$store.state.spatiiPublice.selectedItem"
-          position="bottom-right"
-          :offset="[50, 50]"
-      >
-        <q-btn fab color="blue-8" icon="o_visibility_off" type="button" @click="toggleRightPanel"/>
-      </q-page-sticky>
-    </q-drawer>
   </div>
 </template>
 
@@ -196,6 +179,10 @@ export default {
         return state.spatiiPublice.selectedItem;
       }
     }),
+
+    isLmiRoute() {
+      return this.$route.name === 'spatii-publice';
+    },
 
     rightPanel: {
       get() {
