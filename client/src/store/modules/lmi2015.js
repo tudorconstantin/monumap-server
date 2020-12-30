@@ -180,8 +180,11 @@ const actions = {
       commit("setSelectedItem", undefined);
       // commit("setMonumentDisplay", false);
       commit("setRightPanel", false);
+      // hide right panel
       dispatch('app/updateRightPanel', false, {root: true});
       dispatch('app/updateItemSelected', false, {root: true});
+      // hide left panel
+      if(!desktopFlag) dispatch('app/updateLeftPanel', false, {root: true});
 
       // else, if valid item is selected
     } else {
@@ -233,7 +236,19 @@ const actions = {
       // commit new item
       commit("setSelectedItem", monProp);
       // show right panel
-      if (desktopFlag) commit('setRightPanel', true);
+      commit('setRightPanel', true);
+
+      // if on desktop
+      if (desktopFlag) {
+        // console.log('@store > selectItem >> desktopFlag: ', desktopFlag);
+        // else, if on tablet or mobile
+      } else {
+        // console.log('@store > selectItem >> desktopFlag: ', desktopFlag);
+        // hide right panel, open on fab button click
+        commit('app/setRightPanel', false, {root: true});
+        // hide left panel
+        commit('setLeftPanel', false);
+      }
     }
   },
 

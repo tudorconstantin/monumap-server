@@ -88,6 +88,10 @@ export default {
         this.$store.dispatch('lmi2015/updateLoading', value);
       },
     },
+
+    rightPanel() {
+      return this.$store.state.lmi2015.rightPanel;
+    }
   },
   watch: {
     /* eslint-disable-next-line no-unused-vars */
@@ -99,6 +103,13 @@ export default {
       // re-center map view
       if (newValue && newValue.longitudine_x && this.map)
         this.map.flyTo({center: [newValue.longitudine_x, newValue.latitudine_y], zoom: 18});
+    },
+    // when leftPanel is closed, on mobile, via swipe
+    /* eslint-disable-next-line no-unused-vars */
+    rightPanel(newValue, oldValue) {
+      // update app rightPanel
+      if (!this.$q.platform.is.desktop && newValue === false)
+        this.$store.dispatch('app/updateRightPanel', false);
     },
   },
   methods: {
@@ -214,6 +225,7 @@ export default {
     onMonumentClicked(monument) {
       // console.log('monument: ', monument);
       const desktopFlag = this.$q.platform.is.desktop;
+      // console.log('@map > onMonumentClicked >> desktopFlag: ', desktopFlag);
       this.$store.dispatch('lmi2015/selectItem', {monument, desktopFlag});
     },
 

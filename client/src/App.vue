@@ -1,6 +1,7 @@
 <template>
   <div>
 
+    <!-- -------------------------------------------------------------------------------- -->
     <!-- DESKTOP -->
     <q-layout
         view="hHh lpR fFf"
@@ -54,32 +55,6 @@
         </q-tabs>
       </q-header>
 
-      <!-- left panel -->
-      <!--      <q-drawer-->
-      <!--          v-if="!isHomeRoute"-->
-      <!--          :overlay="true"-->
-      <!--          v-model="leftPanel"-->
-      <!--          side="left"-->
-      <!--          bordered-->
-      <!--          :content-style="{ backgroundColor: '#bdbdbd' }"-->
-      <!--      >-->
-      <!--        &lt;!&ndash; drawer content &ndash;&gt;-->
-      <!--        <search-panel></search-panel>-->
-      <!--      </q-drawer>-->
-
-      <!-- right panel -->
-      <!--      <q-drawer-->
-      <!--          v-if="!isHomeRoute"-->
-      <!--          v-model="rightPanel"-->
-      <!--          side="right"-->
-      <!--          bordered-->
-      <!--          :width="400"-->
-      <!--          :content-style="{ backgroundColor: '#bdbdbd' }"-->
-      <!--      >-->
-      <!--        &lt;!&ndash; drawer content &ndash;&gt;-->
-      <!--        <info-panel></info-panel>-->
-      <!--      </q-drawer>-->
-
       <!-- page container / map container -->
       <q-page-container id="map-enclosure">
         <router-view/>
@@ -87,6 +62,7 @@
     </q-layout>
 
 
+    <!-- -------------------------------------------------------------------------------- -->
     <!-- MOBILE -->
     <q-layout
         view="hHh lpR fFf"
@@ -176,11 +152,24 @@
       <q-page-container id="map-enclosure-mobile">
         <router-view/>
         <!-- fab button to toggle infoPanel -->
-        <q-page-sticky position="bottom-right" :offset="[50, 50]" v-if="this.$store.state.app.itemSelected">
-          <q-btn fab color="blue-8" icon="o_visibility" type="button" @click="toggleRightPanel"/>
+        <q-page-sticky
+            position="bottom-right"
+            :offset="[50, 50]"
+            v-if="this.$store.state.app.itemSelected"
+            class="z-top"
+        >
+          <q-btn
+              fab
+              color="blue-8"
+              :icon="this.$store.state.app.rightPanel ? 'o_visibility_off' : 'o_visibility'"
+              type="button"
+              @click="toggleRightPanel"
+          />
         </q-page-sticky>
       </q-page-container>
     </q-layout>
+
+    <!-- -------------------------------------------------------------------------------- -->
 
   </div>
 </template>
@@ -225,9 +214,30 @@ export default {
 
   methods: {
     toggleLeftPanel() {
-      this.$store.dispatch('app/toggleLeftPanel');
+      // update current tab leftPanel
+      if (this.$route.name === 'lmi-2015') {
+        this.$store.dispatch('lmi2015/updateLeftPanel', true);
+      } else if (this.$route.name === 'lie2020_1') {
+        this.$store.dispatch('lie2020_1/updateLeftPanel', true);
+      } else if (this.$route.name === 'spatii-publice') {
+        this.$store.dispatch('spatiiPublice/updateLeftPanel', true);
+      }
+      // update app leftPanel
+      if (this.$q.platform.is.desktop) {
+        this.$store.dispatch('app/toggleLeftPanel');
+      } else {
+        this.$store.dispatch('app/updateLeftPanel', true);
+      }
     },
     toggleRightPanel() {
+      // update current tab leftPanel
+      if (this.$route.name === 'lmi-2015') {
+        this.$store.dispatch('lmi2015/updateRightPanel', true);
+      } else if (this.$route.name === 'lie2020_1') {
+        this.$store.dispatch('lie2020_1/updateRightPanel', true);
+      } else if (this.$route.name === 'spatii-publice') {
+        this.$store.dispatch('spatiiPublice/updateRightPanel', true);
+      }
       this.$store.dispatch('app/toggleRightPanel');
     },
   },
@@ -254,6 +264,9 @@ export default {
 
     // load 'reabilitare termica' data into store
     this.$store.dispatch('reabilitareTermica/loadAllData');
+
+    // if platform is desktop, show left panel
+    if (this.$q.platform.is.desktop) this.leftPanel = true;
 
   },
 };

@@ -33,10 +33,10 @@ const actions = {
     commit('setLeftPanel', !state.leftPanel);
   },
 
-  toggleRightPanel({commit, dispatch, state}) {
+  toggleRightPanel({commit, state}) {
     commit('setRightPanel', !state.rightPanel);
-    dispatch('infrastructuraSanatate/toggleRightPanel', null, {root: true});
-    dispatch('toaletePublice/toggleRightPanel', null, {root: true});
+    // dispatch('infrastructuraSanatate/toggleRightPanel', null, {root: true});
+    // dispatch('toaletePublice/toggleRightPanel', null, {root: true});
   },
 
   updateItemSelected({commit}, value) {
@@ -52,6 +52,7 @@ const actions = {
 const mutations = {
 
   setLeftPanel(state, value) {
+    console.log('@store > app / setLeftPanel: ', value);
     state.leftPanel = value;
   },
 
