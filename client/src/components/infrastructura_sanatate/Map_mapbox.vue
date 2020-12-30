@@ -5,6 +5,9 @@
 
     <!-- left panel -->
     <q-drawer
+        v-if="isLmiRoute
+        && this.$store.state.app.leftPanel
+        && this.$store.state.infrastructuraSanatate.leftPanel"
         :overlay="true"
         v-model="leftPanel"
         side="left"
@@ -18,6 +21,9 @@
 
     <!-- right panel -->
     <q-drawer
+        v-if="isLmiRoute
+        && this.$store.state.app.rightPanel
+        && this.$store.state.infrastructuraSanatate.rightPanel"
         v-model="rightPanel"
         :overlay="true"
         class="bg-grey-5"
@@ -57,7 +63,7 @@
 <script>
 import SearchPanel from './SearchPanel';
 import InfoPanel from './InfoPanel';
-// import 'mapbox-gl/dist/mapbox-gl.css';
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 import {MglMap, MglNavigationControl, MglGeolocateControl} from 'vue-mapbox';
 import Mapbox from 'mapbox-gl';
@@ -88,6 +94,10 @@ export default {
   },
 
   computed: {
+    isLmiRoute() {
+      return this.$route.name === 'infrastructura-sanatate';
+    },
+
     loading: {
       get() {
         return this.$store.state.infrastructuraSanatate.loading;
@@ -279,8 +289,11 @@ export default {
 
     // add map click event handler
     addMapClickHandler(map) {
+      // get desktop flag
+      const desktopFlag = this.$q.platform.is.desktop;
       // load store
       const store = this.$store;
+
       // load array of layers ids
       const layersIdsArr = this.$store.getters["infrastructuraSanatate/getAllLayersIds"];
       // on click action
@@ -301,7 +314,7 @@ export default {
           // save selected item to store
           store.dispatch('infrastructuraSanatate/selectItem', clickedItem);
           // set app right panel flag to true
-          store.dispatch('app/updateRightPanel', true);
+          if (desktopFlag) store.dispatch('app/updateRightPanel', true);
           // set app item selected flag to true
           store.dispatch('app/updateItemSelected', true);
 
@@ -420,6 +433,16 @@ export default {
   destroyed() {
     // remove custom window resize event listener
     window.removeEventListener("resize", this.myEventHandler);
+  },
+
+  watch: {
+    // when leftPanel is closed, on mobile, via swipe
+    /* eslint-disable-next-line no-unused-vars */
+    rightPanel(newValue, oldValue) {
+      // update app rightPanel
+      if (!this.$q.platform.is.desktop && newValue === false)
+        this.$store.dispatch('app/updateRightPanel', false);
+    },
   },
 };
 </script>

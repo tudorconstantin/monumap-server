@@ -266,13 +266,16 @@ export default {
   methods: {
     // @list select item
     async selectItem(item) {
+      const desktopFlag = this.$q.platform.is.desktop;
       // load map object
       const mapObj = this.map;
       // console.log('@list > selectItem >> map: ', mapObj);
+
       // deselect previous selection
       const previousSelectedItem = this.$store.state.infrastructuraSanatate.selectedItem;
       // console.log('previousSelectedItem: ', previousSelectedItem);
       if (previousSelectedItem && item != previousSelectedItem) mapObj.setFilter(`${previousSelectedItem.layer.id}_HIGHLIGHT`, ['==', ['get', 'id'], '']);
+
       // if nothing is selected
       if (!item) {
         // clear selection data
@@ -285,15 +288,22 @@ export default {
       } else {
         // highlight clicked item
         mapObj.setFilter(`${item.layer.id}_HIGHLIGHT`, ['==', ['get', 'id'], item.properties.id]);
-        this.$store.dispatch('app/updateRightPanel', true);
-        this.$store.dispatch('app/updateItemSelected', true);
 
+        // update flags
+        if(desktopFlag) {
+          this.$store.dispatch('app/updateRightPanel', true);
+        } else {
+          // this.$store.dispatch('app/updateRightPanel', true);
+          this.$store.dispatch('infrastructuraSanatate/updateLeftPanel', false);
+        }
+        this.$store.dispatch('app/updateItemSelected', true);
+        this.$store.dispatch('infrastructuraSanatate/selectItem', item);
+
+        // center map view on new item
         mapObj.flyTo({
           center: item.geometry.coordinates,
           zoom: 15,
         });
-
-        this.$store.dispatch('infrastructuraSanatate/selectItem', item);
       }
     },
   },

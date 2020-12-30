@@ -252,6 +252,8 @@ export default {
       } else {
         // highlight clicked clickedItem
         this.map.setFilter(`${clickedItem.layer.id}_HIGHLIGHT`, ['==', ['get', 'id'], clickedItem.properties.id]);
+
+        // update flags
         if(desktopFlag) {
           this.$store.dispatch('app/updateRightPanel', true);
         } else {
@@ -259,13 +261,13 @@ export default {
           this.$store.dispatch('lie2020_1/updateLeftPanel', false);
         }
         this.$store.dispatch('app/updateItemSelected', true);
+        this.$store.dispatch('lie2020_1/selectItem', clickedItem);
 
+        // center map view on new item
         this.map.flyTo({
           center: clickedItem.geometry.coordinates[0],
           zoom: 17,
         });
-
-        this.$store.dispatch('lie2020_1/selectItem', clickedItem);
       }
     },
 
