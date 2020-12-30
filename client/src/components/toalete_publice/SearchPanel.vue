@@ -67,6 +67,10 @@
 
 <script>
 export default {
+  props: [
+    'map',
+  ],
+
   computed: {
     items() {
       return this.$store.state.toaletePublice.items;
@@ -100,14 +104,15 @@ export default {
   methods: {
     // @list select item
     async selectItem(item) {
+      const desktopFlag = this.$q.platform.is.desktop;
       // load map object
-      const map = this.$store.state.toaletePublice.map;
+      // const map = this.map;
       // console.log('@list > selectItem >> item: ', item);
       // deselect previous selection
       const previousSelectedItem = this.$store.state.toaletePublice.selectedItem;
       // console.log('previousSelectedItem: ', previousSelectedItem);
       if (previousSelectedItem && item != previousSelectedItem)
-        map.setFilter(`${previousSelectedItem.layer.id}_HIGHLIGHT`, ['==', ['get', 'id'], '']);
+        this.map.setFilter(`${previousSelectedItem.layer.id}_HIGHLIGHT`, ['==', ['get', 'id'], '']);
       // if nothing is selected
       if (!item) {
         // clear selection data
@@ -119,16 +124,23 @@ export default {
         // if selected
       } else {
         // highlight clicked item
-        map.setFilter(`${item.layer.id}_HIGHLIGHT`, ['==', ['get', 'id'], item.properties.id]);
-        this.$store.dispatch('app/updateRightPanel', true);
-        this.$store.dispatch('app/updateItemSelected', true);
+        this.map.setFilter(`${item.layer.id}_HIGHLIGHT`, ['==', ['get', 'id'], item.properties.id]);
 
-        map.flyTo({
+        // update flags
+        if(desktopFlag) {
+          this.$store.dispatch('app/updateRightPanel', true);
+        } else {
+          // this.$store.dispatch('app/updateRightPanel', true);
+          this.$store.dispatch('toaletePublice/updateLeftPanel', false);
+        }
+        this.$store.dispatch('app/updateItemSelected', true);
+        this.$store.dispatch('toaletePublice/selectItem', item);
+
+        // center map view on new item
+        this.map.flyTo({
           center: item.geometry.coordinates,
           zoom: 15,
         });
-
-        this.$store.dispatch('toaletePublice/selectItem', item);
       }
     },
   },

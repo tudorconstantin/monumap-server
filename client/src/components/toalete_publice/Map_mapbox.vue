@@ -5,6 +5,9 @@
 
     <!-- left panel -->
     <q-drawer
+        v-if="isLmiRoute
+        && this.$store.state.app.leftPanel
+        && this.$store.state.toaletePublice.leftPanel"
         :overlay="true"
         v-model="leftPanel"
         side="left"
@@ -13,11 +16,14 @@
         class="bg-grey-5"
     >
       <!-- drawer content -->
-      <search-panel></search-panel>
+      <search-panel :map="map"></search-panel>
     </q-drawer>
 
     <!-- right panel -->
     <q-drawer
+        v-if="isLmiRoute
+        && this.$store.state.app.rightPanel
+        && this.$store.state.toaletePublice.rightPanel"
         v-model="rightPanel"
         :overlay="true"
         class="bg-grey-5"
@@ -43,13 +49,21 @@
       <MglNavigationControl position="top-left"/>
       <MglGeolocateControl position="top-left"/>
     </MglMap>
+
+    <!-- loading indicator -->
+    <q-spinner
+        color="blue"
+        size="3em"
+        :thickness="10"
+        class="absolute-center vertical-middle"
+        v-if="loading"/>
   </div>
 </template>
 
 <script>
 import SearchPanel from './SearchPanel';
 import InfoPanel from './InfoPanel';
-// import 'mapbox-gl/dist/mapbox-gl.css';
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 import {MglMap, MglNavigationControl, MglGeolocateControl} from 'vue-mapbox';
 import Mapbox from 'mapbox-gl';
@@ -62,6 +76,7 @@ export default {
     SearchPanel,
     InfoPanel,
   },
+
   data() {
     return {
       hoverItemId: null,
@@ -76,6 +91,19 @@ export default {
   },
 
   computed: {
+    isLmiRoute() {
+      return this.$route.name === 'toalete-publice';
+    },
+
+    loading: {
+      get() {
+        return this.$store.state.toaletePublice.loading;
+      },
+      set: function (value) {
+        this.$store.dispatch('toaletePublice/updateLoading', value);
+      },
+    },
+
     leftPanel: {
       get() {
         // console.log('app: getLeftPanel');
@@ -155,9 +183,7 @@ export default {
 
   methods: {
     // add map source
-    addMapSource(sourceId, data) {
-      // load map object
-      const map = this.$store.state.toaletePublice.map;
+    addMapSource(map, sourceId, data) {
       // add source
       map.addSource(sourceId, {
         type: 'geojson',
@@ -170,9 +196,7 @@ export default {
     },
 
     // add map layer
-    addMapLayer: function (layer) {
-      // load map object
-      const map = this.$store.state.toaletePublice.map;
+    addMapLayer: function (map, layer) {
       // add map layer
       map.addLayer({
         id: layer.id,
@@ -256,11 +280,12 @@ export default {
     },
 
     // add map click event handler
-    addMapClickHandler() {
-      // load map object
-      const map = this.$store.state.toaletePublice.map;
+    addMapClickHandler(map) {
+      // get desktop flag
+      const desktopFlag = this.$q.platform.is.desktop;
       // load store
       const store = this.$store;
+
       // load array of layers ids
       const layersIdsArr = this.$store.getters["toaletePublice/getAllLayersIds"];
       // console.log('layersIdsArr: ', layersIdsArr);
@@ -283,7 +308,7 @@ export default {
           // save selected item to store
           store.dispatch('toaletePublice/selectItem', clickedItem);
           // set app right panel flag to true
-          store.dispatch('app/updateRightPanel', true);
+          if (desktopFlag) store.dispatch('app/updateRightPanel', true);
           // set app item selected flag to true
           store.dispatch('app/updateItemSelected', true);
 
@@ -342,21 +367,24 @@ export default {
 
 
     async onMapLoaded(event) {
+      this.loading = false;
+
       const map = event.map;
-      // save map reference to store
-      this.$store.dispatch('toaletePublice/saveMap', map);
+      // save map
+      this.map = map;
+
       // add map data sources
       const itemsArr = await this.$store.state.toaletePublice.items;
       // console.log('itemsArr: ', itemsArr);
-      await this.addMapSource('TOALETE_PUBLICE', itemsArr.data);
+      this.addMapSource(map, 'TOALETE_PUBLICE', itemsArr.data);
 
       // add map layers
       // add layers for 'TOALETE_PUBLICE'
-      this.addMapLayer(this.$store.state.toaletePublice.items.layers[0]);
+      this.addMapLayer(map, this.$store.state.toaletePublice.items.layers[0]);
 
 
       // add click handler
-      this.addMapClickHandler();
+      this.addMapClickHandler(map);
     },
 
     // calculate map height, required by mapbox
@@ -393,6 +421,16 @@ export default {
   destroyed() {
     // remove custom window resize event listener
     window.removeEventListener("resize", this.myEventHandler);
+  },
+
+  watch: {
+    // when leftPanel is closed, on mobile, via swipe
+    /* eslint-disable-next-line no-unused-vars */
+    rightPanel(newValue, oldValue) {
+      // update app rightPanel
+      if (!this.$q.platform.is.desktop && newValue === false)
+        this.$store.dispatch('app/updateRightPanel', false);
+    },
   },
 };
 </script>

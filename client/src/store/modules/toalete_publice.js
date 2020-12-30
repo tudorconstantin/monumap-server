@@ -59,9 +59,10 @@ const textStyle = {
 // STATE
 
 const state = {
+  loading: true,
   leftPanel: true,
   rightPanel: false,
-  map: null,
+  // map: null,
   itemsInfoPanelColors,
   items: {
     code: 'TOALETE_PUBLICE',
@@ -126,8 +127,9 @@ const actions = {
     commit("setAllData", {items});
   },
 
-  saveMap({commit}, value) {
-    commit('setMap', value);
+  updateLoading({commit}, value) {
+    // console.log('@store > loading: ', value);
+    commit('setLoading', value);
   },
 
   async selectItem({commit}, value) {
@@ -189,8 +191,8 @@ const mutations = {
     });
   },
 
-  setMap(state, value) {
-    state.map = value;
+  setLoading(state, value) {
+    state.loading = value;
   },
 
   setSelectedItem(state, value) {
