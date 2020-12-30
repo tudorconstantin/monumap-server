@@ -52,7 +52,7 @@ const actions = {
 const mutations = {
 
   setLeftPanel(state, value) {
-    console.log('@store > app / setLeftPanel: ', value);
+    // console.log('@store > app / setLeftPanel: ', value);
     state.leftPanel = value;
   },
 

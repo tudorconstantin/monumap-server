@@ -5,6 +5,9 @@
 
     <!-- left panel -->
     <q-drawer
+        v-if="isLmiRoute
+        && this.$store.state.app.leftPanel
+        && this.$store.state.reabilitareTermica.leftPanel"
         id="search-panel-container"
         :overlay="true"
         v-model="leftPanel"
@@ -22,6 +25,9 @@
 
     <!-- right panel -->
     <q-drawer
+        v-if="isLmiRoute
+        && this.$store.state.app.rightPanel
+        && this.$store.state.reabilitareTermica.rightPanel"
         v-model="rightPanel"
         :overlay="true"
         class="bg-grey-5"
@@ -89,6 +95,10 @@ export default {
   },
 
   computed: {
+    isLmiRoute() {
+      return this.$route.name === 'reabilitare-termica';
+    },
+
     loading: {
       get() {
         return this.$store.state.reabilitareTermica.loading;
@@ -276,11 +286,11 @@ export default {
 
     // add map click event handler
     addMapClickHandler(map) {
-      // let self = this;
-      // load map object
-      // const map = this.$store.state.reabilitareTermica.map;
+      // get desktop flag
+      const desktopFlag = this.$q.platform.is.desktop;
       // load store
       const store = this.$store;
+
       // load array of layers ids
       const layersIdsArr = this.$store.getters["reabilitareTermica/getAllLayersIds"];
       // on click action
@@ -305,7 +315,7 @@ export default {
           // save selected item to store
           store.dispatch('reabilitareTermica/selectItem', clickedItem);
           // set app right panel flag to true
-          store.dispatch('app/updateRightPanel', true);
+          if (desktopFlag) store.dispatch('app/updateRightPanel', true);
           // set app item selected flag to true
           store.dispatch('app/updateItemSelected', true);
 
@@ -399,11 +409,16 @@ export default {
     cssVars() {
       //https://www.telerik.com/blogs/passing-variables-to-css-on-a-vue-component
       return {
-        '--height':
+        "--height": this.$q.platform.is.desktop ?
             window.innerHeight -
-            document.getElementById('header').offsetHeight +
-            'px',
-        '--width': window.innerWidth + 'px',
+            document.getElementById("header").offsetHeight +
+            "px" :
+            window.innerHeight -
+            (document.getElementById("header-mobile-portrait") ?
+                document.getElementById("header-mobile-portrait") :
+                document.getElementById("header-mobile-landscape")).offsetHeight +
+            "px",
+        "--width": window.innerWidth + "px",
       };
     },
 
@@ -411,18 +426,21 @@ export default {
     myEventHandler() {
       // console.log('event: ', e);
       // this.map.resize();
-      const spBox = document.getElementById('mapContainer').offsetHeight;
-      const spDD = document.getElementById('rt-sp-descarcare-date').offsetHeight;
-      const spFL = document.getElementById('rt-sp-lista-filtre').offsetHeight;
-      const spVSmaxHeight = spBox - spDD - spFL - 32;
-      // console.log('searchPanel VB height: ', spVSmaxHeight);
-      const spVSelement = document.getElementById('rt-sp-vscroll');
-      // console.log('vscroll.maxHeight: ', spVSelement.style.maxHeight);
-      spVSelement.style.maxHeight = `${spVSmaxHeight}px`;
-      // console.log('vscroll.maxHeight: ', spVSelement.style.maxHeight);
-      spVSelement.style.display = 'block';
-      // force redraw
-      this.$mount();
+      const desktopFlag = this.$q.platform.is.desktop;
+      if (desktopFlag) {
+        const spBox = document.getElementById('mapContainer');
+        const spDD = document.getElementById('rt-sp-descarcare-date');
+        const spFL = document.getElementById('rt-sp-lista-filtre');
+        const spVSmaxHeight = spBox.offsetHeight - spDD.offsetHeight - spFL.offsetHeight - 32;
+        // console.log('searchPanel VB height: ', spVSmaxHeight);
+        const spVSelement = document.getElementById('rt-sp-vscroll');
+        // console.log('vscroll.maxHeight: ', spVSelement.style.maxHeight);
+        spVSelement.style.maxHeight = `${spVSmaxHeight}px`;
+        // console.log('vscroll.maxHeight: ', spVSelement.style.maxHeight);
+        spVSelement.style.display = 'block';
+        // force redraw
+        this.$mount();
+      }
     },
   },
 
@@ -438,18 +456,37 @@ export default {
     window.removeEventListener("resize", this.myEventHandler);
   },
 
-  mounted() {
-    const spBox = document.getElementById('mapContainer').offsetHeight;
-    const spDD = document.getElementById('rt-sp-descarcare-date').offsetHeight;
-    const spFL = document.getElementById('rt-sp-lista-filtre').offsetHeight;
-    const spVSmaxHeight = spBox - spDD - spFL - 32;
-    // console.log('searchPanel VB height: ', spVSmaxHeight);
-    const spVSelement = document.getElementById('rt-sp-vscroll');
-    // console.log('vscroll.maxHeight: ', spVSelement.style.maxHeight);
-    spVSelement.style.maxHeight = `${spVSmaxHeight}px`;
-    // console.log('vscroll.maxHeight: ', spVSelement.style.maxHeight);
-    spVSelement.style.display = 'block';
-    this.$mount();
+  // mounted() {
+  //   console.log('screen: ', this.$q.screen.height);
+  //   const desktopFlag = this.$q.platform.is.desktop;
+  //   if (desktopFlag) {
+  //     // const spBox = document.getElementById('mapContainer').offsetHeight;
+  //     // const spDD = document.getElementById('rt-sp-descarcare-date').offsetHeight;
+  //     // const spFL = document.getElementById('rt-sp-lista-filtre').offsetHeight;
+  //     // const spVSmaxHeight = spBox - spDD - spFL - 32;
+  //     const screenHeight = this.$q.screen.height;
+  //     const headerHeight = 98;
+  //     const ddHeight = 0;
+  //     const feHeight = 0;
+  //     const spVSmaxHeight = screenHeight - headerHeight - ddHeight - feHeight;
+  //     // console.log('searchPanel VB height: ', spVSmaxHeight);
+  //     const spVSelement = document.getElementById('rt-sp-vscroll');
+  //     // console.log('vscroll.maxHeight: ', spVSelement.style.maxHeight);
+  //     spVSelement.style.maxHeight = `${spVSmaxHeight}px`;
+  //     // console.log('vscroll.maxHeight: ', spVSelement.style.maxHeight);
+  //     spVSelement.style.display = 'block';
+  //     this.$mount();
+  //   }
+  // },
+
+  watch: {
+    // when leftPanel is closed, on mobile, via swipe
+    /* eslint-disable-next-line no-unused-vars */
+    rightPanel(newValue, oldValue) {
+      // update app rightPanel
+      if (!this.$q.platform.is.desktop && newValue === false)
+        this.$store.dispatch('app/updateRightPanel', false);
+    },
   },
 
 };

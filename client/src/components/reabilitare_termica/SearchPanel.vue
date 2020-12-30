@@ -127,7 +127,6 @@
 export default {
   props: [
     'map',
-    'mapLoadedFlag',
   ],
 
   computed: {
@@ -197,6 +196,7 @@ export default {
   methods: {
     // @list select item
     async selectItem(clickedItem) {
+      const desktopFlag = this.$q.platform.is.desktop;
       // console.log('@searchPanel > clickedItem: ', clickedItem);
       // load map object
       const map = this.map;
@@ -234,28 +234,49 @@ export default {
       } else {
         // highlight clicked clickedItem
         map.setFilter(`${clickedItem.layer.id}_HIGHLIGHT`, ['==', ['get', 'id'], clickedItem.properties.id]);
-        this.$store.dispatch('app/updateRightPanel', true);
+
+        // update flags
+        if (desktopFlag) {
+          this.$store.dispatch('app/updateRightPanel', true);
+        } else {
+          // this.$store.dispatch('app/updateRightPanel', true);
+          this.$store.dispatch('reabilitareTermica/updateLeftPanel', false);
+        }
         this.$store.dispatch('app/updateItemSelected', true);
+        this.$store.dispatch('reabilitareTermica/selectItem', clickedItem);
 
         map.flyTo({
           center: clickedItem.geometry.coordinates,
-          zoom: 15,
+          zoom: 17,
         });
-
-        this.$store.dispatch('reabilitareTermica/selectItem', clickedItem);
       }
     },
   },
 
-  // created() {
-  //   const spBox = document.getElementById('mapContainer').offsetHeight;
-  //   const spDD = document.getElementById('rt-sp-descarcare-date').offsetHeight;
-  //   const spFL = document.getElementById('rt-sp-lista-filtre').offsetHeight;
-  //   const spVSmaxHeight = spBox - spDD - spFL;
-  //   console.log('searchPanel VB height: ', spVSmaxHeight);
-  //   const spVSelement = document.getElementById('rt-sp-vscroll');
-  //   spVSelement.style.maxHeight = `${spVSmaxHeight} px`;
-  // },
+  mounted() {
+    // console.log('screen: ', this.$q.screen.height);
+    const desktopFlag = this.$q.platform.is.desktop;
+    if (desktopFlag) {
+      const spBox = document.getElementById('mapContainer').offsetHeight;
+      const spDD = document.getElementById('rt-sp-descarcare-date').offsetHeight;
+      const spFL = document.getElementById('rt-sp-lista-filtre').offsetHeight;
+      const spVSmaxHeight = spBox - spDD - spFL - 32;
+      // console.log('searchPanel VB height: ', spVSmaxHeight);
+      const spVSelement = document.getElementById('rt-sp-vscroll');
+      // console.log('vscroll.maxHeight: ', spVSelement.style.maxHeight);
+      spVSelement.style.maxHeight = `${spVSmaxHeight}px`;
+
+      // console.log('vscroll.maxHeight: ', spVSelement.style.maxHeight);
+      spVSelement.style.display = 'block';
+      this.$mount();
+
+    } else {
+      const spVSelement = document.getElementById('rt-sp-vscroll');
+      spVSelement.style.maxHeight = `${this.$q.screen.height}px`;
+      spVSelement.style.display = 'block';
+      this.$mount();
+    }
+  },
 };
 </script>
 
