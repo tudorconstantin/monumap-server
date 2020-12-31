@@ -96,7 +96,7 @@
             <td class="text-left">2. Datele descarcate au fost curatate manual pentru a corecta celule populate cu date multiple.</td>
           </tr>
           <tr>
-            <td class="text-left">3. Adresele au fost geo-localizare cu QGis + extensia MMQgis si serviciul GoogleAPI. Articolele cu aceasi adresa au generat aceleasi coordonate si sunt suprapuse vizual. Rezultatele din afara Municipiului Bucuresti au fost sterse si considerate ne-gasite. O parte din adresele ne-gasite au fost adaugate de mana in coloana de coordonate.</td>
+            <td class="text-left">3. Adresele au fost geo-localizare cu QGis + extensia MMQgis si serviciul GoogleAPI. Articolele cu acedasi adresa au generat aceleasi coordonate si sunt suprapuse vizual. Rezultatele din afara Municipiului Bucuresti au fost sterse si considerate ne-gasite. O parte din adresele ne-gasite au fost adaugate de mana in coloana de coordonate.</td>
           </tr>
           <tr>
             <td class="text-left">4. Exista diferente de reprezentare a punctelor pe hartile cu suport fotografic intre serviciile de harti Google, Bing si OSM.</td>
