@@ -46,8 +46,8 @@
         </q-toolbar>
         <!-- navigation tabs -->
         <q-tabs align="left" active-color="deep-orange-10">
-          <q-route-tab to="/lmi-2015" label="LMI 2015"/>
-          <q-route-tab to="/lie-2020-1" label="LIE 2020.1"/>
+          <q-route-tab to="/lmi-2015" label="Patrimoniu Istoric"/>
+          <q-route-tab to="/lie-2020-1" label="Risc Seismic"/>
           <q-route-tab to="/spatii-publice" label="Spatii Publice"/>
           <q-route-tab to="/infrastructura-sanatate" label="Infrastructura Sanatate"/>
           <q-route-tab to="/toalete-publice" label="Toalete Publice"/>
@@ -97,8 +97,8 @@
         </div>
         <!-- navigation tabs -->
         <q-tabs align="left" active-color="deep-orange-10">
-          <q-route-tab to="/lmi-2015" label="LMI 2015"/>
-          <q-route-tab to="/lie-2020-1" label="LIE 2020.1"/>
+          <q-route-tab to="/lmi-2015" label="Patrimoniu Istoric"/>
+          <q-route-tab to="/lie-2020-1" label="Risc Seismic"/>
           <q-route-tab to="/spatii-publice" label="Spatii Publice"/>
           <q-route-tab to="/infrastructura-sanatate" label="Infrastructura Sanatate"/>
           <q-route-tab to="/toalete-publice" label="Toalete Publice"/>
@@ -138,8 +138,8 @@
           />
           <!-- navigation tabs -->
           <q-tabs class="row" style="overflow: auto" active-color="deep-orange-10">
-            <q-route-tab to="/lmi-2015" label="LMI 2015"/>
-            <q-route-tab to="/lie-2020-1" label="LIE 2020.1"/>
+            <q-route-tab to="/lmi-2015" label="Patrimoniu Istoric"/>
+            <q-route-tab to="/lie-2020-1" label="Risc Seismic"/>
             <q-route-tab to="/spatii-publice" label="Spatii Publice"/>
             <q-route-tab to="/infrastructura-sanatate" label="Infrastructura Sanatate"/>
             <q-route-tab to="/toalete-publice" label="Toalete Publice"/>
