@@ -82,19 +82,27 @@
             <tbody>
             <tr>
               <td class="text-left name-column">Patrimoniu</td>
-              <td class="text-left">{{ currentItem["tip_patrimoniu"] }}</td>
+              <td class="text-left">{{
+                  currentItem["tip_patrimoniu"] !== 'null' ? currentItem["tip_patrimoniu"] : ''
+                }}</td>
             </tr>
             <tr>
               <td class="text-left name-column">Program</td>
-              <td class="text-left">{{ currentItem["program_arhitectura"] }}</td>
+              <td class="text-left">{{
+                  currentItem["program_arhitectura"] !== 'null' ? currentItem["program_arhitectura"] : ''
+                }}</td>
             </tr>
             <tr>
               <td class="text-left name-column">Monument</td>
-              <td class="text-left">{{ currentItem["tip_monument"] }}</td>
+              <td class="text-left">{{
+                  currentItem["tip_monument"] !== 'null' ? currentItem["tip_monument"] : ''
+                }}</td>
             </tr>
             <tr>
               <td class="text-left name-column">Datare</td>
-              <td class="text-left">{{ currentItem["datare"] }}</td>
+              <td class="text-left">{{
+                  currentItem["datare"] !== 'null' ? currentItem["datare"] : ''
+                }}</td>
             </tr>
             </tbody>
           </q-markup-table>
