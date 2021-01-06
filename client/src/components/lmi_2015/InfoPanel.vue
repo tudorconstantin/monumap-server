@@ -133,7 +133,8 @@
             <tr>
               <td class="text-left">Perioada evaluare</td>
               <td class="text-left">{{
-                  currentItem["stare_generala"] !== 'null' ? 'sept 2019 - fev 2020' : ''
+                  currentItem["stare_generala"] && currentItem["stare_generala"] !== 'null' ?
+                      'sept 2019 - fev 2020' : ''
                 }}</td>
             </tr>
             </tbody>
