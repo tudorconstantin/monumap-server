@@ -113,7 +113,10 @@
             </td>
           </tr>
           <tr>
-            <td class="text-left">5. Exista diferente de reprezentare a punctelor pe hartile cu
+            <td class="text-left">5. Toaleta de pe Aleea Pan Halipa a fost adaugata manual.</td>
+          </tr>
+          <tr>
+            <td class="text-left">6. Exista diferente de reprezentare a punctelor pe hartile cu
               suport fotografic intre serviciile de harti Google, Bing si OSM.</td>
           </tr>
           </tbody>
