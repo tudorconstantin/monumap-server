@@ -132,7 +132,9 @@
             </tr>
             <tr>
               <td class="text-left">Perioada evaluare</td>
-              <td class="text-left">sept 2019 - fev 2020</td>
+              <td class="text-left">{{
+                  currentItem["observatii"] !== 'null' ? 'sept 2019 - fev 2020' : ''
+                }}</td>
             </tr>
             </tbody>
           </q-markup-table>
