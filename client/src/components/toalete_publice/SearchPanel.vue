@@ -14,7 +14,7 @@
       <q-card>
         <q-card-section class="column bg-grey-4">
           <q-btn flat no-caps label="Date WGS84 [SHP... @43KB]" align="between" type="a"
-                 href="/downloads/toalete_publice/toalete_publice.zip" target="_blank"/>
+                 href="/downloads/toalete_publice/toalete_publice_1.zip" target="_blank"/>
         </q-card-section>
       </q-card>
     </q-expansion-item>
