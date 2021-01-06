@@ -118,12 +118,16 @@
             <tbody>
             <tr>
               <td class="text-left name-column">Stare generală</td>
-              <td class="text-left">{{ currentItem["stare_generala"] }}</td>
+              <td class="text-left">{{
+                  currentItem["stare_generala"] !== 'null' ? currentItem["stare_generala"] : ''
+                }}</td>
             </tr>
             <tr>
               <td class="text-left name-column">Observații</td>
               <td class="text-left">
-                {{ currentItem["observatii"] }}
+                {{
+                  currentItem["observatii"] !== 'null' ? currentItem["observatii"] : ''
+                }}
               </td>
             </tr>
             <tr>
