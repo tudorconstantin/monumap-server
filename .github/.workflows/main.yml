@@ -23,13 +23,14 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build and push the client image
         run: |
-          folder="client/"
+          pwd
+          folder="client"
           IMAGE_NAME=monumap-client
 
           tmpName="image-$RANDOM"
           docker build $folder --file $folder/Dockerfile --tag $tmpName
           IMAGE_ID=prforge/$IMAGE_NAME
-          VERSION=$(echo GITHUB_SHA | cut -c1-7)
+          VERSION=$(echo $GITHUB_SHA | cut -c1-7)
 
           echo IMAGE_ID=$IMAGE_ID
           echo VERSION=$VERSION
