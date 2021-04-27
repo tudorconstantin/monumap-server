@@ -23,7 +23,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build and push the client image
         run: |
-          pwd
+          echo $(pwd)
           folder="client"
           IMAGE_NAME=monumap-client
 
