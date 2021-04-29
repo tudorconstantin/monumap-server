@@ -40,6 +40,9 @@ jobs:
           docker tag $tmpName $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
 
+          docker tag $tmpName $IMAGE_ID:latest
+          docker push $IMAGE_ID:latest
+
           ############
           folder="server"
           IMAGE_NAME=monumap-server
@@ -54,5 +57,8 @@ jobs:
 
           docker tag $tmpName $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
+
+          docker tag $tmpName $IMAGE_ID:latest
+          docker push $IMAGE_ID:latest
 
 
