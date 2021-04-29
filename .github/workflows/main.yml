@@ -26,7 +26,6 @@ jobs:
         uses: docker/setup-buildx-action@v1
       - name: Build and push the client image
         run: |
-          echo $(pwd)
           folder="client"
           IMAGE_NAME=monumap-client
 
@@ -40,3 +39,20 @@ jobs:
 
           docker tag $tmpName $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
+
+          ############
+          folder="server"
+          IMAGE_NAME=monumap-server
+
+          tmpName="serverImage-$RANDOM"
+          docker build $folder --file $folder/Dockerfile --tag $tmpName
+          IMAGE_ID=prforge/$IMAGE_NAME
+          VERSION=$(echo $GITHUB_SHA | cut -c1-7)
+
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
+
+          docker tag $tmpName $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION
+
+
