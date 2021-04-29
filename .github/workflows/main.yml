@@ -37,39 +37,39 @@ jobs:
 
 
           ##############
-          folder="client"
-          IMAGE_NAME=monumap-client
+          #folder="client"
+          #IMAGE_NAME=monumap-client
 
-          tmpName="client-$RANDOM"
-          docker build $folder --file $folder/Dockerfile --tag $tmpName
-          IMAGE_ID=prforge/$IMAGE_NAME
-          VERSION=$(echo $GITHUB_SHA | cut -c1-7)
+          #tmpName="client-$RANDOM"
+          #docker build $folder --file $folder/Dockerfile --tag $tmpName
+          #IMAGE_ID=prforge/$IMAGE_NAME
+          #VERSION=$(echo $GITHUB_SHA | cut -c1-7)
 
-          echo IMAGE_ID=$IMAGE_ID
-          echo VERSION=$VERSION
+          #echo IMAGE_ID=$IMAGE_ID
+          #echo VERSION=$VERSION
 
-          docker tag $tmpName $IMAGE_ID:$VERSION
-          docker push $IMAGE_ID:$VERSION
+          #docker tag $tmpName $IMAGE_ID:$VERSION
+          #docker push $IMAGE_ID:$VERSION
 
-          docker tag $tmpName $IMAGE_ID:latest
-          docker push $IMAGE_ID:latest
+          #docker tag $tmpName $IMAGE_ID:latest
+          #docker push $IMAGE_ID:latest
 
-          ############
-          folder="server"
-          IMAGE_NAME=monumap-server
+          #############
+          #folder="server"
+          #IMAGE_NAME=monumap-server
 
-          tmpName="server-$RANDOM"
-          docker build $folder --file $folder/Dockerfile --tag $tmpName
-          IMAGE_ID=prforge/$IMAGE_NAME
-          VERSION=$(echo $GITHUB_SHA | cut -c1-7)
+          #tmpName="server-$RANDOM"
+          #docker build $folder --file $folder/Dockerfile --tag $tmpName
+          #IMAGE_ID=prforge/$IMAGE_NAME
+          #VERSION=$(echo $GITHUB_SHA | cut -c1-7)
 
-          echo IMAGE_ID=$IMAGE_ID
-          echo VERSION=$VERSION
+          #echo IMAGE_ID=$IMAGE_ID
+          #echo VERSION=$VERSION
 
-          docker tag $tmpName $IMAGE_ID:$VERSION
-          docker push $IMAGE_ID:$VERSION
+          #docker tag $tmpName $IMAGE_ID:$VERSION
+          #docker push $IMAGE_ID:$VERSION
 
-          docker tag $tmpName $IMAGE_ID:latest
-          docker push $IMAGE_ID:latest
+          #docker tag $tmpName $IMAGE_ID:latest
+          #docker push $IMAGE_ID:latest
 
 
